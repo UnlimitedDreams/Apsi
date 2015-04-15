@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="Jquery/jquery-1.11.2.js"></script>
+
+        <script>
+
+            function datos() {
+                //un prompt
+                alertify.prompt("Esto es un <b>prompt</b>, introduce un valor:", function(e, str) {
+                    if (e) {
+                        alertify.success("Has pulsado '" + alertify.labels.ok + "'' e introducido: " + str);
+                    } else {
+                        alertify.error("Has pulsado '" + alertify.labels.cancel + "'");
+                    }
+                });
+                return false;
+            }
+
+        </script>
+    </head>
+    <body>
+        <div>TODO write content</div>
+        <input   type="button" value="cargar" onclick="datos()" />
+            
+    </body>
+</html>

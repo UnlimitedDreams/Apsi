@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Bienvenido</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/ingreso.css"/>
+        <link rel="stylesheet" href="css/formas.css"/>
+
+    </head>
+    <body onload="if(window.innerWidth<'400'){document.getElementById('slider').style.display = 'none'};">
+
+        <div id="header" class="head">
+            <div  style="text-align: center;">
+                <b>Bienvenido</b>    
+            </div>
+        </div>
+
+
+
+        <div id="ingresa" Class="ingresa">
+
+            <form name="log" action="ingresar" method="POST">
+                <table border="0" width="1" cellspacing="4" cellpadding="4">
+
+                    <tbody>
+                        <tr style="text-align: right;">
+                            <td><b>Usuario:</b></td>
+                            <td>
+                                <input type="text" id="user" class="form-in" name="user" required="" />
+                            </td>
+                        </tr>
+                        <tr style="text-align: right;">
+                            <td>
+                                <b>Contrase&ntilde;a:</b>
+                            </td>
+                            <td>
+                                <input type="password" id="pass" class="form-in" name="pass" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <input type="submit" class="btn-log" value="Iniciar sesi&oacute;n"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="text-align: center;">
+                    <tr><td><a href="opcionesDeAcceso.jsp">No puedes acceder?</a></td>
+
+                    </tr>
+                    <tr><td>No Tienes una cuenta? <b><a href="www.uniajc.edu.co"> Registrate</a> </b></td>
+
+                    </tr>
+                </table>
+            </form>
+
+        </div>
+        
+        <div id="slider" class="slider">
+            <!-- Aqui va el codigo para el slider.-->   
+            <img src="img/sld001.jpg" id="sld001" class="img" style="width:60%; height:61%;" />
+        </div>
+       
+    </body>
+    
+</html>

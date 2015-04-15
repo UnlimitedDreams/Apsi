@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Bienvenido</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/ingreso.css"/>
+        <link rel="stylesheet" href="css/formas.css"/>
+        <script src="Jquery/jquery-1.11.2.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#submenu1").hide();
+                $("#submenu2").hide();
+                $("#menu").click(function () {
+                    $("#submenu1").toggle("left", function () {
+                        $("#option1").click(function () {
+                            
+                        });
+                    });
+                });
+            });
+
+        </script>
+
+
+    </head>
+    <body onload="if (window.innerWidth < '400') {
+                document.getElementById('slider').style.display = 'none'
+            }
+            ;">
+
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="img/men.png">
+
+            </div>
+            <div  style="text-align: center;">
+                <b>Estudiante</b>    
+            </div>
+
+        </div>
+
+        <div id="submenu1" style="position: fixed;top:6%;background-color:#a4a4ff ;width: 200px">
+            <ul>
+                <li id="option1"><a class="menu" href="#" onclick="index.xhtml">ARCHIVO</a></li>
+                <li id="option2"><a class="menu" href="#">CERRAR SECCION</a></li>
+
+            </ul>
+        </div>
+        <div id="submenu2" style="position: fixed;top:16%;background-color:#a4a4ff ;width: 200px;left: 200px;">
+            <ul>
+                <li id="option1"><a class="menu" href="index.xhtml">ARCHIVO</a></li>
+                <li id="option2"><a class="menu" href="#">CERRAR SECCION</a></li>
+
+            </ul>
+        </div>
+
+    </body>
+
+</html>

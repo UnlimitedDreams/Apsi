@@ -1,0 +1,45 @@
+/* 
+    Document   : formas
+    Created on : 17/02/2015, 11:46:26 AM
+    Author     : USR_Toshiba
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+a:link{
+    text-decoration: none;
+}
+*{
+    font-family: arial;
+}
+.form-in{
+    border-style: solid;
+    padding: 8px;
+    border-color: #0050A0;
+    color: blue;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+.btn-log{
+    font-size: 14px;
+    padding: 8px;
+    background: #0050A0;
+    color: white;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px; 
+}.btn-log:active{
+    background: #0e25a3;
+}.btn-log:hover{
+    background: #103da3;
+}
+#btn-menu:hover{
+    position: fixed;
+    top: 1px;
+    
+}
+.menu{
+    color: #ffffff;
+}
