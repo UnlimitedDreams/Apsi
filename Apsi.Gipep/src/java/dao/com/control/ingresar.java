@@ -67,7 +67,7 @@ HttpSession s;
         
         s.setAttribute("ObjUsu", new usuario(request.getParameter("user"), request.getParameter("user"), "pruebas", 123));
         
-        response.sendRedirect("infoDeUsuario.jsp");
+        response.sendRedirect("logIn/infoDeUsuario.jsp");
 
     }
 
