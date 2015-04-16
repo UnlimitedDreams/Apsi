@@ -15,6 +15,9 @@
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/ingreso.css"/>
+        <link rel="stylesheet" href="css/formas.css"/>
+
         <link href="css/stylish-portfolio.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
@@ -44,17 +47,53 @@
                     <a href="#top">Inicio</a>
                 </li>
                 <li>
-                    <a href="#" onclick="">Acceder</a>
-                    <div id="log" style="visibility: hidden;color: white;">
-                        Hola
+                    <a id="opt1" onclick="">Acceder</a>
+                    <div id="ingresa" class="ingresa">
+                        <form name="log" action="ingresar" method="POST">
+                            <table border="0" width="1" cellspacing="4" cellpadding="4">
+
+                                <tbody>
+                                    <tr style="text-align: right;">
+                                        <td><b>Usuario:</b></td>
+                                        <td>
+                                            <input type="text" id="user" class="form-in" name="user" required="" />
+                                        </td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td>
+                                            <b>Contrase&ntilde;a:</b>
+                                        </td>
+                                        <td>
+                                            <input type="password" id="pass" class="form-in" name="pass" required=""/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <input type="submit" class="a" value="Iniciar sesi&oacute;n"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table style="text-align: center;">
+                                <tr>
+                                    <td><a href="opcionesDeAcceso.jsp">No puedes acceder?</a></td>
+                                </tr>
+                                <tr>
+                                    <td><b><a href="www.uniajc.edu.co"> Registrate</a></b></td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
+                </li>
+                 <li>
+                    <a href="#about">Acerca de Apsi</a>
                 </li>
                 <li>
                     <a href="#services">Solicitar Registro</a>
                 </li>
-                <li>
-                    <a href="#about">Acerca de Apsi</a>
-                </li>
+               
                 <li>
                     <a href="#contacto">Contacto</a>
                 </li>
@@ -153,7 +192,7 @@
                 <!-- /.container -->
         </section>
 
-       
+
 
         <!-- Footer -->
         <footer>
@@ -192,7 +231,16 @@
 
         <!-- Bootstrap Core JavaScript -->
         <script src="js/bootstrap.min.js"></script>
-
+        <!--Script ocultar Divs-->
+        <script>
+            $(document).ready(function () {
+                $("#ingresa").hide();
+                $('#opt1').click(function () {
+                    $("#ingresa").toggle("left", function () {
+                    });
+                });
+            });
+        </script>
         <!-- Custom Theme JavaScript -->
         <script>
             // Closes the sidebar menu

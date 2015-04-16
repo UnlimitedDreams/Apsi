@@ -25,15 +25,14 @@ root {
     size: 13px;
     color: #0050A0;
     text-decoration-color: activecaption;
-    position: fixed;
-    right: 4%;
+   
 }
-.slider{
+/*.slider{
     width: 50%;
 }
 .slider, #ingresa{
     position: fixed;
     top: 65px;   
-}
+}*/
 
 
