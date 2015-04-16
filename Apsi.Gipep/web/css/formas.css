@@ -12,21 +12,18 @@ root {
 a:link{
     text-decoration: none;
 }
-*{
-    font-family: arial;
-}
+
 .form-in{
     border-style: solid;
     padding: 5px;
-    border-color: #0050A0;
-    color: blue;
+    border-color: #999;
+    color: #999;
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
 .btn-log{
     font-size: 14px;
-    padding: 8px;
-    background: #0050A0;
+    background: #cccccc;
     color: white;
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px; 
