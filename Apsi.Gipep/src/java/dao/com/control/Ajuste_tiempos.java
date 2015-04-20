@@ -72,6 +72,14 @@ public class Ajuste_tiempos extends HttpServlet {
         return r;
     }
 
+    public void Traer_festivos() {
+        Dias_Ajuste dia1 = new Dias_Ajuste(31, 03, 2015);
+        Festivos.add(dia1);
+        Dias_Ajuste dia2 = new Dias_Ajuste(07, 04, 2015);
+        Festivos.add(dia2);
+
+    }
+
     public void cargarDias(String v[]) { // carga los dias de la primerz vista de ajuste
         dias.clear();
         Dias a = new Dias(false, "lunes", "0", "0");
@@ -104,14 +112,6 @@ public class Ajuste_tiempos extends HttpServlet {
                 dias.remove(i);
             }
         }
-    }
-
-    public void Traer_festivos() {
-        Dias_Ajuste dia1 = new Dias_Ajuste(31, 03, 2015);
-        Festivos.add(dia1);
-        Dias_Ajuste dia2 = new Dias_Ajuste(07, 04, 2015);
-        Festivos.add(dia2);
-
     }
 
     public boolean validarPeriodo(String x) {
@@ -290,22 +290,34 @@ public class Ajuste_tiempos extends HttpServlet {
                     } else if (temp.getDia().equalsIgnoreCase("sabado")) {
                         diia = 7;
                     }
-//                    System.err.println("Son iguales los dias " + x.get(Calendar.DAY_OF_WEEK) + " y " + diia + " con mes" + x.get(Calendar.MONTH));
-                    if (x.get(Calendar.DAY_OF_WEEK) == diia) {
-                         Dias_Ajuste Festi=null;
-//                        System.err.println("Son iguales ----- mes " + x.get(Calendar.MONTH) + " dia " + x.get(Calendar.DAY_OF_MONTH));
-                        if (cuenta >= tot) {
-                            cuenta = x.get(Calendar.DAY_OF_MONTH);
-                            Dias_Ajuste na = new Dias_Ajuste(cuenta, conce, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.MONTH), x.get(Calendar.YEAR), false);
-                            p.add(na);
-//                    break;
-                        } else {
-                            cuenta++;
-                            Dias_Ajuste na = new Dias_Ajuste(cuenta, conce, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.MONTH), x.get(Calendar.YEAR), false);
-                            p.add(na);
+                    boolean EsFestivo = false;
+                    Dias_Ajuste temp2 = null;
+                    for (int k = 0; k < Festivos.size(); k++) {
+                        temp2 = (Dias_Ajuste) Festivos.get(k);
+                        if (temp2.getMes() == mes && temp2.getDia() == (x.get(Calendar.DAY_OF_MONTH))) {
+                            EsFestivo = true;
                         }
-                        conce++;
                     }
+                    if (EsFestivo == false) {
+                        if (x.get(Calendar.DAY_OF_WEEK) == diia) {
+                            Dias_Ajuste Festi = null;
+//                        System.err.println("Son iguales ----- mes " + x.get(Calendar.MONTH) + " dia " + x.get(Calendar.DAY_OF_MONTH));
+                            if (cuenta >= tot) {
+                                cuenta = x.get(Calendar.DAY_OF_MONTH);
+                                Dias_Ajuste na = new Dias_Ajuste(cuenta, conce, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.MONTH), x.get(Calendar.YEAR), false);
+                                p.add(na);
+//                    break;
+                            } else {
+                                cuenta++;
+                                Dias_Ajuste na = new Dias_Ajuste(cuenta, conce, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.MONTH), x.get(Calendar.YEAR), false);
+                                p.add(na);
+                            }
+                            conce++;
+                        }
+                    } else {
+                        System.out.println("Error");
+                    }
+
                 }
 
             }
@@ -332,41 +344,13 @@ public class Ajuste_tiempos extends HttpServlet {
             int minutos = 0;
             minutos = ran * horapor;
             Diadehoy.set(01, 05, 2014, hor, minu, 00);
-//            System.err.println("hora " + Diadehoy.get(Calendar.HOUR_OF_DAY));
             Diadehoy.add(Calendar.MINUTE, minutos);
-//            System.err.println("hora " + Diadehoy.get(Calendar.HOUR_OF_DAY) + " minutos " + Diadehoy.get(Calendar.MINUTE));
             hora_final = Diadehoy.get(Calendar.HOUR_OF_DAY) + ":" + Diadehoy.get(Calendar.MINUTE);
         } else {
             System.err.println("error");
         }
 
         return hora_final;
-    }
-
-    public int traerNumAjuste() {
-        int n = 0;
-//        control.ejecuteQuery("select Max(cod_ajuste) from ajuste");
-//        try {
-//            while (control.rs.next()) {
-//                n = control.rs.getInt(1);
-//            }
-//        } catch (Exception ex) {
-//
-//        }
-        return n + 1;
-    }
-
-    public int traerNumdias() {
-        int n = 0;
-//        control.ejecuteQuery("select max(cod_dias) from dias");
-//        try {
-//            while (control.rs.next()) {
-//                n = control.rs.getInt(1);
-//            }
-//        } catch (Exception ex) {
-//
-//        }
-        return n + 1;
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -386,7 +370,6 @@ public class Ajuste_tiempos extends HttpServlet {
             String valo[] = request.getParameterValues("che");
 
             String Hora_fincho = "No";
-//            boolean hay_sabado = false;
             for (int i = 0; i < valo.length; i++) {
                 System.err.println("dias " + valo[i]);
                 if (valo[i].equalsIgnoreCase("sabado")) {
@@ -412,7 +395,6 @@ public class Ajuste_tiempos extends HttpServlet {
                             molde.add(new Ajuste_Modelo(fecha, fecha_final, periodo, Ramgo_asesoria, Num_asesoria, Hora_inicio, Hora_final, Asesoeria_dia, Asesoria_profesor));
                         } else {
                             Hora_final_sabado = Hora_final(Hora_fincho, Ramgo_asesoria, Asesoeria_dia);
-
                             molde.add(new Ajuste_Modelo(fecha, fecha_final, periodo, Ramgo_asesoria, Num_asesoria,
                                     Hora_inicio, Hora_final, Asesoeria_dia, Asesoria_profesor, Hora_fincho, Hora_final_sabado));
 
@@ -560,7 +542,7 @@ public class Ajuste_tiempos extends HttpServlet {
             temporal = (ArrayList) session.getAttribute("molde_ajuste");
             mis_dias = (ArrayList) session.getAttribute("dias");
             System.err.println("tamaño " + temporal.size());
-            int sequence = traerNumAjuste();
+            int sequence = Sequence.Sequen("select max(cod_ajuste) from ajuste");
 
             Ajuste_Modelo temp2 = null;
             String qe = "";
@@ -575,12 +557,13 @@ public class Ajuste_tiempos extends HttpServlet {
             for (int i = 0; i < mis_dias.size(); i++) {
                 temp = (Dias) mis_dias.get(i);
                 if (temp.isEstado()) {
+                    int sequence_dias = Sequence.Sequen("select max(cod_dias) from dias");
                     System.err.println("r+ " + temp.getDia());
+                    Control.ejecuteUpdate("insert into dias values(" + sequence_dias + ",'" + temp.getDia() + "'," + sequence + ")");
                 }
             }
             boolean con = true;
             if (con == true) {
-                System.err.println("Entro");
                 PrintWriter out = response.getWriter();
                 try {
                     /* TODO output your page here. You may use following sample code. */
@@ -607,9 +590,9 @@ public class Ajuste_tiempos extends HttpServlet {
                 }
             }
             HttpSession s = request.getSession(true);
-            response.sendRedirect("index.xhtml");
             dias.clear();
             molde.clear();
+            response.sendRedirect("index.xhtml");
 
 //                    boolean r = control.ejecuteUpdate(qe);
 //                    boolean r = true;
