@@ -8,6 +8,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="dao.com.modelo.disponibilidadModelo"%>
 <%!ArrayList<disponibilidadModelo> Mis_dias = new ArrayList();%>
+<%!ArrayList<String> hora1 = new ArrayList();%>
+<%!ArrayList<String> hora2 = new ArrayList();%>
+
+
+
 
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://java.sun.com/jsf/html">
@@ -45,27 +50,54 @@
                 <br/><br/>
                 <h5 id="title">DISPONIBILIDAD</h5>
 
-                <form action="../DisponibilidadControl" method="post" id="formu">
+                <form action="../Disponibilidad_control" method="post" id="formu">
                     <br></br>
                     <br></br>
                     <table >
                         <tr ><td><label>Fecha Inicio</label></td>
-                            <td><input type="date" name="fecha_ini" size="10" /></td></tr>
-
+                            <td><input type="date" name="fecha" size="10" /></td></tr>
                     </table>
                     <br></br>
+                    <table border="1">
+                        <tr><td>Seleccion</td><td>dia</td><td>Hora Inicial</td><td>Hora final</td></tr>
+                        <tr>
+                            <%disponibilidadModelo dispo = new disponibilidadModelo();
+                                Mis_dias = dispo.Traer_disponibilidad();
+                                hora1 = dispo.TraerHoras();
+                                hora2 = dispo.TraerHoras2();
+                                disponibilidadModelo temp = null;
+                                for (int i = 0; i < Mis_dias.size(); i++) {
+                                    temp = (disponibilidadModelo) Mis_dias.get(i);
+                                    out.println("<tr>");
+                                    out.println("<td><input type=\"checkbox\" name=\"sele\" value="+temp.getDia()+"></td>");
+                                    out.println("<td>"+temp.getDia()+"</td>");
+                                    out.println("<td>");
+                                    out.println("<select name=\"fec1\">");
+                                    for (int k = 0; k < hora1.size(); k++) {
+                                        out.println("<option value =" + hora1.get(k).toString() + ">" + hora1.get(k).toString() + "</option>");
+                                    }
+                                    out.println("</select>");
+                                    out.println("</td>");
+                                    out.println("<td>");
+                                    out.println("<select name=\"fec2\">");
+                                    for (int k = 0; k < hora2.size(); k++) {
+                                        out.println("<option value =" + hora2.get(k).toString() + ">" + hora2.get(k).toString() + "</option>");
+                                    }
+                                    out.println("</select>");
+                                    out.println("</td>");
+                                    out.println("</tr>");
+
+                                }
+
+
+                            %>
+                        </tr>
+                    </table>
+                        <br/><br/>
+                        <input type="submit" value="enviar">
                 </form>
                 <script src="../Jquery/jquery-1.11.2.js"></script>
                 <script type="text/javascript">
-        $(document).ready(function () {
-            $("#sab").hide();
-            var entro = false;
-            $("#Saba").click(function () {
-                $("#sab").toggle("left", function () {
-
-                });
-            });
-        });
 
                 </script>
                 </h:body>
