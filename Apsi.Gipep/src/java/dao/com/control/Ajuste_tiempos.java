@@ -39,7 +39,6 @@ public class Ajuste_tiempos extends HttpServlet {
 
     private String periodo;
     ArrayList<Dias> dias = new ArrayList(); //dias seleccionados en la vista
-    ArrayList<Dias_Ajuste> Festivos = new ArrayList(); //Festivos que hay durante el año
     ArrayList<Ajuste_Modelo> molde = new ArrayList();
 
     public String getPeriodo() {
@@ -77,33 +76,6 @@ public class Ajuste_tiempos extends HttpServlet {
         }
         return r;
     }
-
-    public void Traer_festivos() throws ClassNotFoundException {
-        //se traen los festivos del respetivo año para mas adelante tenerlos encuenta
-        Festivos.clear();
-        Control.conectar();
-        Date fecha1 = new Date();
-        String año = fecha1.toString();
-        String año2 = año.substring((año.length() - 4), año.length());
-        Control.ejecuteQuery("select festivos.* from festivos,año_festivo where\n"
-                + "año_festivo.cod_año=festivos.cod_año\n"
-                + "and año_festivo.año='" + año2 + "'");
-        Date fecha = null;
-        String fecha2 = "";
-        int dia = 0, mes = 0;
-        try {
-            while (Control.rs.next()) {
-                fecha = Control.rs.getDate(2);
-                fecha2 = fecha.toString();
-                dia = Integer.parseInt(fecha2.substring((fecha2.length() - 2), fecha2.length()));
-                mes = Integer.parseInt(fecha2.substring((fecha2.length() - 5), fecha2.length() - 4));
-                Dias_Ajuste dia1 = new Dias_Ajuste(dia, mes, Integer.parseInt(año2));
-                Festivos.add(dia1);
-            }
-        } catch (Exception ex) {
-        }
-    }
-
     public void cargarDias(String v[]) {
         // carga los dias de la primera vista de ajuste con lso dias normales de la semana
         // los ceros son la hora inicial y final
@@ -140,8 +112,8 @@ public class Ajuste_tiempos extends HttpServlet {
     }
 
     public boolean validarPeriodo(String x) {
-        //valida la fecha que se ingreso que sea la correcta 
-        //correcta en año y fechas no menores a la de hoy
+//        valida la fecha que se ingreso que sea la correcta 
+//        correcta en año y fechas no menores a la de hoy
         boolean r = false;
         Date fecha1 = new Date();
         System.out.println(fecha1.toString());
@@ -173,8 +145,8 @@ public class Ajuste_tiempos extends HttpServlet {
     }
 
     public int Diasdelperiodo(String numero_horas, String Horas_porDia, String Rango_hora) {
-        // se calcula cuantos dias se necesitan para cumplir con las horas dichas en la vista
-        //para ellos se usa la formula de (Numero Horas*60)/(Hora_pordia*RangodeHora)
+//         se calcula cuantos dias se necesitan para cumplir con las horas dichas en la vista
+//        para ellos se usa la formula de (Numero Horas*60)/(Hora_pordia*RangodeHora)
         int total_Min = 0, dia_min = 0, ac = 0, ran = 0, b = 0;
         total_Min = Integer.parseInt(numero_horas) * 60;
         ac = Integer.parseInt(Horas_porDia);
@@ -184,131 +156,6 @@ public class Ajuste_tiempos extends HttpServlet {
         a = (float) total_Min / (ac * ran);
         b = (int) Math.round(a);
         return b;
-    }
-
-    public String Numero_asesorias(int tot, String fecha) throws ParseException {
-        //este metodo me calcula la fecha final de todas las asesorias
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        String dia2 = "", mes = "", año = "";
-        dia2 = fecha.substring(8, 10);
-        mes = fecha.substring(5, 7);
-        año = fecha.substring(0, 4);
-        String dias_semana = "";
-        String fecha_final = "";
-        ArrayList<Dias_Ajuste> n = new ArrayList();
-        if (dias.size() >= 1) {
-            int tot2 = tot;
-            int dia = 0;
-            int num_id = 0;
-            boolean p = true;
-            int a = Integer.parseInt(dia2);
-            int m = Integer.parseInt(mes);
-            int d = Integer.parseInt(año);
-            Dias_Ajuste temp = null;
-            int conce = 1;
-            boolean con2 = true;
-            while (p) {
-                //tomamos la fecha ingresada y la pasamos a un calendar
-                //mandamos los valores al metodo dia_semana el cual me devuelve un arreglo con los dias qe conto
-                //a esos dias qe trajo le paso el estado de true y cuanto cuantos dias me trajo
-                //la variable de tot2 comienza con la cantidad de dias que se necesitan llegar
-                //y a esa variable de tot2 le empiezo a rebajar los dias qe traje
-                //hasta cuando llege a cero no parara este proceso
-                //al final me doy cuenta cual es la fecha final buscando el dia en la posicion tot
-                Calendar Diadehoy = Calendar.getInstance();
-                String fecha_convertida = "" + a + "-" + m + "-" + d;
-                Date date = formatter.parse(fecha_convertida);
-                Diadehoy.setTime(date);
-                conce = conce + num_id;
-                num_id = 0;
-                n = dia_semana(Diadehoy, tot2, n, conce, con2);
-                for (int i = 0; i < n.size(); i++) {
-                    temp = (Dias_Ajuste) n.get(i);
-                    if (temp.isR() == false) {
-                        num_id++;
-                        temp.setR(true);
-                    }
-                }
-                tot2 = tot2 - num_id;
-                if (tot2 <= 0) {
-                    p = false;
-                }
-                if (m == 11) {
-                    m = 0;
-                    d++;
-                } else {
-                    m++;
-                }
-                con2 = false;
-            }
-        }
-        return fecha_final;
-    }
-
-    public ArrayList dia_semana(Calendar x, int tot, ArrayList p, int conce, boolean con) throws ParseException {
-        //este metodo cuenta cuantos dias de los selecionado hay en un mes y devuelve el resultado guardandolo en un arreglo
-        int cuenta = 0;
-        int mes = x.get(Calendar.MONTH);
-        if (con == false) {
-            int diii = x.get(Calendar.DAY_OF_MONTH);
-            x.add(Calendar.DAY_OF_MONTH, -diii + 1);
-        }
-        int diia = 0;
-        while (x.get(Calendar.MONTH) == mes) {
-            String r = "";
-            Dias temp = null;
-            for (int i = 0; i < dias.size(); i++) {
-                //le asignamos un numero al dia porque asii esta determinado en el calendario de java
-                temp = (Dias) dias.get(i);
-                if (temp.isEstado() == true) {
-                    if (temp.getDia().equalsIgnoreCase("lunes")) {
-                        diia = 2;
-                    } else if (temp.getDia().equalsIgnoreCase("martes")) {
-                        diia = 3;
-                    } else if (temp.getDia().equalsIgnoreCase("miercoles")) {
-                        diia = 4;
-                    } else if (temp.getDia().equalsIgnoreCase("jueves")) {
-                        diia = 5;
-                    } else if (temp.getDia().equalsIgnoreCase("viernes")) {
-                        diia = 6;
-                    } else if (temp.getDia().equalsIgnoreCase("sabado")) {
-                        diia = 7;
-                    }
-                    boolean EsFestivo = false;
-                    Dias_Ajuste temp2 = null;
-                    //miramos si el dia que se va a contar es festivo para no contarlo
-                    for (int k = 0; k < Festivos.size(); k++) {
-                        temp2 = (Dias_Ajuste) Festivos.get(k);
-                        if (temp2.getMes() == mes && temp2.getDia() == (x.get(Calendar.DAY_OF_MONTH))) {
-                            EsFestivo = true;
-                        }
-                    }
-                    if (EsFestivo == false) {
-                        //comparamos que el dia de la semana sea el mismo qe el calendario
-                        if (x.get(Calendar.DAY_OF_WEEK) == diia) {
-                            Dias_Ajuste Festi = null;
-                            if (cuenta >= tot) {
-                                cuenta = x.get(Calendar.DAY_OF_MONTH);
-                                Dias_Ajuste na = new Dias_Ajuste(cuenta, conce, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.MONTH), x.get(Calendar.YEAR), false);
-                                p.add(na);
-                            } else {
-                                cuenta++;
-                                Dias_Ajuste na = new Dias_Ajuste(cuenta, conce, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.MONTH), x.get(Calendar.YEAR), false);
-                                p.add(na);
-                            }
-                            conce++;
-                        }
-                    } else {
-                        System.out.println("Es Festivo");
-                    }
-
-                }
-
-            }
-            x.add(Calendar.DAY_OF_MONTH, 1);
-        }
-        // end while   
-        return p;
     }
 
     public static int traerAño(String fecha) {
@@ -363,6 +210,18 @@ public class Ajuste_tiempos extends HttpServlet {
         return hora_final;
     }
 
+    public String cuadrar_hora(String Hora, String Min) {
+        String Hora_final = "";
+        if (Hora.length() == 1) {
+            Hora = "0" + Hora;
+        }
+        if (Min.length() == 1) {
+            Min = "0" + Min;
+        }
+        Hora_final = Hora + ":" + Min;
+        return Hora_final;
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
@@ -371,23 +230,30 @@ public class Ajuste_tiempos extends HttpServlet {
         //se optione la option con la que vamos a procesar la informacion
         System.err.println("++ " + respuesta);
         if (respuesta.equalsIgnoreCase("Primero")) {
-            Traer_festivos();//cargamos los festivos
+//            Traer_festivos();//cargamos los festivos
             String fecha = request.getParameter("fecha_ini");
             String Num_asesoria = request.getParameter("Nase");
             String Ramgo_asesoria = request.getParameter("Rango");
             String Asesoeria_dia = request.getParameter("dia");
-            String Hora_inicio = request.getParameter("horaI");
+            String Hora_inicioH = request.getParameter("Hora");
+            String Hora_inicioM = request.getParameter("Min");
             String Asesoria_profesor = request.getParameter("AseP");
             String valo[] = request.getParameterValues("che");
-
+            String Hora_inicio = cuadrar_hora(Hora_inicioH, Hora_inicioM);
+            System.out.println("La hora es " + Hora_inicio);
             String Hora_fincho = "No";
+            String Hora_finchoH = "", Hora_finchoM = "";
             //miramos si seleciono el sabado
             for (int i = 0; i < valo.length; i++) {
                 System.err.println("dias " + valo[i]);
                 if (valo[i].equalsIgnoreCase("sabado")) {
-                    Hora_fincho = request.getParameter("horaIS");
+                    Hora_finchoH = request.getParameter("HoraF");
+                    Hora_finchoM = request.getParameter("MinF");
+                    Hora_fincho = "Si";
                 }
-
+            }
+            if (Hora_fincho.equalsIgnoreCase("Si")) {
+                Hora_fincho = cuadrar_hora(Hora_finchoH, Hora_finchoM);
             }
             if (valo.length >= 1) {//debe haber seleccionado algun dia para poder proseguir
                 cargarDias(valo);//cargamos los dias
@@ -395,8 +261,9 @@ public class Ajuste_tiempos extends HttpServlet {
                 session.setAttribute("dias", dias);//traemos los dias cargados 
                 if (validarPeriodo(fecha) == true) {
                     if (Verificar(fecha) == false) {
+                        Calendario calen=new Calendario();
                         int horarSemestre = Diasdelperiodo(Num_asesoria, Asesoeria_dia, Ramgo_asesoria);
-                        String fecha_final = Numero_asesorias(horarSemestre, fecha);
+                        String fecha_final = calen.Numero_asesorias(horarSemestre, fecha,dias);
                         String Hora_final = Hora_final(Hora_inicio, Ramgo_asesoria, Asesoeria_dia);
                         String Hora_final_sabado = "No";
                         if (Hora_fincho.equalsIgnoreCase("No")) {
@@ -512,7 +379,6 @@ public class Ajuste_tiempos extends HttpServlet {
                                     out.println("<td>" + temp2.getDia() + "</td>");
                                     out.println("</tr>");
                                 }
-
                             }
                             out.println("</table>");
                             out.println("<br>");
@@ -548,7 +414,7 @@ public class Ajuste_tiempos extends HttpServlet {
                 temp2 = (Ajuste_Modelo) temporal.get(i);
                 int cod_año = traerAño(temp2.getFecha_inicio());
                 System.err.println("r+ " + temp2.toString());
-                 Control.ejecuteUpdate("insert into ajuste values(" + sequence + ",'" + temp2.getFecha_inicio() + "','" + temp2.getFecha_final() + "'," + temp2.getRango_hora() + "," + temp2.getPeriodo()
+                Control.ejecuteUpdate("insert into ajuste values(" + sequence + ",'" + temp2.getFecha_inicio() + "','" + temp2.getFecha_final() + "'," + temp2.getRango_hora() + "," + temp2.getPeriodo()
                         + "," + temp2.getNumero_horas() + ",'" + temp2.getHora_inicio() + "','" + temp2.getHora_final() + "','No','No',1,'"
                         + temp2.getAsesorias_profesor() + "','" + temp2.getHoras_porDia() + "'," + cod_año + ")");
             }

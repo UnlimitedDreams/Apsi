@@ -201,8 +201,7 @@ public class Festivos implements Serializable {
     public void setEvent(ScheduleEvent event) {
         this.event = event;
     }
-
-    public static int traerAño(Date fecha) {
+     public static int traerAño(Date fecha) {
         String año = fecha.toString();
         String año2 = año.substring((año.length() - 4), año.length());
         Control.ejecuteQuery("select * from año_Festivo where año='" + año2 + "'");
@@ -227,7 +226,6 @@ public class Festivos implements Serializable {
         }
         return codigo;
     }
-
     public void addEvent(ActionEvent actionEvent) {
         System.out.println("Entro1");
         Control.ejecuteQuery("select * from festivos where fecha='" + fecha_hoy.getTime() + "'");

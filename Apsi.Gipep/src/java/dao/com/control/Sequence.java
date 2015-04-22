@@ -24,4 +24,5 @@ public class Sequence {
         }
         return codigo + 1;
     }
+    
 }
