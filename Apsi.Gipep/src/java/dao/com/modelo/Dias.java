@@ -25,11 +25,10 @@ public class Dias {
     private int cod;
     private String cod2;
 
-    public Dias(boolean estado, String dia) {
-        this.estado = estado;
-        this.dia = dia;
-    }
-
+//    public Dias(boolean estado, String dia) {
+//        this.estado = estado;
+//        this.dia = dia;
+//    }
     public Dias(boolean estado, String dia, String hora_inicio, String hora_final) {
         this.estado = estado;
         this.dia = dia;
@@ -38,11 +37,12 @@ public class Dias {
 
     }
 
-    public Dias(int cod, String fecha1, String fecha2, String razon) {
+    public Dias(int cod, String fecha1, String fecha2, String hora_inicio, String hora_final) {
         this.cod = cod;
         this.fecha1 = fecha1;
         this.fecha2 = fecha2;
-        this.razon = razon;
+        this.hora_inicio = hora_inicio;
+        this.hora_final = hora_final;
     }
 
     public int getCod() {
@@ -69,21 +69,13 @@ public class Dias {
         this.num2 = num2;
     }
 
-    public Dias(boolean estado, String dia, String hora_inicio, String hora_final, int numer_ase) {
-        this.estado = estado;
-        this.dia = dia;
-        this.hora_inicio = hora_inicio;
-        this.hora_final = hora_final;
-        this.numer_ase = numer_ase;
-    }
-
-    public Dias(String cod2, String hora_inicio, String hora_final, String fecha) {
-        this.hora_inicio = hora_inicio;
-        this.hora_final = hora_final;
-        this.fecha = fecha;
-        this.cod2 = cod2;
-    }
-
+//    public Dias(boolean estado, String dia, String hora_inicio, String hora_final, int numer_ase) {
+//        this.estado = estado;
+//        this.dia = dia;
+//        this.hora_inicio = hora_inicio;
+//        this.hora_final = hora_final;
+//        this.numer_ase = numer_ase;
+//    }
     public int getNumer_ase() {
         return numer_ase;
     }
