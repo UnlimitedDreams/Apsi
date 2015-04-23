@@ -1,4 +1,4 @@
-
+package dao.com.control;
 import dao.com.control.Control;
 import dao.com.control.Sequence;
 import java.awt.BorderLayout;

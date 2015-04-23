@@ -21,15 +21,9 @@
 .slider{
     width: 50%;
 }
-.slider, #ingresa{
+.slider{
     position: fixed;
     top: 65px;   
 }
-#ingresa{
-    size: 13px;
-    color: #0050A0;
-    text-decoration-color: activecaption;
-    position: fixed;
-    right: 4%;
-}
+
 

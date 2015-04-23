@@ -47,12 +47,11 @@
                     <a href="#top">Inicio</a>
                 </li>
                 <li>
-                    <a id="opt1" onclick="">Acceder</a>
-                    <div id="ingresa" class="ingresa">
+                    <a id="opt1">Acceder</a>
+                    <div id="ingresa" >
                         <form name="log" action="ingresar" method="POST">
                             <table style="border-spacing: 6px 12px; border-collapse: separate">
 
-                                <tbody>
                                     <tr style="text-align: right;">
                                         <td></td>
                                         <td>
@@ -74,17 +73,15 @@
                                             <input type="submit" class="btn-log" value="Iniciar sesi&oacute;n"/>
                                         </td>
                                     </tr>
-                                </tbody>
+                                
                             </table>
+                            <b><a href="logIn/opcionesDeAcceso.jsp">No puedes acceder?</a></b>
+                            <b><a href="http://www.uniajc.edu.co">Registrate</a></b>
                         </form>
-
-                        <b><a href="logIn/opcionesDeAcceso.jsp">No puedes acceder?</a></b>
-
-                        <b><a href="http://www.uniajc.edu.co">Registrate</a></b>
-
-
                     </div>
                 </li>
+
+
 
                 <li>
                     <a href="#about">Acerca de Apsi</a>
@@ -226,10 +223,11 @@
         </footer>
 
         <!-- jQuery -->
-        <script src="js/jquery.js"></script>
+        <script src="js/Jquery/jquery-1.11.2.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+
         <!--Script ocultar Divs-->
         <script>
             $(document).ready(function () {
@@ -240,6 +238,7 @@
                 });
             });
         </script>
+
         <!-- Custom Theme JavaScript -->
         <script>
             // Closes the sidebar menu
