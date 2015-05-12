@@ -2,6 +2,7 @@ package dao.com.control;
 
 import dao.com.control.Control;
 import dao.com.modelo.Dias;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +18,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -77,7 +77,7 @@ public class Calendario_profesor implements Serializable {
 //                date2.setMinutes(min2);
 //                date2.setDate(date2.getDate() + 1);
                 System.out.println("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + date1 + "+" + date2);
-                eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #", date1, date2));
+                eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + temp.getCod(), date1, date2));
             }
 
             for (int k = 0; k < b.size(); k++) {
@@ -89,7 +89,6 @@ public class Calendario_profesor implements Serializable {
                 Date date = fmt2.parse(temp2.getFecha2());
                 System.out.println("hora1 " + temp2.getHora_inicio());
                 System.out.println("hora2 " + temp2.getHora_final());
-
                 h1 = Integer.parseInt((String) temp2.getHora_inicio().subSequence(0, 2));
                 min1 = Integer.parseInt((String) temp2.getHora_inicio().subSequence(3, 5));
                 h2 = Integer.parseInt((String) temp2.getHora_final().subSequence(0, 2));
@@ -99,9 +98,8 @@ public class Calendario_profesor implements Serializable {
                 date.setHours(h2);
                 date.setMinutes(min2);
                 date.setDate(date.getDate() + 1);
-
                 System.out.println("citas--- " + date1 + "-" + date);
-                eventModel.addEvent(new DefaultScheduleEvent("Cita #", date1, date));
+                eventModel.addEvent(new DefaultScheduleEvent("Cita #" + temp2.getCod(), date1, date));
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Calendario_profesor.class.getName()).log(Level.SEVERE, null, ex);
@@ -395,46 +393,49 @@ public class Calendario_profesor implements Serializable {
         Control.conectar();
         String no = "", cod = "";
         String cod1[] = null;
+        System.out.println("----- " + event.getTitle().toString());
         if (event.getTitle().length() >= 8) {
             no = event.getTitle().substring(0, 8);
         } else {
             no = event.getTitle();
         }
         if (no.equals("Asesoria")) {
-            cod1 = event.getTitle().split("#");
-            cod = cod1[1];
-            Control.ejecuteQuery(" select hora_asesoria, hora_final, fecha_asesoria from asesoria where cod_asesoria='" + cod + "'");
-            hora1 = "";
-            hora2 = "";
-            fecha_final = null;
-            try {
-                while (Control.rs.next()) {
-                    hora1 = Control.rs.getString(1);
-                    hora2 = Control.rs.getString(2);
-                    fecha_final = Control.rs.getDate(3);
-                }
-                cod = "";
-            } catch (Exception ex) {
-
-            }
+            System.out.println("Asesoria");
+//            cod1 = event.getTitle().split("#");
+//            cod = cod1[1];
+//            Control.ejecuteQuery(" select hora_asesoria, hora_final, fecha_asesoria from asesoria where cod_asesoria='" + cod + "'");
+//            hora1 = "";
+//            hora2 = "";
+//            fecha_final = null;
+//            try {
+//                while (Control.rs.next()) {
+//                    hora1 = Control.rs.getString(1);
+//                    hora2 = Control.rs.getString(2);
+//                    fecha_final = Control.rs.getDate(3);
+//                }
+//                cod = "";
+//            } catch (Exception ex) {
+//
+//            }
         } else {
-            System.err.println("-----------------------------------------------");
-            cod1 = event.getTitle().split("#");
-            cod = cod1[1];
-            Control.ejecuteQuery("select hora_inicio,hora_final,fecha_final from calendario where codigo='" + cod + "'");
-            hora1 = "";
-            hora2 = "";
-            fecha_final = null;
-            try {
-                while (Control.rs.next()) {
-                    hora1 = Control.rs.getString(1);
-                    fecha_final = Control.rs.getDate(3);
-                    System.err.println("---<< " + hora1 + "--" + hora2 + "-- fecha " + fecha_final);
-                }
-                cod = "";
-            } catch (Exception ex) {
-
-            }
+            System.out.println("Cita");
+//            System.err.println("-----------------------------------------------");
+//            cod1 = event.getTitle().split("#");
+//            cod = cod1[1];
+//            Control.ejecuteQuery("select hora_inicio,hora_final,fecha_final from calendario where codigo='" + cod + "'");
+//            hora1 = "";
+//            hora2 = "";
+//            fecha_final = null;
+//            try {
+//                while (Control.rs.next()) {
+//                    hora1 = Control.rs.getString(1);
+//                    fecha_final = Control.rs.getDate(3);
+//                    System.err.println("---<< " + hora1 + "--" + hora2 + "-- fecha " + fecha_final);
+//                }
+//                cod = "";
+//            } catch (Exception ex) {
+//
+//            }
         }
         System.err.println("hora " + hora1 + "--" + hora2);
 
@@ -500,7 +501,7 @@ public class Calendario_profesor implements Serializable {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
             System.err.println("codigo es " + cod);
-            boolean p = Control.ejecuteUpdate("delete from calendario where codigo=" + cod);
+            boolean p = Control.ejecuteUpdate("delete from calendario where cod_calemndario=" + cod);
             if (p) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
                 añadir_eventos();
@@ -510,34 +511,45 @@ public class Calendario_profesor implements Serializable {
         }
     }
 
-    public void actualizar() throws ClassNotFoundException {
-        Control.conectar();
+    public void actual() throws IOException {
+        System.out.println("entro a update");
+       String codigo=(String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Codigo_asesoria");
+        System.out.println("codigo que trajo es "+ codigo);
+    }
+
+    public void actualizar() throws ClassNotFoundException, IOException {
         String no = "", cod = "";
         String cod1[] = null;
-        if (event.getTitle().length() >= 8) {
-            no = event.getTitle().substring(0, 8);
-        } else {
-            no = event.getTitle();
-        }
-        if (no.equals("Asesoria")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puede Actualizar", ""));
-        } else {
-            cod1 = event.getTitle().split("#");
-            cod = cod1[1];
-            System.err.println("titulo " + event.getTitle() + "--- " + event.getEndDate() + "---" + event.getStartDate() + "-- "
-                    + hora1 + "--" + hora2);
-            System.err.println("update calendario set fecha_inicio='" + event.getStartDate() + "'"
-                    + ",fecha_final='" + event.getEndDate() + "',hora_inicio='" + hora1 + "',hora_final='" + hora2 + "' where codigo=" + cod);
-            boolean r = Control.ejecuteUpdate("update calendario set fecha_inicio='" + event.getStartDate() + "'"
-                    + ",fecha_final='" + event.getEndDate() + "',hora_inicio='" + hora1 + "',hora_final='" + hora2 + "' where codigo=" + cod);
-            System.err.println("Boolen " + r);
-            if (r) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Actualizado", ""));
-                añadir_eventos();
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puede Actualizar", ""));
-            }
-        }
+        cod1 = event.getTitle().split("#");
+        cod = cod1[1];
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Codigo_asesoria", cod);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("Calendario_update.xhtml");
+//        Control.conectar();
+//      
+//        if (event.getTitle().length() >= 8) {
+//            no = event.getTitle().substring(0, 8);
+//        } else {
+//            no = event.getTitle();
+//        }
+//        if (no.equals("Asesoria")) {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puede Actualizar", ""));
+//        } else {
+//            cod1 = event.getTitle().split("#");
+//            cod = cod1[1];
+//            System.err.println("titulo " + event.getTitle() + "--- " + event.getEndDate() + "---" + event.getStartDate() + "-- "
+//                    + hora1 + "--" + hora2);
+//            System.err.println("update calendario set fecha_inicio='" + event.getStartDate() + "'"
+//                    + ",fecha_final='" + event.getEndDate() + "',hora_inicio='" + hora1 + "',hora_final='" + hora2 + "' where codigo=" + cod);
+//            boolean r = Control.ejecuteUpdate("update calendario set fecha_inicio='" + event.getStartDate() + "'"
+//                    + ",fecha_final='" + event.getEndDate() + "',hora_inicio='" + hora1 + "',hora_final='" + hora2 + "' where codigo=" + cod);
+//            System.err.println("Boolen " + r);
+//            if (r) {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Actualizado", ""));
+//                añadir_eventos();
+//            } else {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puede Actualizar", ""));
+//            }
+//        }
     }
 
 }
