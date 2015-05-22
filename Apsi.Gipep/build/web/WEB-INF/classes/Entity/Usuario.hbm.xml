@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Usuario" table="usuario" schema="public">
+        <id name="pegeId" type="big_decimal">
+            <column name="pege_id" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="contrasea" type="string">
+            <column name="contrasea" length="40" not-null="true" />
+        </property>
+        <property name="usuario" type="string">
+            <column name="usuario" not-null="true" />
+        </property>
+        <set name="dispoUsuarios" table="dispo_usuario" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.DispoUsuario" />
+        </set>
+        <set name="usuarioProyectos" table="usuario_proyecto" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.UsuarioProyecto" />
+        </set>
+        <set name="ajustes" table="ajuste" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Ajuste" />
+        </set>
+        <set name="asistentes" table="asistente" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Asistente" />
+        </set>
+        <set name="rols" table="rol" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Rol" />
+        </set>
+        <set name="calendarios" table="calendario" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.Calendario" />
+        </set>
+        <set name="logses" table="logs" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pege_id" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Logs" />
+        </set>
+    </class>
+</hibernate-mapping>

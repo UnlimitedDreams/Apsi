@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Ubicacion" table="ubicacion" schema="public">
+        <id name="ubicacion" type="big_decimal">
+            <column name="ubicacion" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="sede" type="string">
+            <column name="sede" length="15" not-null="true" />
+        </property>
+        <property name="salon" type="string">
+            <column name="salon" length="10" not-null="true" />
+        </property>
+        <set name="asesorias" table="asesoria" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ubicacion" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Asesoria" />
+        </set>
+    </class>
+</hibernate-mapping>

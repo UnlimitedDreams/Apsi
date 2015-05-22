@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.A&#241;oFestivo" table="a&#241;o_festivo" schema="public">
+        <id name="codA&#241;o" type="long">
+            <column name="cod_a&#241;o" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="a&#241;o" type="string">
+            <column name="a&#241;o" length="10" not-null="true" />
+        </property>
+        <set name="ajustes" table="ajuste" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="festivo" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.Ajuste" />
+        </set>
+        <set name="festivoses" table="festivos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_a&#241;o" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.Festivos" />
+        </set>
+    </class>
+</hibernate-mapping>

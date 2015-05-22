@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Calendario" table="calendario" schema="public">
+        <id name="codCalemndario" type="long">
+            <column name="cod_calemndario" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="usuario" class="Entity.Usuario" fetch="select">
+            <column name="pege_id" precision="10" scale="0" />
+        </many-to-one>
+        <property name="fechaInicial" type="date">
+            <column name="fecha_inicial" length="13" not-null="true" />
+        </property>
+        <property name="fechaFinal" type="date">
+            <column name="fecha_final" length="13" not-null="true" />
+        </property>
+        <property name="horaInicial" type="string">
+            <column name="hora_inicial" length="10" />
+        </property>
+        <property name="horaFinal" type="string">
+            <column name="hora_final" length="10" />
+        </property>
+        <property name="actividad" type="string">
+            <column name="actividad" length="200" />
+        </property>
+    </class>
+</hibernate-mapping>

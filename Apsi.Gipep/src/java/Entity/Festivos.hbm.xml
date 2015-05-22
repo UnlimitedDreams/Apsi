@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Festivos" table="festivos" schema="public">
+        <id name="festivo" type="long">
+            <column name="festivo" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="a&#241;oFestivo" class="Entity.A&#241;oFestivo" fetch="select">
+            <column name="cod_a&#241;o" precision="10" scale="0" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

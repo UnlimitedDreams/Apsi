@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.NivelDisponible" table="nivel_disponible" schema="public">
+        <id name="codigoNivel" type="big_decimal">
+            <column name="codigo_nivel" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="disponibilidad" class="Entity.Disponibilidad" fetch="select">
+            <column name="cod_dis" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="semestre" type="string">
+            <column name="semestre" length="2" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

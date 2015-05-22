@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.EstadoProyecto" table="estado_proyecto" schema="public">
+        <id name="estaPro" type="big_decimal">
+            <column name="esta_pro" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="estados" class="Entity.Estados" fetch="select">
+            <column name="codigo_estados" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="proyectos" class="Entity.Proyectos" fetch="select">
+            <column name="codigo_proyecto" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

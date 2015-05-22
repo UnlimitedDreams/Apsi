@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="tesis" match-schema="public"/>
+  <table-filter match-name="actividades"/>
+  <table-filter match-name="usuario_proyecto"/>
+  <table-filter match-name="logs"/>
+  <table-filter match-name="revisiones"/>
+  <table-filter match-name="disponibilidad"/>
+  <table-filter match-name="dia"/>
+  <table-filter match-name="estados_asesoria"/>
+  <table-filter match-name="año_festivo"/>
+  <table-filter match-name="proyectos"/>
+  <table-filter match-name="ubicacion"/>
+  <table-filter match-name="dias"/>
+  <table-filter match-name="rol_actividad"/>
+  <table-filter match-name="calendario"/>
+  <table-filter match-name="ajuste"/>
+  <table-filter match-name="asistente"/>
+  <table-filter match-name="festivos"/>
+  <table-filter match-name="estado_proyecto"/>
+  <table-filter match-name="nivel_disponible"/>
+  <table-filter match-name="asesoria"/>
+  <table-filter match-name="rol"/>
+  <table-filter match-name="usuario"/>
+  <table-filter match-name="dispo_usuario"/>
+  <table-filter match-name="estados"/>
+  <table-filter match-name="revision_proyecto"/>
+</hibernate-reverse-engineering>

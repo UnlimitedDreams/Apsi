@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Actividades" table="actividades" schema="public">
+        <id name="codigoActividad" type="big_decimal">
+            <column name="codigo_actividad" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="250" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <set name="rolActividads" table="rol_actividad" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="codigo_actividad" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.RolActividad" />
+        </set>
+    </class>
+</hibernate-mapping>
