@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -23,43 +23,44 @@ import javax.persistence.TemporalType;
 public class Calendario  implements java.io.Serializable {
 
 
-     private long codCalemndario;
+     private long codCalendario;
      private Usuario usuario;
+     private String descripcion;
      private Date fechaInicial;
      private Date fechaFinal;
      private String horaInicial;
      private String horaFinal;
-     private String actividad;
 
     public Calendario() {
     }
 
 	
-    public Calendario(long codCalemndario, Date fechaInicial, Date fechaFinal) {
-        this.codCalemndario = codCalemndario;
+    public Calendario(long codCalendario, String descripcion, Date fechaInicial, Date fechaFinal) {
+        this.codCalendario = codCalendario;
+        this.descripcion = descripcion;
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
     }
-    public Calendario(long codCalemndario, Usuario usuario, Date fechaInicial, Date fechaFinal, String horaInicial, String horaFinal, String actividad) {
-       this.codCalemndario = codCalemndario;
+    public Calendario(long codCalendario, Usuario usuario, String descripcion, Date fechaInicial, Date fechaFinal, String horaInicial, String horaFinal) {
+       this.codCalendario = codCalendario;
        this.usuario = usuario;
+       this.descripcion = descripcion;
        this.fechaInicial = fechaInicial;
        this.fechaFinal = fechaFinal;
        this.horaInicial = horaInicial;
        this.horaFinal = horaFinal;
-       this.actividad = actividad;
     }
    
      @Id 
 
     
-    @Column(name="cod_calemndario", unique=true, nullable=false, precision=10, scale=0)
-    public long getCodCalemndario() {
-        return this.codCalemndario;
+    @Column(name="cod_calendario", unique=true, nullable=false, precision=10, scale=0)
+    public long getCodCalendario() {
+        return this.codCalendario;
     }
     
-    public void setCodCalemndario(long codCalemndario) {
-        this.codCalemndario = codCalemndario;
+    public void setCodCalendario(long codCalendario) {
+        this.codCalendario = codCalendario;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
@@ -70,6 +71,16 @@ public class Calendario  implements java.io.Serializable {
     
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    
+    @Column(name="descripcion", nullable=false, length=200)
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+    
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Temporal(TemporalType.DATE)
@@ -93,7 +104,7 @@ public class Calendario  implements java.io.Serializable {
     }
 
     
-    @Column(name="hora_inicial", length=10)
+    @Column(name="hora_inicial", length=6)
     public String getHoraInicial() {
         return this.horaInicial;
     }
@@ -103,7 +114,7 @@ public class Calendario  implements java.io.Serializable {
     }
 
     
-    @Column(name="hora_final", length=10)
+    @Column(name="hora_final", length=6)
     public String getHoraFinal() {
         return this.horaFinal;
     }
@@ -112,19 +123,9 @@ public class Calendario  implements java.io.Serializable {
         this.horaFinal = horaFinal;
     }
 
-    
-    @Column(name="actividad", length=200)
-    public String getActividad() {
-        return this.actividad;
-    }
-    
-    public void setActividad(String actividad) {
-        this.actividad = actividad;
-    }
-
     @Override
     public String toString() {
-        return ""+codCalemndario;
+        return ""+codCalendario;
     }
 
 

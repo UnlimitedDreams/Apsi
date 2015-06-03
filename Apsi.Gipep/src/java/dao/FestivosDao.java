@@ -5,8 +5,9 @@
  */
 package Dao;
 
-import Beans.FestivosBeans;
-import Entity.AñoFestivo;
+
+import Entity.Aofestivo;
+import Entity.Aofestivo;
 import Entity.Festivos;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,11 +20,11 @@ public interface FestivosDao {
 
     public boolean crearFestivo(Festivos fes);
 
-    public boolean CrearAñoFestivo(AñoFestivo añoFes);
+    public boolean CrearAñoFestivo(Aofestivo añoFes);
 
     public ArrayList<Festivos> listaFestivos();
 
-    public AñoFestivo Traer_año(String año);
+    public Aofestivo Traer_año(String año);
     
     public Festivos BuscarFestivo(String fecha);
     

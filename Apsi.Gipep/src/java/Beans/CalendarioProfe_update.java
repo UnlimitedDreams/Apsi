@@ -44,7 +44,7 @@ public class CalendarioProfe_update {
             fecha_final = calendario.getFechaFinal();
             hora1 = calendario.getHoraInicial();
             hora2 = calendario.getHoraFinal();
-            Actividad = calendario.getActividad();
+            Actividad = calendario.getDescripcion();
 
             System.out.println("tra");
         } catch (Exception ex) {
@@ -60,12 +60,12 @@ public class CalendarioProfe_update {
         long cod = Long.parseLong(codigo);
         CalendarioP calen = new CalendarioImple();
         Calendario calendario = new Calendario();
-        calendario.setCodCalemndario(cod);
+        calendario.setCodCalendario(cod);
         calendario.setFechaInicial(fecha_inicio);
         calendario.setFechaFinal(fecha_final);
         calendario.setHoraInicial(hora1);
         calendario.setHoraFinal(hora2);
-        calendario.setActividad(Actividad);
+        calendario.setDescripcion(Actividad);
         calendario.setUsuario(usu);
         boolean r = calen.ActualizarCalendario(calendario);
         if (r) {

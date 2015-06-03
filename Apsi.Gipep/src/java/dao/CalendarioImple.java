@@ -38,7 +38,6 @@ public class CalendarioImple implements CalendarioP {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
-        System.out.println("-----  " + c.getCodCalemndario() + " usu " + c.getUsuario().getPegeId());
         try {
             session.save(c);
             t.commit();
@@ -55,7 +54,7 @@ public class CalendarioImple implements CalendarioP {
         Transaction t = session.beginTransaction();
         boolean r = false;
         try {
-            session.createQuery("delete from Calendario where codCalemndario=" + c.getCodCalemndario()).executeUpdate();
+            session.createQuery("delete from Calendario where codCalendario=" + c.getCodCalendario()).executeUpdate();
             t.commit();
             r = true;
         } catch (Exception ex) {
@@ -102,7 +101,7 @@ public class CalendarioImple implements CalendarioP {
         try {
             calen = (ArrayList) session.createQuery("select A from Asesoria A INNER JOIN A.disponibilidad D "
                     + " INNER JOIN D.dispoUsuarios UD "
-                    + " INNER JOIN UD.usuario Usu WHERE Usu.pegeId=1").list();
+                    + " INNER JOIN UD.usuarioByProfesor Usu WHERE Usu.pegeId=1").list();
             t.commit();
         } catch (Exception ex) {
 
@@ -117,7 +116,7 @@ public class CalendarioImple implements CalendarioP {
         Transaction t = session.beginTransaction();
         Calendario temp = new Calendario();
         try {
-            temp = (Calendario) session.createQuery("FROM Calendario c WHERE c.codCalemndario=" + cod).uniqueResult();
+            temp = (Calendario) session.createQuery("FROM Calendario c WHERE c.codCalendario=" + cod).uniqueResult();
             t.commit();
         } catch (Exception ex) {
 

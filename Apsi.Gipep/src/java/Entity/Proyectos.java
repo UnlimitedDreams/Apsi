@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -24,8 +24,9 @@ public class Proyectos  implements java.io.Serializable {
 
      private BigDecimal codigoProyecto;
      private String nombre;
+     private String descripcion;
      private String ruta;
-     private String calificacion;
+     private Set calificacions = new HashSet(0);
      private Set revisionProyectos = new HashSet(0);
      private Set usuarioProyectos = new HashSet(0);
      private Set estadoProyectos = new HashSet(0);
@@ -34,17 +35,18 @@ public class Proyectos  implements java.io.Serializable {
     }
 
 	
-    public Proyectos(BigDecimal codigoProyecto, String nombre, String ruta, String calificacion) {
+    public Proyectos(BigDecimal codigoProyecto, String nombre, String descripcion, String ruta) {
         this.codigoProyecto = codigoProyecto;
         this.nombre = nombre;
+        this.descripcion = descripcion;
         this.ruta = ruta;
-        this.calificacion = calificacion;
     }
-    public Proyectos(BigDecimal codigoProyecto, String nombre, String ruta, String calificacion, Set revisionProyectos, Set usuarioProyectos, Set estadoProyectos) {
+    public Proyectos(BigDecimal codigoProyecto, String nombre, String descripcion, String ruta, Set calificacions, Set revisionProyectos, Set usuarioProyectos, Set estadoProyectos) {
        this.codigoProyecto = codigoProyecto;
        this.nombre = nombre;
+       this.descripcion = descripcion;
        this.ruta = ruta;
-       this.calificacion = calificacion;
+       this.calificacions = calificacions;
        this.revisionProyectos = revisionProyectos;
        this.usuarioProyectos = usuarioProyectos;
        this.estadoProyectos = estadoProyectos;
@@ -73,6 +75,16 @@ public class Proyectos  implements java.io.Serializable {
     }
 
     
+    @Column(name="descripcion", nullable=false)
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+    
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    
     @Column(name="ruta", nullable=false, length=250)
     public String getRuta() {
         return this.ruta;
@@ -82,14 +94,13 @@ public class Proyectos  implements java.io.Serializable {
         this.ruta = ruta;
     }
 
-    
-    @Column(name="calificacion", nullable=false, length=10)
-    public String getCalificacion() {
-        return this.calificacion;
+@OneToMany(fetch=FetchType.LAZY, mappedBy="proyectos")
+    public Set getCalificacions() {
+        return this.calificacions;
     }
     
-    public void setCalificacion(String calificacion) {
-        this.calificacion = calificacion;
+    public void setCalificacions(Set calificacions) {
+        this.calificacions = calificacions;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="proyectos")

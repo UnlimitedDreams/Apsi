@@ -1,7 +1,8 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,59 +24,61 @@ import javax.persistence.TemporalType;
 public class Festivos  implements java.io.Serializable {
 
 
-     private long festivo;
-     private AñoFestivo añoFestivo;
-     private Date fecha;
+     private BigDecimal codigoFestivos;
+     private Aofestivo aofestivo;
+     private Disponibilidad disponibilidad;
+     private Date fechaFestivo;
 
     public Festivos() {
     }
 
-	
-    public Festivos(long festivo, Date fecha) {
-        this.festivo = festivo;
-        this.fecha = fecha;
-    }
-    public Festivos(long festivo, AñoFestivo añoFestivo, Date fecha) {
-       this.festivo = festivo;
-       this.añoFestivo = añoFestivo;
-       this.fecha = fecha;
+    public Festivos(BigDecimal codigoFestivos, Aofestivo aofestivo, Disponibilidad disponibilidad, Date fechaFestivo) {
+       this.codigoFestivos = codigoFestivos;
+       this.aofestivo = aofestivo;
+       this.disponibilidad = disponibilidad;
+       this.fechaFestivo = fechaFestivo;
     }
    
      @Id 
 
     
-    @Column(name="festivo", unique=true, nullable=false, precision=10, scale=0)
-    public long getFestivo() {
-        return this.festivo;
+    @Column(name="codigo_festivos", unique=true, nullable=false, precision=131089, scale=0)
+    public BigDecimal getCodigoFestivos() {
+        return this.codigoFestivos;
     }
     
-    public void setFestivo(long festivo) {
-        this.festivo = festivo;
+    public void setCodigoFestivos(BigDecimal codigoFestivos) {
+        this.codigoFestivos = codigoFestivos;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="cod_a�o")
-    public AñoFestivo getAñoFestivo() {
-        return this.añoFestivo;
+    @JoinColumn(name="cod_ao", nullable=false)
+    public Aofestivo getAofestivo() {
+        return this.aofestivo;
     }
     
-    public void setAñoFestivo(AñoFestivo añoFestivo) {
-        this.añoFestivo = añoFestivo;
+    public void setAofestivo(Aofestivo aofestivo) {
+        this.aofestivo = aofestivo;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="cod_dis", nullable=false)
+    public Disponibilidad getDisponibilidad() {
+        return this.disponibilidad;
+    }
+    
+    public void setDisponibilidad(Disponibilidad disponibilidad) {
+        this.disponibilidad = disponibilidad;
     }
 
     @Temporal(TemporalType.DATE)
-    @Column(name="fecha", nullable=false, length=30)
-    public Date getFecha() {
-        return this.fecha;
+    @Column(name="fecha_festivo", nullable=false, length=13)
+    public Date getFechaFestivo() {
+        return this.fechaFestivo;
     }
     
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    @Override
-    public String toString() {
-        return  ""+festivo;
+    public void setFechaFestivo(Date fechaFestivo) {
+        this.fechaFestivo = fechaFestivo;
     }
 
 

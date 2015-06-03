@@ -1,13 +1,14 @@
 package Beans;
 
+
 import Dao.CalendarioImple;
 import Dao.CalendarioP;
 import Dao.Sequence;
 import Entity.Asesoria;
 import Entity.Asistente;
 import Entity.Calendario;
-import Entity.ModeloDias;
 import Entity.Usuario;
+import Modelo.MDias;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -53,26 +54,26 @@ public class Calendario_profesor implements Serializable {
     ArrayList<String> res = new ArrayList();
 
     @PostConstruct
-    public void init() {
+    public void init(){
         añadir_eventos();
     }
 
-    public void añadir_eventos() {
+    public void añadir_eventos()  {
         eventModel = new DefaultScheduleModel();
         ArrayList a = null;
         ArrayList b = null;
         try {
             a = traer_dias();
             b = traer_citas();
-            ModeloDias temp = null;
-            ModeloDias temp2 = null;
+            MDias temp = null;
+            MDias temp2 = null;
             String fecha = "";
             int h1 = 0, h2 = 0;
             int min1 = 0, min2 = 0;
-            System.out.println("comenzamos " + a.size() + "---"+ b.size());
+            System.out.println("comenzamos " + a.size() + "---" + b.size());
             for (int i = 0; i < a.size(); i++) {
                 System.out.println(".l.");
-                temp = (ModeloDias) a.get(i);
+                temp = (MDias) a.get(i);
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
                 Date date1 = fmt.parse(temp.getFecha1());
                 Date date2 = fmt.parse(temp.getFecha1());
@@ -90,7 +91,7 @@ public class Calendario_profesor implements Serializable {
             }
 
             for (int k = 0; k < b.size(); k++) {
-                temp2 = (ModeloDias) b.get(k);
+                temp2 = (MDias) b.get(k);
                 System.err.println(temp2.toString());
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
                 Date date1 = fmt.parse(temp2.getFecha1());
@@ -107,7 +108,7 @@ public class Calendario_profesor implements Serializable {
                 date.setHours(h2);
                 date.setMinutes(min2);
 //                date.setDate(date.getDate());
-                System.out.println(""+temp2.getCod() + date1 + "-" + date);
+                System.out.println("" + temp2.getCod() + date1 + "-" + date);
                 eventModel.addEvent(new DefaultScheduleEvent(temp2.getRazon() + "#" + temp2.getCod(), date1, date));
             }
         } catch (ClassNotFoundException ex) {
@@ -182,7 +183,7 @@ public class Calendario_profesor implements Serializable {
     }
 
     public ArrayList traer_dias() throws ClassNotFoundException {
-        ArrayList<ModeloDias> dias = new ArrayList();
+        ArrayList<MDias> dias = new ArrayList();
         CalendarioP calen = new CalendarioImple();
         ArrayList<Asesoria> usu = new ArrayList();
         usu = calen.TraerAsesorias(1);
@@ -195,7 +196,7 @@ public class Calendario_profesor implements Serializable {
             for (int i = 0; i < usu.size(); i++) {
                 temp = (Asesoria) usu.get(i);
                 cod = temp.getCodAsesoria().intValue();
-                ModeloDias d = new ModeloDias(cod,""+temp.getFechaAsesoria(), "", temp.getHoraAsesoria(), temp.getHoraAsesoria(), "");
+                MDias d = new MDias(cod, "" + temp.getFechaAsesoria(), "", temp.getHoraAsesoria(), temp.getHoraAsesoria(), "");
                 dias.add(d);
             }
         } catch (Exception ex) {
@@ -205,7 +206,7 @@ public class Calendario_profesor implements Serializable {
     }
 
     public ArrayList traer_citas() throws ClassNotFoundException {
-        ArrayList<ModeloDias> dias = new ArrayList();
+        ArrayList<MDias> dias = new ArrayList();
         CalendarioP calen = new CalendarioImple();
         ArrayList<Calendario> c = new ArrayList();
         Usuario usu = new Usuario();
@@ -220,8 +221,8 @@ public class Calendario_profesor implements Serializable {
             Calendario temp = null;
             for (int i = 0; i < c.size(); i++) {
                 temp = (Calendario) c.get(i);
-                dias.add(new ModeloDias(temp.getCodCalemndario(), "" + temp.getFechaInicial(), "" + temp.getFechaFinal(),
-                        temp.getHoraInicial(), temp.getHoraFinal(), temp.getActividad()));
+                dias.add(new MDias((int) temp.getCodCalendario(), "" + temp.getFechaInicial(), "" + temp.getFechaFinal(),
+                        "" + temp.getHoraInicial(), "" + temp.getHoraFinal(), temp.getDescripcion()));
 
             }
         } catch (Exception ex) {
@@ -241,19 +242,19 @@ public class Calendario_profesor implements Serializable {
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
         System.err.println("------------------");
         CalendarioP calen = new CalendarioImple();
-        Query query = Sequence.GetUltimoRegistro("FROM Calendario order by codCalemndario DESC");
+        Query query = Sequence.GetUltimoRegistro("FROM Calendario order by codCalendario DESC");
         String cod_salvador = "" + query.uniqueResult();
         int Codigo_calendario = Integer.parseInt(cod_salvador);
         Usuario usu = new Usuario();
         usu.setPegeId(new BigDecimal(1));
         Calendario c = new Calendario();
-        c.setCodCalemndario(Codigo_calendario + 1);
+        c.setCodCalendario(Codigo_calendario + 1);
         c.setFechaInicial(fecha_inicio);
         c.setFechaFinal(fecha_final);
         c.setUsuario(usu);
         c.setHoraInicial(hora1);
         c.setHoraFinal(hora2);
-        c.setActividad(titulo);
+        c.setDescripcion(titulo);
         boolean r = calen.CrearCalendario(c);
         if (r) {
             String f1 = "", f2 = "";
@@ -384,37 +385,37 @@ public class Calendario_profesor implements Serializable {
         } else {
             no = event.getTitle();
         }
-        if (no.equals("Asesoria")) {
-            cod1 = event.getTitle().split("#");
-            cod = cod1[1];
-            System.err.println("Codigo es " + cod);
-            Asesoria asesoria = new Asesoria();
-            int convertir = Integer.parseInt(cod);
-            asesoria.setCodAsesoria(new BigDecimal(convertir));
-            Asistente asistente = new Asistente();
-            asistente.setAsesoria(asesoria);
-            boolean a = calen.BorrarASesoria(asesoria, asistente);
-//            boolean a = Control.ejecuteUpdate("delete from asistente where cod_asesoria=" + cod);
-            if (a) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
-                añadir_eventos();
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "NO Cancelado", ""));
-            }
-        } else {
-            cod1 = event.getTitle().split("#");
-            cod = cod1[1];
-            Calendario ca = new Calendario();
-            ca.setCodCalemndario(Integer.parseInt(cod));
-            System.err.println("codigo es " + cod);
-            boolean p = calen.BorrarCalendario(ca);
-            if (p) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
-                añadir_eventos();
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "NO Cancelado", ""));
-            }
-        }
+//        if (no.equals("Asesoria")) {
+//            cod1 = event.getTitle().split("#");
+//            cod = cod1[1];
+//            System.err.println("Codigo es " + cod);
+//            Asesoria asesoria = new Asesoria();
+//            int convertir = Integer.parseInt(cod);
+//            asesoria.setCodAsesoria(new BigDecimal(convertir));
+//            Asistente asistente = new Asistente();
+//            asistente.setAsesoria(asesoria);
+//            boolean a = calen.BorrarASesoria(asesoria, asistente);
+////            boolean a = Control.ejecuteUpdate("delete from asistente where cod_asesoria=" + cod);
+//            if (a) {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
+//                añadir_eventos();
+//            } else {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "NO Cancelado", ""));
+//            }
+//        } else {
+//            cod1 = event.getTitle().split("#");
+//            cod = cod1[1];
+//            Calendario ca = new Calendario();
+//            ca.setCodCalemndario(Integer.parseInt(cod));
+//            System.err.println("codigo es " + cod);
+//            boolean p = calen.BorrarCalendario(ca);
+//            if (p) {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
+//                añadir_eventos();
+//            } else {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "NO Cancelado", ""));
+//            }
+//        }
     }
 
     public void actual() throws IOException {

@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -21,39 +21,51 @@ import javax.persistence.Table;
 public class DispoUsuario  implements java.io.Serializable {
 
 
-     private BigDecimal dispoUsu;
-     private Usuario usuario;
+     private BigDecimal codDispousu;
+     private Usuario usuarioByProfesor;
+     private Usuario usuarioByAdmon;
      private Disponibilidad disponibilidad;
 
     public DispoUsuario() {
     }
 
-    public DispoUsuario(BigDecimal dispoUsu, Usuario usuario, Disponibilidad disponibilidad) {
-       this.dispoUsu = dispoUsu;
-       this.usuario = usuario;
+    public DispoUsuario(BigDecimal codDispousu, Usuario usuarioByProfesor, Usuario usuarioByAdmon, Disponibilidad disponibilidad) {
+       this.codDispousu = codDispousu;
+       this.usuarioByProfesor = usuarioByProfesor;
+       this.usuarioByAdmon = usuarioByAdmon;
        this.disponibilidad = disponibilidad;
     }
    
      @Id 
 
     
-    @Column(name="dispo_usu", unique=true, nullable=false, precision=131089, scale=0)
-    public BigDecimal getDispoUsu() {
-        return this.dispoUsu;
+    @Column(name="cod_dispousu", unique=true, nullable=false, precision=131089, scale=0)
+    public BigDecimal getCodDispousu() {
+        return this.codDispousu;
     }
     
-    public void setDispoUsu(BigDecimal dispoUsu) {
-        this.dispoUsu = dispoUsu;
+    public void setCodDispousu(BigDecimal codDispousu) {
+        this.codDispousu = codDispousu;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="pege_id", nullable=false)
-    public Usuario getUsuario() {
-        return this.usuario;
+    @JoinColumn(name="profesor", nullable=false)
+    public Usuario getUsuarioByProfesor() {
+        return this.usuarioByProfesor;
     }
     
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuarioByProfesor(Usuario usuarioByProfesor) {
+        this.usuarioByProfesor = usuarioByProfesor;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="admon", nullable=false)
+    public Usuario getUsuarioByAdmon() {
+        return this.usuarioByAdmon;
+    }
+    
+    public void setUsuarioByAdmon(Usuario usuarioByAdmon) {
+        this.usuarioByAdmon = usuarioByAdmon;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)

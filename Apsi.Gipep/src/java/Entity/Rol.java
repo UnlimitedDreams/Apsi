@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -9,8 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,27 +23,26 @@ public class Rol  implements java.io.Serializable {
 
 
      private BigDecimal codRol;
-     private Usuario usuario;
      private String estado;
      private String nombre;
      private Set rolActividads = new HashSet(0);
+     private Set usuRols = new HashSet(0);
 
     public Rol() {
     }
 
 	
-    public Rol(BigDecimal codRol, Usuario usuario, String estado, String nombre) {
+    public Rol(BigDecimal codRol, String estado, String nombre) {
         this.codRol = codRol;
-        this.usuario = usuario;
         this.estado = estado;
         this.nombre = nombre;
     }
-    public Rol(BigDecimal codRol, Usuario usuario, String estado, String nombre, Set rolActividads) {
+    public Rol(BigDecimal codRol, String estado, String nombre, Set rolActividads, Set usuRols) {
        this.codRol = codRol;
-       this.usuario = usuario;
        this.estado = estado;
        this.nombre = nombre;
        this.rolActividads = rolActividads;
+       this.usuRols = usuRols;
     }
    
      @Id 
@@ -58,16 +55,6 @@ public class Rol  implements java.io.Serializable {
     
     public void setCodRol(BigDecimal codRol) {
         this.codRol = codRol;
-    }
-
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="pege_id", nullable=false)
-    public Usuario getUsuario() {
-        return this.usuario;
-    }
-    
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     
@@ -97,6 +84,15 @@ public class Rol  implements java.io.Serializable {
     
     public void setRolActividads(Set rolActividads) {
         this.rolActividads = rolActividads;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="rol")
+    public Set getUsuRols() {
+        return this.usuRols;
+    }
+    
+    public void setUsuRols(Set usuRols) {
+        this.usuRols = usuRols;
     }
 
 

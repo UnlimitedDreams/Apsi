@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -33,6 +33,7 @@ public class Asesoria  implements java.io.Serializable {
      private Date fechaAsesoria;
      private BigDecimal codigoProyecto;
      private String horaAsesoria;
+     private String horaFinal;
      private String description;
      private String tipoAsesoria;
      private Set estadosAsesorias = new HashSet(0);
@@ -42,23 +43,25 @@ public class Asesoria  implements java.io.Serializable {
     }
 
 	
-    public Asesoria(BigDecimal codAsesoria, Ubicacion ubicacion, Disponibilidad disponibilidad, Date fechaAsesoria, BigDecimal codigoProyecto, String horaAsesoria, String description, String tipoAsesoria) {
+    public Asesoria(BigDecimal codAsesoria, Ubicacion ubicacion, Disponibilidad disponibilidad, Date fechaAsesoria, BigDecimal codigoProyecto, String horaAsesoria, String horaFinal, String description, String tipoAsesoria) {
         this.codAsesoria = codAsesoria;
         this.ubicacion = ubicacion;
         this.disponibilidad = disponibilidad;
         this.fechaAsesoria = fechaAsesoria;
         this.codigoProyecto = codigoProyecto;
         this.horaAsesoria = horaAsesoria;
+        this.horaFinal = horaFinal;
         this.description = description;
         this.tipoAsesoria = tipoAsesoria;
     }
-    public Asesoria(BigDecimal codAsesoria, Ubicacion ubicacion, Disponibilidad disponibilidad, Date fechaAsesoria, BigDecimal codigoProyecto, String horaAsesoria, String description, String tipoAsesoria, Set estadosAsesorias, Set asistentes) {
+    public Asesoria(BigDecimal codAsesoria, Ubicacion ubicacion, Disponibilidad disponibilidad, Date fechaAsesoria, BigDecimal codigoProyecto, String horaAsesoria, String horaFinal, String description, String tipoAsesoria, Set estadosAsesorias, Set asistentes) {
        this.codAsesoria = codAsesoria;
        this.ubicacion = ubicacion;
        this.disponibilidad = disponibilidad;
        this.fechaAsesoria = fechaAsesoria;
        this.codigoProyecto = codigoProyecto;
        this.horaAsesoria = horaAsesoria;
+       this.horaFinal = horaFinal;
        this.description = description;
        this.tipoAsesoria = tipoAsesoria;
        this.estadosAsesorias = estadosAsesorias;
@@ -125,6 +128,16 @@ public class Asesoria  implements java.io.Serializable {
     
     public void setHoraAsesoria(String horaAsesoria) {
         this.horaAsesoria = horaAsesoria;
+    }
+
+    
+    @Column(name="hora_final", nullable=false)
+    public String getHoraFinal() {
+        return this.horaFinal;
+    }
+    
+    public void setHoraFinal(String horaFinal) {
+        this.horaFinal = horaFinal;
     }
 
     

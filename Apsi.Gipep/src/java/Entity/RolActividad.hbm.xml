@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
     <class name="Entity.RolActividad" table="rol_actividad" schema="public">
-        <id name="rolActivi" type="big_decimal">
-            <column name="rol_activi" precision="131089" scale="0" />
+        <id name="codRolacti" type="big_decimal">
+            <column name="cod_rolacti" precision="131089" scale="0" />
             <generator class="assigned" />
         </id>
         <many-to-one name="actividades" class="Entity.Actividades" fetch="select">

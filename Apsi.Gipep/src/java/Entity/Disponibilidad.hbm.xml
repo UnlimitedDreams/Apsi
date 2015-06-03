@@ -1,21 +1,27 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
     <class name="Entity.Disponibilidad" table="disponibilidad" schema="public">
         <id name="codDis" type="big_decimal">
             <column name="cod_dis" precision="131089" scale="0" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="ajuste" class="Entity.Ajuste" fetch="select">
-            <column name="cod_ajuste" precision="131089" scale="0" not-null="true" />
-        </many-to-one>
         <property name="fechaInicial" type="date">
             <column name="fecha_inicial" length="13" not-null="true" />
         </property>
         <property name="fechaFinal" type="date">
             <column name="fecha_final" length="13" not-null="true" />
+        </property>
+        <property name="rango" type="big_decimal">
+            <column name="rango" precision="131089" scale="0" not-null="true" />
+        </property>
+        <property name="numHoras" type="big_decimal">
+            <column name="num_horas" precision="131089" scale="0" not-null="true" />
+        </property>
+        <property name="periodo" type="big_decimal">
+            <column name="periodo" precision="131089" scale="0" not-null="true" />
         </property>
         <set name="asesorias" table="asesoria" inverse="true" lazy="true" fetch="select">
             <key>
@@ -34,6 +40,12 @@
                 <column name="cod_dis" precision="131089" scale="0" not-null="true" />
             </key>
             <one-to-many class="Entity.NivelDisponible" />
+        </set>
+        <set name="festivoses" table="festivos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_dis" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Festivos" />
         </set>
         <set name="dias" table="dia" inverse="true" lazy="true" fetch="select">
             <key>

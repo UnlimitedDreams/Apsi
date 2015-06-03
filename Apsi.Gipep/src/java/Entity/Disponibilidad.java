@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -10,8 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,32 +26,40 @@ public class Disponibilidad  implements java.io.Serializable {
 
 
      private BigDecimal codDis;
-     private Ajuste ajuste;
      private Date fechaInicial;
      private Date fechaFinal;
+     private BigDecimal rango;
+     private BigDecimal numHoras;
+     private BigDecimal periodo;
      private Set asesorias = new HashSet(0);
      private Set dispoUsuarios = new HashSet(0);
      private Set nivelDisponibles = new HashSet(0);
+     private Set festivoses = new HashSet(0);
      private Set dias = new HashSet(0);
 
     public Disponibilidad() {
     }
 
 	
-    public Disponibilidad(BigDecimal codDis, Ajuste ajuste, Date fechaInicial, Date fechaFinal) {
+    public Disponibilidad(BigDecimal codDis, Date fechaInicial, Date fechaFinal, BigDecimal rango, BigDecimal numHoras, BigDecimal periodo) {
         this.codDis = codDis;
-        this.ajuste = ajuste;
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
+        this.rango = rango;
+        this.numHoras = numHoras;
+        this.periodo = periodo;
     }
-    public Disponibilidad(BigDecimal codDis, Ajuste ajuste, Date fechaInicial, Date fechaFinal, Set asesorias, Set dispoUsuarios, Set nivelDisponibles, Set dias) {
+    public Disponibilidad(BigDecimal codDis, Date fechaInicial, Date fechaFinal, BigDecimal rango, BigDecimal numHoras, BigDecimal periodo, Set asesorias, Set dispoUsuarios, Set nivelDisponibles, Set festivoses, Set dias) {
        this.codDis = codDis;
-       this.ajuste = ajuste;
        this.fechaInicial = fechaInicial;
        this.fechaFinal = fechaFinal;
+       this.rango = rango;
+       this.numHoras = numHoras;
+       this.periodo = periodo;
        this.asesorias = asesorias;
        this.dispoUsuarios = dispoUsuarios;
        this.nivelDisponibles = nivelDisponibles;
+       this.festivoses = festivoses;
        this.dias = dias;
     }
    
@@ -67,16 +73,6 @@ public class Disponibilidad  implements java.io.Serializable {
     
     public void setCodDis(BigDecimal codDis) {
         this.codDis = codDis;
-    }
-
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="cod_ajuste", nullable=false)
-    public Ajuste getAjuste() {
-        return this.ajuste;
-    }
-    
-    public void setAjuste(Ajuste ajuste) {
-        this.ajuste = ajuste;
     }
 
     @Temporal(TemporalType.DATE)
@@ -97,6 +93,36 @@ public class Disponibilidad  implements java.io.Serializable {
     
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
+    }
+
+    
+    @Column(name="rango", nullable=false, precision=131089, scale=0)
+    public BigDecimal getRango() {
+        return this.rango;
+    }
+    
+    public void setRango(BigDecimal rango) {
+        this.rango = rango;
+    }
+
+    
+    @Column(name="num_horas", nullable=false, precision=131089, scale=0)
+    public BigDecimal getNumHoras() {
+        return this.numHoras;
+    }
+    
+    public void setNumHoras(BigDecimal numHoras) {
+        this.numHoras = numHoras;
+    }
+
+    
+    @Column(name="periodo", nullable=false, precision=131089, scale=0)
+    public BigDecimal getPeriodo() {
+        return this.periodo;
+    }
+    
+    public void setPeriodo(BigDecimal periodo) {
+        this.periodo = periodo;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="disponibilidad")
@@ -124,6 +150,15 @@ public class Disponibilidad  implements java.io.Serializable {
     
     public void setNivelDisponibles(Set nivelDisponibles) {
         this.nivelDisponibles = nivelDisponibles;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="disponibilidad")
+    public Set getFestivoses() {
+        return this.festivoses;
+    }
+    
+    public void setFestivoses(Set festivoses) {
+        this.festivoses = festivoses;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="disponibilidad")

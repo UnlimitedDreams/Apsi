@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -21,15 +21,15 @@ import javax.persistence.Table;
 public class RevisionProyecto  implements java.io.Serializable {
 
 
-     private BigDecimal reviProyec;
+     private BigDecimal codRevisionproyecto;
      private Revisiones revisiones;
      private Proyectos proyectos;
 
     public RevisionProyecto() {
     }
 
-    public RevisionProyecto(BigDecimal reviProyec, Revisiones revisiones, Proyectos proyectos) {
-       this.reviProyec = reviProyec;
+    public RevisionProyecto(BigDecimal codRevisionproyecto, Revisiones revisiones, Proyectos proyectos) {
+       this.codRevisionproyecto = codRevisionproyecto;
        this.revisiones = revisiones;
        this.proyectos = proyectos;
     }
@@ -37,13 +37,13 @@ public class RevisionProyecto  implements java.io.Serializable {
      @Id 
 
     
-    @Column(name="revi_proyec", unique=true, nullable=false, precision=131089, scale=0)
-    public BigDecimal getReviProyec() {
-        return this.reviProyec;
+    @Column(name="cod_revisionproyecto", unique=true, nullable=false, precision=131089, scale=0)
+    public BigDecimal getCodRevisionproyecto() {
+        return this.codRevisionproyecto;
     }
     
-    public void setReviProyec(BigDecimal reviProyec) {
-        this.reviProyec = reviProyec;
+    public void setCodRevisionproyecto(BigDecimal codRevisionproyecto) {
+        this.codRevisionproyecto = codRevisionproyecto;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)

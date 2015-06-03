@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -21,15 +21,15 @@ import javax.persistence.Table;
 public class RolActividad  implements java.io.Serializable {
 
 
-     private BigDecimal rolActivi;
+     private BigDecimal codRolacti;
      private Actividades actividades;
      private Rol rol;
 
     public RolActividad() {
     }
 
-    public RolActividad(BigDecimal rolActivi, Actividades actividades, Rol rol) {
-       this.rolActivi = rolActivi;
+    public RolActividad(BigDecimal codRolacti, Actividades actividades, Rol rol) {
+       this.codRolacti = codRolacti;
        this.actividades = actividades;
        this.rol = rol;
     }
@@ -37,13 +37,13 @@ public class RolActividad  implements java.io.Serializable {
      @Id 
 
     
-    @Column(name="rol_activi", unique=true, nullable=false, precision=131089, scale=0)
-    public BigDecimal getRolActivi() {
-        return this.rolActivi;
+    @Column(name="cod_rolacti", unique=true, nullable=false, precision=131089, scale=0)
+    public BigDecimal getCodRolacti() {
+        return this.codRolacti;
     }
     
-    public void setRolActivi(BigDecimal rolActivi) {
-        this.rolActivi = rolActivi;
+    public void setCodRolacti(BigDecimal codRolacti) {
+        this.codRolacti = codRolacti;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)

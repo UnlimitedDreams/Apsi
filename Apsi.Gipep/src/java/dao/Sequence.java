@@ -5,7 +5,7 @@
  */
 package Dao;
 
-import Entity.Dias;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

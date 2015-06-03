@@ -1,5 +1,5 @@
 package Entity;
-// Generated 19-may-2015 18:40:29 by Hibernate Tools 3.6.0
+// Generated 02-jun-2015 13:38:41 by Hibernate Tools 3.6.0
 
 
 import java.math.BigDecimal;
@@ -25,13 +25,14 @@ public class Usuario  implements java.io.Serializable {
      private BigDecimal pegeId;
      private String contrasea;
      private String usuario;
-     private Set dispoUsuarios = new HashSet(0);
-     private Set usuarioProyectos = new HashSet(0);
-     private Set ajustes = new HashSet(0);
+     private Set usuRols = new HashSet(0);
+     private Set personas = new HashSet(0);
+     private Set dispoUsuariosForProfesor = new HashSet(0);
+     private Set dispoUsuariosForAdmon = new HashSet(0);
+     private Set usuarioProyectosForEstudiante = new HashSet(0);
      private Set asistentes = new HashSet(0);
-     private Set rols = new HashSet(0);
      private Set calendarios = new HashSet(0);
-     private Set logses = new HashSet(0);
+     private Set usuarioProyectosForDirector = new HashSet(0);
 
     public Usuario() {
     }
@@ -42,17 +43,18 @@ public class Usuario  implements java.io.Serializable {
         this.contrasea = contrasea;
         this.usuario = usuario;
     }
-    public Usuario(BigDecimal pegeId, String contrasea, String usuario, Set dispoUsuarios, Set usuarioProyectos, Set ajustes, Set asistentes, Set rols, Set calendarios, Set logses) {
+    public Usuario(BigDecimal pegeId, String contrasea, String usuario, Set usuRols, Set personas, Set dispoUsuariosForProfesor, Set dispoUsuariosForAdmon, Set usuarioProyectosForEstudiante, Set asistentes, Set calendarios, Set usuarioProyectosForDirector) {
        this.pegeId = pegeId;
        this.contrasea = contrasea;
        this.usuario = usuario;
-       this.dispoUsuarios = dispoUsuarios;
-       this.usuarioProyectos = usuarioProyectos;
-       this.ajustes = ajustes;
+       this.usuRols = usuRols;
+       this.personas = personas;
+       this.dispoUsuariosForProfesor = dispoUsuariosForProfesor;
+       this.dispoUsuariosForAdmon = dispoUsuariosForAdmon;
+       this.usuarioProyectosForEstudiante = usuarioProyectosForEstudiante;
        this.asistentes = asistentes;
-       this.rols = rols;
        this.calendarios = calendarios;
-       this.logses = logses;
+       this.usuarioProyectosForDirector = usuarioProyectosForDirector;
     }
    
      @Id 
@@ -88,30 +90,48 @@ public class Usuario  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
-    public Set getDispoUsuarios() {
-        return this.dispoUsuarios;
+    public Set getUsuRols() {
+        return this.usuRols;
     }
     
-    public void setDispoUsuarios(Set dispoUsuarios) {
-        this.dispoUsuarios = dispoUsuarios;
+    public void setUsuRols(Set usuRols) {
+        this.usuRols = usuRols;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
-    public Set getUsuarioProyectos() {
-        return this.usuarioProyectos;
+    public Set getPersonas() {
+        return this.personas;
     }
     
-    public void setUsuarioProyectos(Set usuarioProyectos) {
-        this.usuarioProyectos = usuarioProyectos;
+    public void setPersonas(Set personas) {
+        this.personas = personas;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
-    public Set getAjustes() {
-        return this.ajustes;
+@OneToMany(fetch=FetchType.LAZY, mappedBy="usuarioByProfesor")
+    public Set getDispoUsuariosForProfesor() {
+        return this.dispoUsuariosForProfesor;
     }
     
-    public void setAjustes(Set ajustes) {
-        this.ajustes = ajustes;
+    public void setDispoUsuariosForProfesor(Set dispoUsuariosForProfesor) {
+        this.dispoUsuariosForProfesor = dispoUsuariosForProfesor;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="usuarioByAdmon")
+    public Set getDispoUsuariosForAdmon() {
+        return this.dispoUsuariosForAdmon;
+    }
+    
+    public void setDispoUsuariosForAdmon(Set dispoUsuariosForAdmon) {
+        this.dispoUsuariosForAdmon = dispoUsuariosForAdmon;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="usuarioByEstudiante")
+    public Set getUsuarioProyectosForEstudiante() {
+        return this.usuarioProyectosForEstudiante;
+    }
+    
+    public void setUsuarioProyectosForEstudiante(Set usuarioProyectosForEstudiante) {
+        this.usuarioProyectosForEstudiante = usuarioProyectosForEstudiante;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
@@ -124,15 +144,6 @@ public class Usuario  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
-    public Set getRols() {
-        return this.rols;
-    }
-    
-    public void setRols(Set rols) {
-        this.rols = rols;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
     public Set getCalendarios() {
         return this.calendarios;
     }
@@ -141,13 +152,13 @@ public class Usuario  implements java.io.Serializable {
         this.calendarios = calendarios;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="usuario")
-    public Set getLogses() {
-        return this.logses;
+@OneToMany(fetch=FetchType.LAZY, mappedBy="usuarioByDirector")
+    public Set getUsuarioProyectosForDirector() {
+        return this.usuarioProyectosForDirector;
     }
     
-    public void setLogses(Set logses) {
-        this.logses = logses;
+    public void setUsuarioProyectosForDirector(Set usuarioProyectosForDirector) {
+        this.usuarioProyectosForDirector = usuarioProyectosForDirector;
     }
 
 

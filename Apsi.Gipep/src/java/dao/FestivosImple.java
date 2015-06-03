@@ -5,8 +5,8 @@
  */
 package Dao;
 
-import Beans.FestivosBeans;
-import Entity.AñoFestivo;
+
+import Entity.Aofestivo;
 import Entity.Festivos;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,18 +38,18 @@ public class FestivosImple implements FestivosDao {
     }
 
     @Override
-    public AñoFestivo Traer_año(String año) {
+    public Aofestivo Traer_año(String año) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
-        AñoFestivo temp = null;
+        Aofestivo temp = null;
         System.out.println("--- entro");
-        temp = (AñoFestivo) session.createQuery("FROM AñoFestivo WHERE año='" + año + "'").uniqueResult();
+        temp = (Aofestivo) session.createQuery("FROM Añofestivo WHERE año='" + año + "'").uniqueResult();
         System.out.println("---- salio " + temp.toString());
         return temp;
     }
 
     @Override
-    public boolean CrearAñoFestivo(AñoFestivo añoFes) {
+    public boolean CrearAñoFestivo(Aofestivo añoFes) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
@@ -83,7 +83,7 @@ public class FestivosImple implements FestivosDao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         Festivos temp = null;
-        temp = (Festivos) session.createQuery("SELECT fe FROM Festivos fe WHERE fecha='" + fecha + "'").uniqueResult();
+        temp = (Festivos) session.createQuery("SELECT fe FROM Festivos fe WHERE fechaFestivo='" + fecha + "'").uniqueResult();
         t.commit();
         return temp;
     }
@@ -95,7 +95,7 @@ public class FestivosImple implements FestivosDao {
         boolean r = false;
         try {
             System.out.println("-");
-            session.createQuery("delete from Festivos where festivo=" + fes.getFestivo()).executeUpdate();
+            session.createQuery("delete from Festivos where codigoFestivos=" + fes.getCodigoFestivos()).executeUpdate();
             t.commit();
             r = true;
         } catch (Exception ex) {
