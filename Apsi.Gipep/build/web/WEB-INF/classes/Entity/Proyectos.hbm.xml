@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
     <class name="Entity.Proyectos" table="proyectos" schema="public">
         <id name="codigoProyecto" type="big_decimal">
@@ -11,12 +11,18 @@
         <property name="nombre" type="string">
             <column name="nombre" length="250" not-null="true" />
         </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" not-null="true" />
+        </property>
         <property name="ruta" type="string">
             <column name="ruta" length="250" not-null="true" />
         </property>
-        <property name="calificacion" type="string">
-            <column name="calificacion" length="10" not-null="true" />
-        </property>
+        <set name="calificacions" table="calificacion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="codigo_proyecto" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Calificacion" />
+        </set>
         <set name="revisionProyectos" table="revision_proyecto" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="codigo_proyecto" precision="131089" scale="0" not-null="true" />

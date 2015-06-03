@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
     <class name="Entity.Asesoria" table="asesoria" schema="public">
         <id name="codAsesoria" type="big_decimal">
@@ -22,6 +22,9 @@
         </property>
         <property name="horaAsesoria" type="string">
             <column name="hora_asesoria" not-null="true" />
+        </property>
+        <property name="horaFinal" type="string">
+            <column name="hora_final" not-null="true" />
         </property>
         <property name="description" type="string">
             <column name="description" not-null="true" />

@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 19-may-2015 18:40:31 by Hibernate Tools 3.6.0 -->
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
     <class name="Entity.Rol" table="rol" schema="public">
         <id name="codRol" type="big_decimal">
             <column name="cod_rol" precision="131089" scale="0" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="usuario" class="Entity.Usuario" fetch="select">
-            <column name="pege_id" precision="131089" scale="0" not-null="true" />
-        </many-to-one>
         <property name="estado" type="string">
             <column name="estado" length="40" not-null="true" />
         </property>
@@ -22,6 +19,12 @@
                 <column name="cod_rol" precision="131089" scale="0" not-null="true" />
             </key>
             <one-to-many class="Entity.RolActividad" />
+        </set>
+        <set name="usuRols" table="usu_rol" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_rol" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.UsuRol" />
         </set>
     </class>
 </hibernate-mapping>
