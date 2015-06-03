@@ -1,0 +1,42 @@
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://java.sun.com/jsf/html"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Bienvenido</title>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+    </h:head>
+    <h:body onload="#{ajusteProfesorBeans.inicionombreProfe()}">
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png"/>
+            </div>
+            <div style="text-align: center;">
+                <b> Ajuste Tiempo</b>    
+            </div>
+        </div>
+        <div style="margin-top: 8%;">
+            <center>
+                <h:form>
+                    <h:outputLabel   value="Profesor : #{ajusteProfesorBeans.nombreProfesor}" style="font-weight:bold" />
+                    <br/><br/>
+                    <p:panelGrid columns="2" >
+                        <h:outputLabel for="ho" value="Hora Inicial :" style="font-weight:bold" />
+                        <p:selectOneMenu id="city" value="#{selectOneMenuView.city}" effect="fold" editable="true">
+                            <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItems value="#{selectOneMenuView.cities}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel for="Ra" value="Hora Final  :" style="font-weight:bold" />
+                        <p:inputText id="Ra" value="#{ajusteProfesorBeans.hora_Final}" />
+                    </p:panelGrid>
+                    <br/>
+                    <h:commandButton value="Next"></h:commandButton>
+                </h:form>
+            </center>
+        </div>
+    </h:body>
+</html>
+
