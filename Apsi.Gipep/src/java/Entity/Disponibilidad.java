@@ -170,6 +170,11 @@ public class Disponibilidad  implements java.io.Serializable {
         this.dias = dias;
     }
 
+    @Override
+    public String toString() {
+        return  ""+codDis;
+    }
+
 
 
 

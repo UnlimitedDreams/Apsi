@@ -78,6 +78,11 @@ public class DispoUsuario  implements java.io.Serializable {
         this.disponibilidad = disponibilidad;
     }
 
+    @Override
+    public String toString() {
+        return  ""+codDispousu ;
+    }
+
 
 
 
