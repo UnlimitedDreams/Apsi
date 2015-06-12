@@ -17,13 +17,11 @@ import util.HibernateUtil;
  */
 public class Sequence {
 
-    public static Query GetUltimoRegistro(String sql) {
+    public static Query GetUltimoRegistro(String sql){
+        System.out.println("entro a sequence");
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
-        int codigo = 0;
         Query query = session.createQuery(sql).setMaxResults(1);
-      
-        
         return query;
     }
 }

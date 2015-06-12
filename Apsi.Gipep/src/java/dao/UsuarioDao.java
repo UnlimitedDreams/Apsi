@@ -11,4 +11,6 @@ import Entity.Usuario;
 
 public interface UsuarioDao {
     public Usuario Loguin(Usuario usu);
+    public boolean CrearUsuario(Usuario usu);
+    public boolean BuscarUsuario(Usuario usu);
 }
