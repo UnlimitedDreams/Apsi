@@ -5,14 +5,17 @@
  */
 package Modelo;
 
-public class Profesor {
+import java.io.Serializable;
+
+public class Profesor implements Serializable{
 
     private boolean activo;
-    private int cedula;
+    private String cedula;
     private String nombre;
     private String apellido;
+    private String pege_id;
 
-    public Profesor(boolean activo, int cedula, String nombre, String apellido) {
+    public Profesor(boolean activo, String cedula, String nombre, String apellido) {
         this.activo = activo;
         this.cedula = cedula;
         this.nombre = nombre;
@@ -20,11 +23,11 @@ public class Profesor {
     }
 
   
-    public int getCedula() {
+    public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
@@ -51,5 +54,14 @@ public class Profesor {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public String getPege_id() {
+        return pege_id;
+    }
+
+    public void setPege_id(String pege_id) {
+        this.pege_id = pege_id;
+    }
+    
 
 }

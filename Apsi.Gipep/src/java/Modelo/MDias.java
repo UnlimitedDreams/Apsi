@@ -5,11 +5,13 @@
  */
 package Modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author USR_Toshiba
  */
-public class MDias {
+public class MDias implements Serializable{
 
     private boolean estado;
     private String dia;
