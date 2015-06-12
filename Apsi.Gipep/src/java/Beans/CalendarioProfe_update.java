@@ -33,6 +33,14 @@ public class CalendarioProfe_update {
     public CalendarioProfe_update() {
     }
 
+    public CalendarioProfe_update(String Actividad, Date fecha_final, Date fecha_inicio, String hora1, String hora2) {
+        this.Actividad = Actividad;
+        this.fecha_final = fecha_final;
+        this.fecha_inicio = fecha_inicio;
+        this.hora1 = hora1;
+        this.hora2 = hora2;
+    }
+
     public void traer_informacion() throws ClassNotFoundException {
         CalendarioP calen = new CalendarioImple();
         String codigo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Codigo_asesoria");

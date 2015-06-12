@@ -1,6 +1,5 @@
 package Beans;
 
-
 import Dao.CalendarioImple;
 import Dao.CalendarioP;
 import Dao.Sequence;
@@ -23,6 +22,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -37,7 +37,7 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class Calendario_profesor implements Serializable {
 
     private ScheduleModel eventModel;
@@ -52,13 +52,14 @@ public class Calendario_profesor implements Serializable {
     private int cod;
     private ScheduleEvent event = new DefaultScheduleEvent();
     ArrayList<String> res = new ArrayList();
+    ArrayList<CalendarioProfe_update> cal = new ArrayList();
 
     @PostConstruct
-    public void init(){
+    public void init() {
         añadir_eventos();
     }
 
-    public void añadir_eventos()  {
+    public void añadir_eventos() {
         eventModel = new DefaultScheduleModel();
         ArrayList a = null;
         ArrayList b = null;
@@ -77,15 +78,15 @@ public class Calendario_profesor implements Serializable {
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
                 Date date1 = fmt.parse(temp.getFecha1());
                 Date date2 = fmt.parse(temp.getFecha1());
-//                h1 = Integer.parseInt((String) temp.getHora_inicio().subSequence(0, 2));
-//                min1 = Integer.parseInt((String) temp.getHora_inicio().subSequence(3, 5));
-//                h2 = Integer.parseInt((String) temp.getHora_final().subSequence(0, 2));
-//                min2 = Integer.parseInt((String) temp.getHora_final().subSequence(3, 5));
-//                date1.setHours(h1);
-//                date1.setMinutes(min1);
-//                date2.setHours(h2);
-//                date2.setMinutes(min2);
-//                date2.setDate(date2.getDate() - 1);
+                h1 = Integer.parseInt((String) temp.getHora_inicio().subSequence(0, 2));
+                min1 = Integer.parseInt((String) temp.getHora_inicio().subSequence(3, 5));
+                h2 = Integer.parseInt((String) temp.getHora_final().subSequence(0, 2));
+                min2 = Integer.parseInt((String) temp.getHora_final().subSequence(3, 5));
+                date1.setHours(h1);
+                date1.setMinutes(min1);
+                date2.setHours(h2);
+                date2.setMinutes(min2);
+                date2.setDate(date2.getDate() - 1);
                 System.out.println("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + date1 + "+" + date2);
                 eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + temp.getCod(), date1, date2));
             }
@@ -107,7 +108,6 @@ public class Calendario_profesor implements Serializable {
                 date1.setMinutes(min1);
                 date.setHours(h2);
                 date.setMinutes(min2);
-//                date.setDate(date.getDate());
                 System.out.println("" + temp2.getCod() + date1 + "-" + date);
                 eventModel.addEvent(new DefaultScheduleEvent(temp2.getRazon() + "#" + temp2.getCod(), date1, date));
             }
@@ -116,70 +116,6 @@ public class Calendario_profesor implements Serializable {
         } catch (ParseException ex) {
             Logger.getLogger(Calendario_profesor.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public Date getEsta() {
-        return esta;
-    }
-
-    public void setEsta(Date esta) {
-        this.esta = esta;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public int getCod() {
-        return cod;
-    }
-
-    public void setCod(int cod) {
-        this.cod = cod;
-    }
-
-    public Date getFecha_inicio() {
-        return fecha_inicio;
-    }
-
-    public void setFecha_inicio(Date fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
-    }
-
-    public String getHora1() {
-        return hora1;
-    }
-
-    public Date getFecha_final() {
-        return fecha_final;
-    }
-
-    public void setFecha_final(Date fecha_final) {
-        this.fecha_final = fecha_final;
-    }
-
-    public void setHora1(String hora1) {
-        this.hora1 = hora1;
-    }
-
-    public String getHora2() {
-        return hora2;
-    }
-
-    public void setHora2(String hora2) {
-        this.hora2 = hora2;
     }
 
     public ArrayList traer_dias() throws ClassNotFoundException {
@@ -229,14 +165,6 @@ public class Calendario_profesor implements Serializable {
 
         }
         return dias;
-    }
-
-    public ScheduleEvent getEvent() {
-        return event;
-    }
-
-    public void setEvent(ScheduleEvent event) {
-        this.event = event;
     }
 
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
@@ -291,60 +219,61 @@ public class Calendario_profesor implements Serializable {
         d = event.getEndDate();
         d.setDate(d.getDate() - 1);
         System.err.println("fechaaa " + d);
-//        traer_datos();
+        traer_datos();
     }
 
-//    public void traer_datos() throws ClassNotFoundException {
-//        Control.conectar();
-//        String no = "", cod = "";
-//        String cod1[] = null;
-//        System.out.println("----- " + event.getTitle().toString());
-//        if (event.getTitle().length() >= 8) {
-//            no = event.getTitle().substring(0, 8);
-//        } else {
-//            no = event.getTitle();
-//        }
-//        if (no.equals("Asesoria")) {
-//            System.out.println("Asesoria");
-////            cod1 = event.getTitle().split("#");
-////            cod = cod1[1];
-////            Control.ejecuteQuery(" select hora_asesoria, hora_final, fecha_asesoria from asesoria where cod_asesoria='" + cod + "'");
-////            hora1 = "";
-////            hora2 = "";
-////            fecha_final = null;
-////            try {
-////                while (Control.rs.next()) {
-////                    hora1 = Control.rs.getString(1);
-////                    hora2 = Control.rs.getString(2);
-////                    fecha_final = Control.rs.getDate(3);
-////                }
-////                cod = "";
-////            } catch (Exception ex) {
-////
-////            }
-//        } else {
-//            System.out.println("Cita");
-////            System.err.println("-----------------------------------------------");
-////            cod1 = event.getTitle().split("#");
-////            cod = cod1[1];
-////            Control.ejecuteQuery("select hora_inicio,hora_final,fecha_final from calendario where codigo='" + cod + "'");
-////            hora1 = "";
-////            hora2 = "";
-////            fecha_final = null;
-////            try {
-////                while (Control.rs.next()) {
-////                    hora1 = Control.rs.getString(1);
-////                    fecha_final = Control.rs.getDate(3);
-////                    System.err.println("---<< " + hora1 + "--" + hora2 + "-- fecha " + fecha_final);
-////                }
-////                cod = "";
-////            } catch (Exception ex) {
-////
-////            }
-//        }
-//        System.err.println("hora " + hora1 + "--" + hora2);
+    public void traer_datos() throws ClassNotFoundException {
+        String no = "", cod = "";
+        String cod1[] = null;
+        System.out.println("----- " + event.getTitle().toString());
+        if (event.getTitle().length() >= 8) {
+            no = event.getTitle().substring(0, 8);
+        } else {
+            no = event.getTitle();
+        }
+        if (no.equals("Asesoria")) {
+            System.out.println("Asesoria");
+//            cod1 = event.getTitle().split("#");
+//            cod = cod1[1];
+//            Control.ejecuteQuery(" select hora_asesoria, hora_final, fecha_asesoria from asesoria where cod_asesoria='" + cod + "'");
+//            hora1 = "";
+//            hora2 = "";
+//            fecha_final = null;
+//            try {
+//                while (Control.rs.next()) {
+//                    hora1 = Control.rs.getString(1);
+//                    hora2 = Control.rs.getString(2);
+//                    fecha_final = Control.rs.getDate(3);
+//                }
+//                cod = "";
+//            } catch (Exception ex) {
 //
-//    }
+//            }
+        } else {
+            System.out.println("Cita");
+            CalendarioP calen = new CalendarioImple();
+            Calendario calendario = new Calendario();
+            cod1 = event.getTitle().split("#");
+            cod = cod1[1];
+            calendario = calen.BuscarCalendario(cod);
+            String hora1 = "", hora2 = "", titul = "";
+            Date fecha1 = null, fecha2 = null;
+            try {
+                System.out.println("-");
+                fecha1 = calendario.getFechaInicial();
+                fecha2 = calendario.getFechaFinal();
+                hora1 = calendario.getHoraInicial();
+                hora2 = calendario.getHoraFinal();
+                titul = calendario.getDescripcion();
+                cal.add(new CalendarioProfe_update(titul, fecha1, fecha2, hora1, hora2));
+                System.out.println("tra  " + titul + "size " + cal.size());
+            } catch (Exception ex) {
+
+            }
+        }
+
+    }
+
     public void onDateSelect(SelectEvent selectEvent) {
         System.err.println("----" + (Date) selectEvent.getObject() + "-" + (Date) selectEvent.getObject());
         esta = (Date) selectEvent.getObject();
@@ -352,22 +281,6 @@ public class Calendario_profesor implements Serializable {
         hora1 = "";
         hora2 = "";
         fecha_final = null;
-    }
-
-    public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-
-        addMessage(message);
-    }
-
-    public void onEventResize(ScheduleEntryResizeEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-
-        addMessage(message);
-    }
-
-    private void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     @Override
@@ -476,6 +389,87 @@ public class Calendario_profesor implements Serializable {
 
     public void setLazyEventModel(ScheduleModel lazyEventModel) {
         this.lazyEventModel = lazyEventModel;
+    }
+
+    public ScheduleEvent getEvent() {
+        return event;
+    }
+
+    public void setEvent(ScheduleEvent event) {
+        this.event = event;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Date getEsta() {
+        return esta;
+    }
+
+    public void setEsta(Date esta) {
+        this.esta = esta;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
+    }
+
+    public int getCod() {
+        return cod;
+    }
+
+    public void setCod(int cod) {
+        this.cod = cod;
+    }
+
+    public Date getFecha_inicio() {
+        return fecha_inicio;
+    }
+
+    public void setFecha_inicio(Date fecha_inicio) {
+        this.fecha_inicio = fecha_inicio;
+    }
+
+    public String getHora1() {
+        return hora1;
+    }
+
+    public Date getFecha_final() {
+        return fecha_final;
+    }
+
+    public void setFecha_final(Date fecha_final) {
+        this.fecha_final = fecha_final;
+    }
+
+    public void setHora1(String hora1) {
+        this.hora1 = hora1;
+    }
+
+    public String getHora2() {
+        return hora2;
+    }
+
+    public void setHora2(String hora2) {
+        this.hora2 = hora2;
+    }
+
+    public ArrayList<CalendarioProfe_update> getCal() {
+        System.out.println("sizeee ---------------------------" + cal.size());
+        return cal;
+    }
+
+    public void setCal(ArrayList<CalendarioProfe_update> cal) {
+        this.cal = cal;
     }
 
 }
