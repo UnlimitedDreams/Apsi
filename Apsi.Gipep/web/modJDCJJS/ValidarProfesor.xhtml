@@ -17,7 +17,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="../css/formas.css"/>
         <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
     </h:head>
-    <h:body onload="#{validarProfesor.cargarProfesores()}"> 
+    <h:body onload="#{validarProfesor.cargar_facultad()}"> 
         <div id="header" class="head">
             <div id="menu" style="position: fixed;top:0%">
                 <img id="btn-menu" src="../img/men.png" />
@@ -28,26 +28,34 @@ and open the template in the editor.
         </div>
         <br/><br/>
         <div id="layoutAjuste">
-            <h:form>
+            <h:form id="vista_validar">
                 <center>
-                    <p:dataTable var="Profesor" value="#{validarProfesor.profe}">
-                        <p:column headerText="Seleccione">
+                    <br/>
+                    <p:growl id="messages" showDetail="true" />
+                    <p:selectOneMenu id="car" value="#{validarProfesor.facultad}" style="margin-top: 80px">
+                        <f:selectItem itemLabel="Seleccione Facultad" itemValue="" />
+                        <f:selectItems value="#{validarProfesor.facul}" />
+                        <p:ajax  event="change" listener="#{validarProfesor.cargarProfesores()}" update=":vista_validar:tabla,messages"></p:ajax>
+                    </p:selectOneMenu>
+                    <p:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
+                                 scrollable="true" scrollHeight="350" style="width: 1000px;height: 400px;margin-top: 20px;" >
+                        <p:column headerText="Seleccione" footerText="Lista de Profesores" >
                             <p:selectBooleanCheckbox >
                                 <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula)}" />
                             </p:selectBooleanCheckbox>
                         </p:column>
-                        <p:column headerText="Cedula">
+                        <p:column headerText="Cedula" filterBy="#{Profesor.cedula}">
                             <h:outputText value="#{Profesor.cedula}" />
                         </p:column>
-                        <p:column headerText="Nombre">
+                        <p:column headerText="Nombre" filterBy="#{Profesor.nombre}">
                             <h:outputText value="#{Profesor.nombre}" />
                         </p:column>
-                        <p:column headerText="Apellido">
+                        <p:column headerText="Apellido" filterBy="#{Profesor.apellido}">
                             <h:outputText value="#{Profesor.apellido}" />
                         </p:column>
                     </p:dataTable>
                     <br/>
-                  <!--  <h:commandButton value="Siguiente" actionListener=""></h:commandButton>-->
+                    <h:commandButton value="Atras" action="Menu_Admon.xhtml"></h:commandButton>
                 </center>
             </h:form>
         </div>
