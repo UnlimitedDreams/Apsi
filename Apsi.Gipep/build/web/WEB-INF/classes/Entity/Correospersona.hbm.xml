@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Correospersona" table="correospersona" schema="public">
+        <id name="codCorreo" type="big_decimal">
+            <column name="cod_correo" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="persona" class="Entity.Persona" fetch="select">
+            <column name="idpersona" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="correo" type="string">
+            <column name="correo" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

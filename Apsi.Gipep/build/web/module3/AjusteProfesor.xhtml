@@ -1,0 +1,84 @@
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://java.sun.com/jsf/html"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Bienvenido</title>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+        <script src="Jquery/jquery-1.11.2.js"></script>
+
+
+    </h:head>
+    <h:body onload="#{ajusteProfesorBean.inicionombreProfe()}">
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png"/>
+            </div>
+            <div style="text-align: center;">
+                <b> Ajuste Tiempo</b>    
+            </div>
+        </div>
+        <div id="layoutAjuste" style="margin-top: 8%;">
+            <center>
+                <h:form id="formul">
+                    <p:growl id="messages" showDetail="true" />
+                    <h3> <h:outputLabel   value="PROFESOR: #{ajusteProfesorBean.nombreProfesor}" /></h3>
+
+                    <br/><br/>
+                    <table>
+                        <tr>
+                            <td> <h:outputLabel for="fechaI" value="Fecha inicial :"  /></td>
+                            <td><p:calendar id="fechaI" value="#{ajusteProfesorBean.fecha_inicial}"  required="true" requiredMessage="Ingresar Fecha inicial"/></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel for="fecha2" value="Fecha Final :"  /></td>
+                            <td> <p:calendar id="fecha2" value="#{ajusteProfesorBean.fecha_final}" required="true" requiredMessage="Ingresar Fecha Final" /></td>
+                        </tr>
+
+                        <tr>
+                            <td><h:outputLabel for="ho" value="Cantidad de Horas :" /></td>
+                            <td> <p:inputText id="ho" value="#{ajusteProfesorBean.cantidad_horas}" required="true" requiredMessage="Ingresar Cantidad de horas De trabajo"/></td>
+                        </tr>
+                        <tr>
+                            <td> <h:outputLabel for="Ra" value="Rango de Asesoria (Min):"  /></td>
+                            <td> <p:inputText id="Ra" value="#{ajusteProfesorBean.ramgoHora}" required="true" requiredMessage="Ingresar Rango de las Asesorias"/></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <p:dataTable var="dias" value="#{ajusteProfesorBean.dias}" style="width: 1000px;height: 300px;"  >
+                        <p:column headerText="Seleccione">
+                            <p:selectBooleanCheckbox >
+                                <p:ajax  listener="#{ajusteProfesorBean.activarDias(dias.dia)}"></p:ajax>
+                            </p:selectBooleanCheckbox>
+                        </p:column>
+                        <p:column headerText="Dia">
+                            <h:outputText value="#{dias.dia}" />
+                        </p:column>
+                        <p:column  headerText="Hora Inicial">
+                            <center>
+                                <p:inputText value="#{ajusteProfesorBean.hora_inicial}">
+                                    <p:ajax  listener="#{ajusteProfesorBean.ponerhorasinicial(dias.dia)}" update=":formul:messages"></p:ajax>
+                                </p:inputText>
+                            </center>
+                        </p:column>
+                        <p:column headerText="Hora Final">
+                            <center>
+                                <p:inputText  value="#{ajusteProfesorBean.hora_Final}" >
+                                    <p:ajax  listener="#{ajusteProfesorBean.ponerhorasFinal(dias.dia)}" update=":formul:messages"></p:ajax>
+                                </p:inputText>
+                            </center>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <h:commandButton value="Next" actionListener="#{ajusteProfesorBean.cargarTodo()}" >
+
+                    </h:commandButton>
+                </h:form>
+            </center>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.UsuRol" table="usu_rol" schema="public">
+        <id name="codUsurol" type="big_decimal">
+            <column name="cod_usurol" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="usuario" class="Entity.Usuario" fetch="select">
+            <column name="pege_id" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="rol" class="Entity.Rol" fetch="select">
+            <column name="cod_rol" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

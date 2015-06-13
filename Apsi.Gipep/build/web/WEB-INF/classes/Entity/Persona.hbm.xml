@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="Entity.Persona" table="persona" schema="public">
+        <id name="idpersona" type="big_decimal">
+            <column name="idpersona" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="usuario" class="Entity.Usuario" fetch="select">
+            <column name="pege_id" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="nombres" type="string">
+            <column name="nombres" not-null="true" />
+        </property>
+        <property name="apellidos" type="string">
+            <column name="apellidos" not-null="true" />
+        </property>
+        <set name="telefonoses" table="telefonos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idpersona" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Telefonos" />
+        </set>
+        <set name="correospersonas" table="correospersona" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idpersona" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="Entity.Correospersona" />
+        </set>
+    </class>
+</hibernate-mapping>

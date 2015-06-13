@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+    </h:head>
+    <h:body onload="#{listaProfesoresBeans.cargar_años()}"> 
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png" />
+            </div>
+            <div  style="text-align: center;">
+                <b> Validar Profesor</b>    
+            </div>
+        </div>
+        <br/><br/>
+        <div id="layoutAjuste">
+            <h:form id="vista_validar">
+                <center>
+                    <table>
+
+                        <tr>
+                            <td><h:outputLabel  value="Año :" /></td>
+                            <td> <p:selectOneMenu id="car" value="#{listaProfesoresBeans.año}" >
+                                    <f:selectItems value="#{listaProfesoresBeans.b_año}"/>   
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Periodo :" /></td>
+                            <td> <p:selectOneMenu id="car2" value="#{listaProfesoresBeans.periodo}" >
+                                    <f:selectItems value="#{listaProfesoresBeans.peri}"/>   
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                    </table>
+                    <h:commandButton value="Cargar" actionListener="#{listaProfesoresBeans.cargar_profesores()}"></h:commandButton>
+                </center>
+            </h:form>
+        </div>
+    </h:body>
+</html>
