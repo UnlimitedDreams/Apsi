@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+    </h:head>
+    <h:body> 
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png" />
+            </div>
+            <div  style="text-align: center;">
+                <b> Calendario</b>    
+            </div>
+        </div>
+        <br/><br/>
+        <div id="layoutAjuste">
+            <h:form>
+                <center>
+                    <div id="calendar" style="width: 600Px;height: 500px;">
+                        <p:growl id="messages" showDetail="true" />
+                        <h:panelGrid columnClasses="value">
+                            <h3 style="margin-top: 0">Calendario Profesor</h3>
+                            <p:schedule  id="schedule" value="#{calendario_profesor.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false"  resizable="false" > 
+                                <p:ajax event="dateSelect" listener="#{calendario_profesor.onDateSelect}"  oncomplete="PF('eventDialog2').show();" />
+                                <p:ajax event="eventSelect" listener="#{calendario_profesor.onEventSelect}"  oncomplete="PF('eventDialog').show();" />
+                            </p:schedule>
+                        </h:panelGrid>
+                        <br/><br/>
+                        <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+                            <p:dataList value="#{calendario_profesor.cal}" var="calen" type="ordered">
+                                <f:facet name="header">
+                                    Informacion
+                                </f:facet>
+                                #{calen.actividad}, #{calen.hora1}
+                            </p:dataList>
+                            <br/>
+                            <h:panelGrid id="eventDetails" columns="2">
+                                <p:commandButton id="addButton" value="Actualizar" actionListener="#{calendario_profesor.actualizar()}" icon="ui-icon-check" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
+                                <p:commandButton id="addButton23" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
+                            </h:panelGrid>
+                        </p:dialog> 
+                        <p:dialog widgetVar="eventDialog2" header="Even" showEffect="clip" hideEffect="clip">
+                            <h:panelGrid id="eventDetails2" columns="2">
+                                <h:outputLabel for="at" value="Actividad :" style="font-weight:bold" />
+                                <p:inputText id="at" value="#{calendario_profesor.titulo}" />
+                                <h:outputLabel for="f1" value="Fecha inicio:" style="font-weight:bold" />
+                                <p:calendar id="f1" value="#{calendario_profesor.fecha_inicio}" showOn="button" />
+                                <h:outputLabel for="f2" value="Fecha Final:" style="font-weight:bold" />
+                                <p:calendar id="f2" value="#{calendario_profesor.fecha_final}" showOn="button" />
+                                <h:outputLabel for="h1" value="Hora inicial :" style="font-weight:bold" />
+                                <p:inputText id="h1" value="#{calendario_profesor.hora1}" />
+                                <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
+                                <p:inputText id="h2" value="#{calendario_profesor.hora2}" />
+                            </h:panelGrid>
+                            <p:commandButton id="Guardar" value="Guardar" actionListener="#{calendario_profesor.addEvent(actionEvent)}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
+                            <p:commandButton id="Cancelar" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
+                        </p:dialog> 
+
+                    </div>
+                </center>
+            </h:form>
+        </div>
+    </h:body>
+</html>

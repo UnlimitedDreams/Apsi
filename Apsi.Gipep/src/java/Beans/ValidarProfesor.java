@@ -64,11 +64,11 @@ public class ValidarProfesor implements Serializable {
             while (Conecion_Oracle.rs.next()) {
                 if (Conecion_Oracle.rs.getString(4) == null) {
                     profe.add(new Profesor(false, Conecion_Oracle.rs.getString(2), Conecion_Oracle.rs.getString(3),
-                            Conecion_Oracle.rs.getString(5)));
+                            Conecion_Oracle.rs.getString(5),Conecion_Oracle.rs.getString(1)));
                 } else {
                     profe.add(new Profesor(false, Conecion_Oracle.rs.getString(2), Conecion_Oracle.rs.getString(3) + " "
                             + Conecion_Oracle.rs.getString(4),
-                            Conecion_Oracle.rs.getString(5)));
+                            Conecion_Oracle.rs.getString(5),Conecion_Oracle.rs.getString(1)));
                 }
 
             }

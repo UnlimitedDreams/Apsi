@@ -84,18 +84,6 @@ public class ListaProfesoresBeans {
 
     public void traer_profesor(String x) throws ClassNotFoundException {
         Conecion_Oracle.conectar();
-        System.out.println("select DISTINCT pege.PEGE_ID,pege.pege_documentoidentidad,peng.peng_primernombre,peng.PENG_SEGUNDONOMBRE,\n"
-                + "peng.peng_primerapellido\n"
-                + "from ACADEMICO.DocenteGrupo Dg ,academico.DocenteUnidad Du ,academico.Unidad Un,\n"
-                + "academico.personageneral pege, academico.PERSONANATURALGENERAL peng\n"
-                + "where Dg.DOUN_ID=Du.DOUN_ID\n"
-                + "and Un.unid_id=Du.UNID_ID\n"
-                + "and Du.PEGE_ID=pege.PEGE_ID\n"
-                + "AND pege.pege_id = peng.pege_id\n"
-                + "and pege.pege_id='" + x + "'\n"
-                + "group by\n"
-                + "pege.PEGE_ID,pege.pege_documentoidentidad,peng.peng_primernombre,peng.PENG_SEGUNDONOMBRE,\n"
-                + "peng.peng_primerapellido");
         Conecion_Oracle.ejecuteQuery("select DISTINCT pege.PEGE_ID,pege.pege_documentoidentidad,peng.peng_primernombre,peng.PENG_SEGUNDONOMBRE,\n"
                 + "peng.peng_primerapellido\n"
                 + "from ACADEMICO.DocenteGrupo Dg ,academico.DocenteUnidad Du ,academico.Unidad Un,\n"
@@ -113,11 +101,11 @@ public class ListaProfesoresBeans {
                 System.out.println("trajo");
                 if (Conecion_Oracle.rs.getString(4) == null) {
                     profe.add(new Profesor(false, Conecion_Oracle.rs.getString(2), Conecion_Oracle.rs.getString(3),
-                            Conecion_Oracle.rs.getString(5)));
+                            Conecion_Oracle.rs.getString(5),Conecion_Oracle.rs.getString(1)));
                 } else {
                     profe.add(new Profesor(false, Conecion_Oracle.rs.getString(2), Conecion_Oracle.rs.getString(3) + " "
                             + Conecion_Oracle.rs.getString(4),
-                            Conecion_Oracle.rs.getString(5)));
+                            Conecion_Oracle.rs.getString(5),Conecion_Oracle.rs.getString(1)));
                 }
 
             }
