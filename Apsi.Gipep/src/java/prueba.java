@@ -34,11 +34,11 @@ import java.math.BigDecimal;
 public class prueba {
 
     public static void main(String[] args) {
-
+       
         Usuario x;
         UsuarioDao usu = new UsuarioImple();
         x = new Usuario(new BigDecimal(1), "juan", "juan");
-        System.out.println("Usuario: "+new UsuarioImple().Loguin(x).getUsuario());
-        System.out.println("Constraseña: "+new UsuarioImple().Loguin(x).getContrasea());
+        System.out.println("Usuario: " + new UsuarioImple().Loguin(x).getUsuario());
+        System.out.println("Constraseña: " + new UsuarioImple().Loguin(x).getContrasea());
     }
 }

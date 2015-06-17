@@ -45,7 +45,7 @@
             <ul class="sidebar-nav">
                 <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
                 <li class="sidebar-brand">
-                    <a onclick="document.location='index.jsp'">ApSi</a>
+                    <a onclick="document.location = 'index.jsp'">ApSi</a>
                 </li>
                 <li>
                     <a href="#top">Inicio</a>
@@ -118,6 +118,8 @@
 
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+
+
         <section id="services" class="services bg-primary">
             <div class="container">
                 <div class="row text-center">
@@ -126,9 +128,24 @@
                         <hr class="small">
                         <div class="row">
                             <div class="col-md-3 col-sm-6">
-                                <div class="service-item">
-
-                                </div>
+                                <%
+                                    try {
+                                        if (!sesion.isNew() | !session.getAttribute("user").equals(null)) {
+                                            out.print("                               <div class=\"service-item\">\n"
+                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                    + "                                        <i class=\"fa fa-bookmark fa-stack-1x text-primary\"></i>\n"
+                                                    + "                                    </span>\n"
+                                                    + "                                    <h4>\n"
+                                                    + "                                        <strong>Menú Principal</strong>\n"
+                                                    + "                                    </h4>\n"
+                                                    + "                                    <p>Acceso al menu principal.</p>\n"
+                                                    + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
+                                                    + "                                </div>\n");
+                                        }
+                                    } catch (java.lang.NullPointerException e) {
+                                    }
+                                %>
 
                             </div>
                             <div class="col-md-3 col-sm-6">
@@ -153,13 +170,30 @@
                                     <h4>
                                         <strong>¡Pide tu usuario!</strong>
                                     </h4>
-                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. Haslo pronto!.</p>
+                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&acute;slo pronto!.</p>
                                     <a href="http://uniajc.edu.co/index.php/estudiantes" class="btn btn-light">Como registrarse</a>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="service-item">
-
+                                    <%
+                                        try {
+                                            if (!sesion.isNew() | !session.getAttribute("user").equals(null)) {
+                                                out.print("                               <div class=\"service-item\">\n"
+                                                        + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                        + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                        + "                                        <i class=\"fa fa-users fa-stack-1x text-primary\"></i>\n"
+                                                        + "                                    </span>\n"
+                                                        + "                                    <h4>\n"
+                                                        + "                                        <strong>Ajustes personales</strong>\n"
+                                                        + "                                    </h4>\n"
+                                                        + "                                    <p>Mant&eacute;n al d&iacute;a tus datos.</p>\n"
+                                                        + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
+                                                        + "                                </div>\n");
+                                            }
+                                        } catch (java.lang.NullPointerException e) {
+                                        }
+                                    %>
                                 </div>
                             </div>
 
@@ -170,6 +204,7 @@
                     <!-- /.row -->
                 </div>
                 <!-- /.container -->
+            </div>
         </section>
 
         <!-- Footer -->
@@ -209,13 +244,13 @@
 
         <!--Script ocultar Divs-->
         <script>
-            $(document).ready(function () {
-                $("#ingresa").hide();
-                $('#opt1').click(function () {
-                    $("#ingresa").toggle("left", function () {
-                    });
-                });
-            });
+                        $(document).ready(function () {
+                            $("#ingresa").hide();
+                            $('#opt1').click(function () {
+                                $("#ingresa").toggle("left", function () {
+                                });
+                            });
+                        });
         </script>
 
         <!-- Custom Theme JavaScript -->
