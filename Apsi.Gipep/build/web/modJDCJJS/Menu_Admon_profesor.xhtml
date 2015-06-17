@@ -1,0 +1,41 @@
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://java.sun.com/jsf/html"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Bienvenido</title>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+        <script src="Jquery/jquery-1.11.2.js"></script>
+
+
+    </h:head>
+    <h:body >
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png"/>
+            </div>
+            <div style="text-align: center;">
+                <b> Ajuste Tiempo</b>    
+            </div>
+        </div>
+        <div id="layoutAjuste" style="margin-top: 8%;">
+            <center>
+                <h:form id="formul">
+                    <p:growl id="messages" showDetail="true" />
+                    <table>
+                        <tr>
+                            <td><h:commandButton value="Lista Profesores Activos" action="ValidarProfesor.xhtml"></h:commandButton></td>
+                            <td><h:commandButton value="Disponibilidad Profesor" ></h:commandButton></td>
+                            <td><h:commandButton value="Calendario Profesor" ></h:commandButton></td>
+                        </tr>
+                    </table>
+                </h:form>
+            </center>
+        </div>
+    </h:body>
+</html>
+
+

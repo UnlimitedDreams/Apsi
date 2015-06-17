@@ -4,7 +4,7 @@
     Author     : usuario
 --%>
 
-<%@page import="dao.com.modelo.usuario"%>
+<%@page import="Entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -23,8 +23,8 @@
         <div id="header" class="head">
             <!-- Encabezado cool!--> 
             Bienvenido: <% HttpSession S = request.getSession();
-                usuario x = (usuario) S.getAttribute("ObjUsu");
-                out.print(x.getUsu() + " Rol: " + x.getRol()); %>            
+                Usuario x = (Usuario) S.getAttribute("ObjUsu");
+                out.print(x.getUsuario()+ " Rol: " + x.getPegeId()); %>            
 
         </div>
         <div id="layout-principal" class="layout layout-principal">

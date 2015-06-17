@@ -7,14 +7,21 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
-
+    <%session = request.getSession();
+        try {
+            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (java.lang.NullPointerException e) {
+        }
+    %>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Apsi.GiPep - Tus asesorias Faciles</title>
+        <title>ApSi.GiPep - Tus asesorias Faciles</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -43,43 +50,10 @@
             <ul class="sidebar-nav">
                 <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
                 <li class="sidebar-brand">
-                    <a href="index.jsp">Apsi</a>
+                    <a href="index.jsp">ApSi</a>
                 </li>
                 <li>
-                    <a href="index.jsp">Inicio</a>
-                </li>
-                <li>
-                    <a id="opt1">Acceder</a>
-                    <div id="ingresa">
-                        <form name="log" action="ingresar" method="POST">
-                            <table style="border-spacing: 6px 12px; border-collapse: separate">
-                                <tr style="text-align: right;">
-                                    <td></td>
-                                    <td>
-                                        <input placeholder="Usuario" type="text" id="user" class="form-in" name="user" required="" />
-                                    </td>
-                                </tr>
-                                <tr style="text-align: right;">
-                                    <td>
-                                    </td>
-                                    <td>
-                                        <input placeholder="Constrase&ntilde;a" type="password" id="pass" class="form-in" name="pass" required="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                    </td>
-                                    <td>
-                                        <input type="submit" class="btn-log" value="Iniciar sesi&oacute;n"/>
-                                    </td>
-                                </tr>
-                            </table>
-                            <b><a href="opcionesDeAcceso.jsp">No puedes acceder?</a></b>
-                            <b><a href="http://www.uniajc.edu.co">Registrate</a></b>
-                        </form>
-
-                    </div>
-
+                    <a href="#top">Inicio</a>
                 </li>
                 <li>
                     <a href="#contacto">Contacto</a>
@@ -93,17 +67,17 @@
                 <h1>ApSi&reg;</h1>
                 <h3>Asesorias y proyectos en cualquier momento</h3>
                 <h4><center>
-                        <form name="log" action="ingresar" method="POST">
+                        <form id="log" name="log" action="ingresar" method="POST">
                             <table border="0" style="border-spacing: 10px 20px; border-collapse: separate;">
                                 <tbody>
                                     <tr style="text-align: right;">
                                         <td>
-                                            <input placeholder="Usuario" type="text" id="user" class="form-in" name="user" required="" />
+                                            <input placeholder="Usuario" type="text" id="user" class="form-in" name="user" required="true"/>
                                         </td>
                                     </tr>
                                     <tr style="text-align: right;">
                                         <td>
-                                            <input placeholder="Contrase&ntilde;a" type="password" id="pass" class="form-in" name="pass" required=""/>
+                                            <input placeholder="Contrase&ntilde;a" type="password" id="pass" class="form-in" name="pass" required="true"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -115,11 +89,17 @@
                                 <tr>
                                     <td>&iquest;No Tienes una cuenta? <b><a href="http://www.uniajc.edu.co"> Registrate</a> </b></td>
                                 </tr>
+                                <tr>
+                                    <td><br>
+                                        <input name="operar" class="btn btn-dark btn-lg" type="submit" value="Iniciar sesi&oacute;n"/> <a href="#about" class="btn btn-dark btn-lg">Aprende m&aacute;s</a>
+                                    </td>
+
+                                </tr>
                             </table>
                         </form>
                     </center></h4>
-                <a  class="btn btn-dark btn-lg" value="Iniciar sesi&oacute;n">Iniciar sesi&oacute;n</a>
-                <a href="#about" class="btn btn-dark btn-lg">Aprende m&aacute;s</a>
+
+
             </div>
         </header>
         <!-- Footer -->
@@ -127,7 +107,7 @@
             <div class="container" id="contacto">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h4><strong>Apsi</strong>
+                        <h4><strong>ApSi&REG;</strong>
                         </h4>
                         <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br>Santiago de Cali, Colombia</p>
                         <ul class="list-unstyled">

@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Apsi.GiPep - Tus asesorias Faciles</title>
+        <title>ApSi.GiPep - Tus asesorias Faciles</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
             <ul class="sidebar-nav">
                 <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
                 <li class="sidebar-brand">
-                    <a href="../index.html">Apsi</a>
+                    <a href="index.jsp">ApSi</a>
                 </li>
                 <li>
                     <a href="#top">Inicio</a>
@@ -130,7 +130,7 @@
                                     <h4>
                                         <strong>¡Pide tu usuario!</strong>
                                     </h4>
-                                    <p>La &uacute;nica forma de acceder a Apsi&REG;, es estando registrado en UNIAJC. Matric&uacute;late pronto!.</p>
+                                    <p>La &uacute;nica forma de acceder a ApSi&REG;, es estando registrado en UNIAJC. Matric&uacute;late pronto!.</p>
                                     <a href="http://uniajc.edu.co/index.php/estudiantes" class="btn btn-light">&iquest;C&oacute;mo registrarme?</a>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
             <div class="container" id="contacto">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h4><strong>Apsi</strong>
+                        <h4><strong>ApSi&reg;</strong>
                         </h4>
                         <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br>Santiago de Cali, Colombia</p>
                         <ul class="list-unstyled">

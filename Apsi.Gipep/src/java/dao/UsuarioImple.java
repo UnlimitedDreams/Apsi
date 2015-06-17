@@ -27,6 +27,7 @@ public class UsuarioImple implements UsuarioDao {
             t.commit();
 
         } catch (Exception ex) {
+            
         }
         return temp;
     }
