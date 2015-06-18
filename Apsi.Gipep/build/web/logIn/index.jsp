@@ -170,7 +170,7 @@
                                     <h4>
                                         <strong>¡Pide tu usuario!</strong>
                                     </h4>
-                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&acute;slo pronto!.</p>
+                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>
                                     <a href="http://uniajc.edu.co/index.php/estudiantes" class="btn btn-light">Como registrarse</a>
                                 </div>
                             </div>
@@ -182,6 +182,7 @@
                                                 out.print("                               <div class=\"service-item\">\n"
                                                         + "                                    <span class=\"fa-stack fa-4x\">\n"
                                                         + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                        + "                                        <i class=\"fa fa-users fa-stack-1x text-primary\"></i>\n"
                                                         + "                                    </span>\n"
                                                         + "                                    <h4>\n"
                                                         + "                                        <strong>Ajustes personales</strong>\n"

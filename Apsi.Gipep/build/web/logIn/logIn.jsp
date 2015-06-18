@@ -66,7 +66,8 @@
             <div class="text-vertical-center">
                 <h1>ApSi&reg;</h1>
                 <h3>Asesorias y proyectos en cualquier momento</h3>
-                <h4><center>
+                <h4>
+                    <center>
                         <form id="log" name="log" action="ingresar" method="POST">
                             <table border="0" style="border-spacing: 10px 20px; border-collapse: separate;">
                                 <tbody>
@@ -91,15 +92,13 @@
                                 </tr>
                                 <tr>
                                     <td><br>
-                                        <input name="operar" class="btn btn-dark btn-lg" type="submit" value="Iniciar sesi&oacute;n"/> <a href="#about" class="btn btn-dark btn-lg">Aprende m&aacute;s</a>
+                                        <input name="operar" class="btn btn-dark btn-lg" type="submit" value="Iniciar sesi&oacute;n"/> <a href="index.jsp#about" class="btn btn-dark btn-lg">Aprende m&aacute;s</a>
                                     </td>
-
                                 </tr>
                             </table>
                         </form>
-                    </center></h4>
-
-
+                    </center>
+                </h4>
             </div>
         </header>
         <!-- Footer -->

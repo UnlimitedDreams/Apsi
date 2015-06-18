@@ -170,7 +170,7 @@
                                     <h4>
                                         <strong>¡Pide tu usuario!</strong>
                                     </h4>
-                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&acute;slo pronto!.</p>
+                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>
                                     <a href="http://uniajc.edu.co/index.php/estudiantes" class="btn btn-light">Como registrarse</a>
                                 </div>
                             </div>
