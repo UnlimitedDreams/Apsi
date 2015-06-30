@@ -35,7 +35,8 @@
         <![endif]-->
 
 
-    <body>
+    <body> 
+
         <!-- Navigation -->
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
         <nav id="sidebar-wrapper">
@@ -164,7 +165,14 @@
                 </div>
                 <!-- /.container -->
         </section>
-
+        <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
+            <br>
+            <b>
+                <h2 style="text-align: center;">
+                    <a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a>
+                </h2>
+            </b>
+        </div>
         <!-- Footer -->
         <footer>
             <div class="container" id="contacto">
@@ -200,9 +208,12 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <center><h1>Empecemos</h1><h2>Digita tu n&uacute;mero de identificaci&oacute;n:</h2><hr> 
-                            <form>
-                                <input id="pegeId" name="pegeId" type="text" placeholder="C&eacute;dula o TI" required=""/>
+                        <center>
+                            <h1>Empecemos</h1>
+                            <h2>Digita tu n&uacute;mero de identificaci&oacute;n:</h2>
+                            <hr> 
+                            <form id="recuperar" name="recuperar" action="srvltOA" method="post">
+                                <input id="pegeId" name="pegeId" type="number" placeholder="C&eacute;dula o TI" required=""/>
                                 <br>  <br>                                         
                                 <input class="btn btn-dark" type="reset" data-dismiss="modal" value="Cerrar"> 
                                 <input id="proceso" name="proceso" class="btn btn-dark" type="submit" value="Enviar">  
@@ -212,6 +223,7 @@
                 </div>
             </div>
         </div>
+
         <!-- MODAL 2 -->
         <div id="modalVentana2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">

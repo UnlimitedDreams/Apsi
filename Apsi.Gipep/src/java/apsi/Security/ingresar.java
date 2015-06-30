@@ -30,6 +30,7 @@ import Entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,7 @@ public class ingresar extends HttpServlet {
             s = request.getSession();
             if (request.getParameter("operar").equalsIgnoreCase("Cerrar sesión")) {
                 s.invalidate();
+                response.sendRedirect("index.jsp");
             } else {
                 Usuario x;
                 x = new Usuario(new BigDecimal(1), request.getParameter("pass"), request.getParameter("user"));
@@ -68,14 +70,18 @@ public class ingresar extends HttpServlet {
                     if (Loguin.getContrasea().equals(x.getContrasea()) && Loguin.getUsuario().equals(x.getUsuario())) {
                         s.setAttribute("user", x.getUsuario());
                         s.setAttribute("pass", x.getContrasea());
+                        response.sendRedirect("index.jsp");
+                    } else {
+                        RequestDispatcher a = request.getRequestDispatcher("index.jsp?msg=Usuario y/o contraseña incorrectos&msgAlt=danger");
+                        a.forward(request, response);
                     }
                 } catch (java.lang.NullPointerException e) {
-
+                    RequestDispatcher a = request.getRequestDispatcher("index.jsp?msg=Usuario y/o contraseña incorrectos&msgAlt=danger");
+                    a.forward(request, response);
                 }
 
-//               
             }
-            response.sendRedirect("index.jsp");
+
         }
     }
 

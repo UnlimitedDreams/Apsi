@@ -50,7 +50,7 @@ public class UsuarioImple implements UsuarioDao {
 
     @Override
     public boolean BuscarUsuario(Usuario usu) {
-        System.out.println("entro a Buscar usuario " + usu.getPegeId());
+        //System.out.println("entro a Buscar usuario " + usu.getPegeId());
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
@@ -58,10 +58,10 @@ public class UsuarioImple implements UsuarioDao {
         try {
             u = (Usuario) session.createQuery("FROM Usuario as usu where usu.pegeId="+usu.getPegeId()).uniqueResult();
             if (u == null) {
-                System.out.println("no esta");
+               // System.out.println("no esta");
                 r=false;
             } else {
-                System.out.println("esta");
+               // System.out.println("esta");
                 r=true;
             }
             t.commit();

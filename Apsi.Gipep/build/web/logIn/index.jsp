@@ -99,6 +99,10 @@
                 <h3>Asesorias y proyectos en cualquier momento</h3>
                 <br>
                 <a href="#about" class="btn btn-dark btn-lg">Aprende m&aacute;s sobre ApSi.</a>
+                <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
+                    <br><b><a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a></b>
+                </div>
+
             </div>
         </header>
 
@@ -284,5 +288,6 @@
                 });
             });
         </script>
+
     </body>
 </html>
