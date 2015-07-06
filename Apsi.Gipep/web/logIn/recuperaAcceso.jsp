@@ -36,53 +36,7 @@
 
     <body> 
 
-        <!-- Navigation -->
-        <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-        <nav id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-                <li class="sidebar-brand">
-                    <a href="index.jsp">ApSi</a>
-                </li>
-                <li>
-                    <a href="#top">Inicio</a>
-                </li>
-                <li>
-                    <a id="opt1">Acceder</a>
-                    <div id="ingresa" >
-                        <form name="log" action="ingresar" method="POST">
-                            <table style="border-spacing: 6px 12px; border-collapse: separate">
-                                <tr style="text-align: right;">
-                                    <td></td>
-                                    <td>
-                                        <input placeholder="Usuario" type="text" id="user" class="form-in" name="user" required="" />
-                                    </td>
-                                </tr>
-                                <tr style="text-align: right;">
-                                    <td>
-                                    </td>
-                                    <td>
-                                        <input placeholder="Constrase&ntilde;a" type="password" id="pass" class="form-in" name="pass" required="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                    </td>
-                                    <td>
-                                        <input type="submit" class="btn-log" value="Iniciar sesi&oacute;n"/>
-                                    </td>
-                                </tr>
-                            </table>
-                            <b><a href="opcionesDeAcceso.jsp">No puedes acceder?</a></b>
-                            <b><a href="http://www.uniajc.edu.co">Registrate</a></b>
-                        </form>
-                    </div>
-                </li>
-                <li>
-                    <a href="#contacto">Contacto</a>
-                </li>
-            </ul>
-        </nav>
+      
 
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
@@ -103,12 +57,12 @@
             <div class="container" style="color: darkgray">
                 <div class="row text-center">
                     <center>
-                        <form id="restaurar" name="restaurar" action="srvltOA" method="get">
+                        <form id="restaurar" name="restaurar" action="srvltOA" method="GET">
                             <table border="0" style="border-spacing: 10px 20px; border-collapse: separate;">
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <input class="form-in" size="40" type="email" placeholder="Email" name="email" required="true"
+                                            <input class="form-in" size="40" type="email" placeholder="Email" id="email" name="email" required="true"
                                                    style="height: 40px;"/>
                                         </td>
                                     </tr>
@@ -126,7 +80,7 @@
                     </center>
                 </div>
             </div>
-
+                        
             <!-- /.container -->
         </section>
         <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   

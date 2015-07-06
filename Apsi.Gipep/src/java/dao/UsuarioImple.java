@@ -5,8 +5,11 @@
  */
 package Dao;
 
-import Entity.Asesoria;
+import Entity.Persona;
 import Entity.Usuario;
+import apsi.Security.md5;
+import java.math.BigDecimal;
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -27,7 +30,7 @@ public class UsuarioImple implements UsuarioDao {
             t.commit();
 
         } catch (Exception ex) {
-            
+
         }
         return temp;
     }
@@ -50,19 +53,16 @@ public class UsuarioImple implements UsuarioDao {
 
     @Override
     public boolean BuscarUsuario(Usuario usu) {
-        //System.out.println("entro a Buscar usuario " + usu.getPegeId());
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
-        Usuario u=new Usuario();
+        Usuario u = new Usuario();
         try {
-            u = (Usuario) session.createQuery("FROM Usuario as usu where usu.pegeId="+usu.getPegeId()).uniqueResult();
+            u = (Usuario) session.createQuery("FROM Usuario as usu where usu.pegeId=" + usu.getPegeId()).uniqueResult();
             if (u == null) {
-               // System.out.println("no esta");
-                r=false;
+                r = false;
             } else {
-               // System.out.println("esta");
-                r=true;
+                r = true;
             }
             t.commit();
         } catch (Exception ex) {
@@ -71,4 +71,58 @@ public class UsuarioImple implements UsuarioDao {
         return r;
     }
 
+    public Usuario cargarUsu(String pege) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Usuario u = new Usuario();
+        try {
+            u = (Usuario) session.get(Usuario.class, BigDecimal.valueOf(Integer.parseInt(pege)));
+            t.commit();
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            throw e;
+        } finally {
+            session.close();
+        }
+        return u;
+    }
+
+    public void CambiarContraseña(String pege, String nPass) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Usuario u = new Usuario();
+        try {
+            u = (Usuario) session.get(Usuario.class, BigDecimal.valueOf(Integer.parseInt(pege)));
+            u.setContrasea(md5.getMD5(nPass));
+            session.update(u);
+            t.commit();
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+    
+    public Persona verPersona(String id){
+         Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Persona p = new Persona();
+        try {
+            p = (Persona) session.get(Persona.class, BigDecimal.valueOf(Integer.parseInt(id)));
+            t.commit();
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            throw e;
+        } finally {
+            session.close();
+        }
+        return p;
+    }
 }

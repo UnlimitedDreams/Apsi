@@ -34,19 +34,6 @@ public class srvltOA extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet srvltOA</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet srvltOA at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -62,6 +49,19 @@ public class srvltOA extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        try {
+            HttpSession s = request.getSession();
+            sender.EnviadorMail EnviadorMail = new sender.EnviadorMail(request.getParameter("email"),
+                    "No reply / No responder",
+                    "Apreciado usuario de ApSi, su contraseña ha sido renovada\n \nContraseña: " + s.getAttribute("nPass")
+                    + "\n\nAcceda, le recomendamos que cambie su contraseña a la mayor brevedad. \nEquipo ApSi");
+            RequestDispatcher a = request.getRequestDispatcher("index.jsp?msg=Contraseña cambiada&msgAlt=info");
+            a.forward(request, response);
+        } catch (Error | NullPointerException e) {
+            RequestDispatcher a = request.getRequestDispatcher("recuperaAcceso.jsp?msg=Algo Fallo&msgAlt=danger");
+            a.forward(request, response);
+        }
+
     }
 
     /**
@@ -82,37 +82,18 @@ public class srvltOA extends HttpServlet {
                 a.forward(request, response);
             } else {
                 HttpSession s = request.getSession();
-                s.setAttribute("tempUser", "mi usuario");
+                Usuario U = new UsuarioImple().cargarUsu(request.getParameter("pegeId"));
+                String x = "";
+                x = (int) (Math.random() * 10000) + "";
+                s.setAttribute("nPass", x);
+                new UsuarioImple().CambiarContraseña(request.getParameter("pegeId"), x);
+                s.setAttribute("tempUser", U.getUsuario());
                 response.sendRedirect("recuperaAcceso.jsp");
-//                RequestDispatcher a = request.getRequestDispatcher("opcionesDeAcceso.jsp?msg=Su usuario si existe&msgAlt=info");
-//                a.forward(request, response);
             }
         } catch (java.lang.NullPointerException e) {
             RequestDispatcher a = request.getRequestDispatcher("opcionesDeAcceso.jsp?msg=No se permirten campos vacios&msgAlt=danger");
             a.forward(request, response);
         }
-
-        // Logueo del usuario
-//        if (request.getSession().getAttribute("pegeId") != null) {
-//        }
-//        login(request, response);
-    }
-
-    void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-//        if (request.getParameter("username") != null && request.getParameter("password").equals(usuarioLogin.getContrasenia())) {
-//            if (request.getParameter("username").equals("NombreDeUnUsuario")  {
-//                HttpSession session = request.getSession();
-//                session.setAttribute("user", request.getParameter("username"));
-//                RequestDispatcher a = request.getRequestDispatcher("index.jsp");
-//                a.forward(request, response);
-//            }
-//            RequestDispatcher a = request.getRequestDispatcher("login.jsp?msg=Usuario y/o "
-//                    + "contraseña incorrectos");
-//            a.forward(request, response);
-//        }
-//        RequestDispatcher a = request.getRequestDispatcher("login.jsp?msg=Usuario y/o contraseña incorrectos");
-//        a.forward(request, response);
     }
 
     /**

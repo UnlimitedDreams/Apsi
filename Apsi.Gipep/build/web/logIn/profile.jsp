@@ -4,12 +4,22 @@
     Author     : Miguel Angel Lemos
 --%>
 
+<%@page import="Entity.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true"%>
 <%HttpSession sesion = request.getSession();%>
+
 <!DOCTYPE html>
 <html lang="es" >
-
+    <%session = request.getSession();
+        try {
+            if (session.isNew() | session.getAttribute("user").equals(null)) {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (java.lang.NullPointerException e) {
+        }
+    %>
+    <%Persona p = (Persona) sesion.getAttribute("persona");%>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -68,7 +78,7 @@
                             out.print("<li><a id=\"opt1\"><i class=\"fa fa-user-md fa-stack-1x text-primary\"></i>" + sesion.getAttribute("user") + "</a></li>"
                                     + "<div id=\"ingresa\">"
                                     + "<ul>"
-                                    + "<li><a href=\"profile.jsp\">Mi perfil</a></li>"
+                                    + "<li><a href=\"#profile\">Mi perfil</a></li>"
                                     + "<li><a href=\"#Activity\">Mi actividad</a></li>"
                                     + "</ul>"
                                     + "<form name=\"log\" action=\"ingresar\" method=\"GET\">"
@@ -101,28 +111,76 @@
                 </li>
             </ul>
         </nav>
-
-        <!-- Header -->
-        <header id="top" class="header">
-            <div class="text-vertical-center">
-                <h1>ApSi&reg;</h1>
-                <h3>Asesorias y proyectos en cualquier momento</h3>
-                <br>
-                <a href="#about" class="btn btn-dark btn-lg">Aprende m&aacute;s sobre ApSi.</a>
-                <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
-                    <br><b><a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a></b>
-                </div>
-
-            </div>
-        </header>
-
-        <!-- About -->
         <section id="about" class="about">
+
             <div class="container">
+                <div class="form-group">
+                    <form>
+                        <table class="table-condensed">
+
+                            <thead>
+                                <tr>
+                            <h1><b><label> Informaci&oacute;n de usuario </label></b></h1>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+
+                                        <b><label class="form-control-static"> N&uacute;mero de identificaci&oacute;n </label></b>   
+
+
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" value="<%=p.getIdpersona()%>"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b><label class="form-control-static"> Nombres: </label></b>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" value="<%=p.getNombres()%>"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b><label class="form-control-static"> Apellidos: </label></b>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" value="<%=p.getApellidos()%>"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b><label class="form-control-static"> Correo: </label></b>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" value="<%=p.getCorreospersonas()%>"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b><label class="form-control-static"> T&eacute;lefono: </label></b>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" value="<%=p.getCorreospersonas()%>"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
+
+                    </form>
+                </div>
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h2>Breve descripci&oacute;n</h2>
                         <p class="lead">&quot;Las m&aacute;quinas no son nada sin una mente humana que las opere, los cuerpos humanos no pueden hacer lograr la perfecci&oacute;n sin una m&aacute;quina que ayude en las labores m&aacute;s arduas e imposibles para la humanidad&quot;.</p>
+                    </div>
+                    <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
+                        <br><b><a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a></b>
                     </div>
                 </div>
                 <!-- /.row -->

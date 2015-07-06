@@ -48,14 +48,16 @@
                     <a onclick="document.location = 'index.jsp'">ApSi</a>
                 </li>
                 <li>
-                    <a href="#top">Inicio</a>
+                    <a href="#top"><i class="fa fa-home fa-stack-1x text-primary"></i>Inicio</a>
                 </li>
-                <%                    String page1 = "<li><a id=\"opt1\">Acceder</a><div id=\"ingresa\" ><form name=\"log\" action=\"ingresar\" method=\"POST\">\n"
+                <%                    String page1 = "<li><a id=\"opt1\">Acceder</a>"
+                            + "<div id=\"ingresa\" >"
+                            + "<form name=\"log\" action=\"ingresar\" method=\"POST\">\n"
                             + "<table style=\"border-spacing: 6px 12px; border-collapse: separate\"><tr style=\"text-align: right;\">\n"
                             + "<td></td><td>"
                             + "<input placeholder=\"Usuario\" type=\"text\" id=\"user\" class=\"form-in\" name=\"user\" required=\"\" />\n"
                             + "</td></tr><tr style=\"text-align: right;\"><td></td><td><input placeholder=\"Constrase&ntilde;a\" type=\"password\" id=\"pass\" class=\"form-in\" name=\"pass\" required=\"\" />\n"
-                            + "</td></tr><tr><td></td><td><input type=\"submit\" class=\"btn-log\" name='operar' value=\"Iniciar sesi&oacute;n\"/></td>\n"
+                            + "</td></tr><tr><td></td><td><input type=\"submit\" class=\"btn btn-light btn-log\" name='operar' value=\"Iniciar sesi&oacute;n\"/></td>\n"
                             + "</tr></table><b><a href=\"opcionesDeAcceso.jsp\">No puedes acceder?</a></b><b><a href=\"http://www.uniajc.edu.co\">Registrate</a></b>\n"
                             + "</form></div></li>";
                     try {
@@ -63,13 +65,21 @@
                             out.print(page1);
                         } else {
 
-                            out.print("<li><a id=\"opt1\">" + sesion.getAttribute("user") + "</a></li>"
+                            out.print("<li><a id=\"opt1\"><i class=\"fa fa-user-md fa-stack-1x text-primary\"></i>" + sesion.getAttribute("user") + "</a></li>"
                                     + "<div id=\"ingresa\">"
+                                    + "<ul>"
+                                    + "<li><a href=\"profile.jsp\">Mi perfil</a></li>"
+                                    + "<li><a href=\"#Activity\">Mi actividad</a></li>"
+                                    + "</ul>"
                                     + "<form name=\"log\" action=\"ingresar\" method=\"GET\">"
-                                    + "<table style=\"border-spacing: 6px 12px; border-collapse: separate\"><tr style=\"text-align: right;\">\n"
-                                    + "<td></td><td>"
-                                    + "<input type=\"submit\" class=\"btn-log\" name='operar' value=\"Cerrar sesi&oacute;n\"/>"
-                                    + "</td></tr></table> "
+                                    + "<table style=\"border-spacing: 6px 12px; border-collapse: separate\">"
+                                    + "<tr style=\"text-align: right;\">\n"
+                                    + "<td></td>"
+                                    + "<td>"
+                                    + "<input type=\"submit\" class=\"btn btn-light btn-log\" name='operar' value=\"Cerrar sesi&oacute;n\"/>"
+                                    + "</td>"
+                                    + "</tr>"
+                                    + "</table> "
                                     + "</form>"
                                     + "</div>");
                         }
@@ -80,14 +90,14 @@
 
 
                 <li>
-                    <a href="#about">Acerca de ApSi</a>
+                    <a href="#about"><i class="fa fa-bookmark fa-stack-1x text-primary"></i>Acerca de ApSi</a>
                 </li>
                 <li>
-                    <a href="#services">Solicitar Registro</a>
+                    <a href="#services"><i class="fa fa-info fa-stack-1x text-primary"></i>Solicitar Registro</a>
                 </li>
 
                 <li>
-                    <a href="#contacto">Contacto</a>
+                    <a href="#contacto"><i class="fa fa-comment fa-stack-1x text-primary"></i>Contacto</a>
                 </li>
             </ul>
         </nav>
@@ -122,18 +132,28 @@
 
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
-
-
         <section id="services" class="services bg-primary">
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-10 col-lg-offset-1">
-                        <h2>A&uacute;n sin registrarte?</h2>
+                        <%
+                            try {
+                                if (!sesion.isNew() | !session.getAttribute("user").equals(null)) {
+                                    out.print("<h2>Bienvenido</h2>");
+                                } else {
+                                    out.print("<h2>A&uacute;n sin registrarte?</h2>");
+                                }
+                            } catch (java.lang.NullPointerException e) {
+                                out.print("<h2>A&uacute;n sin registrarte?</h2>");
+                            }
+
+                        %>
+
+
                         <hr class="small">
                         <div class="row">
                             <div class="col-md-3 col-sm-6">
-                                <%
-                                    try {
+                                <%                                    try {
                                         if (!sesion.isNew() | !session.getAttribute("user").equals(null)) {
                                             out.print("                               <div class=\"service-item\">\n"
                                                     + "                                    <span class=\"fa-stack fa-4x\">\n"
@@ -162,21 +182,49 @@
                                         <strong>Pide una asesoria</strong>
                                     </h4>
                                     <p>Capacitate, esfuerzate y trabaja con los mejores asesores. Tu tesis lo amerita.</p>
-                                    <a href="logIn.jsp" class="btn btn-light">Accede</a>
+                                    <%
+                                        try {
+                                            if (!sesion.isNew() | !session.getAttribute("user").equals(null)) {
+                                                out.print("<a href=\"#NewAsesoria\" class=\"btn btn-light\">Accede</a>");
+                                            }
+                                        } catch (java.lang.NullPointerException e) {
+                                            out.print("<a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>");
+                                        }
+                                    %>
+
+
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
-                                <div class="service-item">
-                                    <span class="fa-stack fa-4x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-cloud fa-stack-1x text-primary"></i>
-                                    </span>
-                                    <h4>
-                                        <strong>¡Pide tu usuario!</strong>
-                                    </h4>
-                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>
-                                    <a href="http://uniajc.edu.co/index.php/estudiantes" class="btn btn-light">Como registrarse</a>
-                                </div>
+                                <%
+                                    try {
+                                        if (!sesion.isNew() | !session.getAttribute("user").equals(null)) {
+                                            out.print("<div class=\"service-item\">\n"
+                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                    + "                                        <i class=\"fa fa-user fa-stack-1x text-primary\"></i>\n"
+                                                    + "                                    </span>\n"
+                                                    + "                                    <h4>\n"
+                                                    + "                                        <strong>Perfil</strong>\n"
+                                                    + "                                    </h4>\n"
+                                                    + "                                    <p>Mant&eacute;n tu perfil actualizado, esto ayuda a que llegue tus correos a tiempo y al lugar indicado.</p>\n"
+                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Como registrarse</a>\n"
+                                                    + "                                </div>");
+                                        }
+                                    } catch (java.lang.NullPointerException e) {
+                                        out.print("<div class=\"service-item\">\n"
+                                                + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                + "                                        <i class=\"fa fa-cloud fa-stack-1x text-primary\"></i>\n"
+                                                + "                                    </span>\n"
+                                                + "                                    <h4>\n"
+                                                + "                                        <strong>¡Pide tu usuario!</strong>\n"
+                                                + "                                    </h4>\n"
+                                                + "                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>\n"
+                                                + "                                    <a href=\"http://uniajc.edu.co/index.php/estudiantes\" class=\"btn btn-light\">Como registrarse</a>\n"
+                                                + "                                </div>");
+                                    }
+                                %>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <div class="service-item">

@@ -1,8 +1,7 @@
 
-import Dao.UsuarioDao;
 import Dao.UsuarioImple;
-import Entity.Usuario;
-import java.math.BigDecimal;
+import Entity.Persona;
+import java.util.Set;
 
 /*
  * The MIT License
@@ -33,14 +32,12 @@ import java.math.BigDecimal;
  */
 public class prueba {
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
-       
-        Usuario x;
-        UsuarioDao usu = new UsuarioImple();
-        boolean ww = new UsuarioImple().BuscarUsuario(new Usuario(BigDecimal.valueOf(1), null, null));
-        System.out.println(ww);
-//        x = new Usuario(new BigDecimal(1), "juan", "juan");
-//        System.out.println("Usuario: " + new UsuarioImple().Loguin(x).getUsuario());
-//        System.out.println("Constraseña: " + new UsuarioImple().Loguin(x).getContrasea());
+        Persona p = new UsuarioImple().verPersona("-1");
+        p.toString();
     }
+
 }
