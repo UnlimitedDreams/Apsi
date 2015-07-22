@@ -23,9 +23,8 @@
  */
 package apsi.Security;
 
-import Beans.Login;
-import Dao.UsuarioDao;
 import Dao.UsuarioImple;
+import Entity.Persona;
 import Entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,7 +38,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author usuario
+ * @author Miguel Angel Lemos
  */
 public class ingresar extends HttpServlet {
 
@@ -70,7 +69,8 @@ public class ingresar extends HttpServlet {
                     if (Loguin.getContrasea().equals(x.getContrasea()) && Loguin.getUsuario().equals(x.getUsuario())) {
                         s.setAttribute("user", x.getUsuario());
                         s.setAttribute("pass", x.getContrasea());
-                        s.setAttribute("persona", new UsuarioImple().verPersona(Loguin.getPegeId().toString()));
+                        Persona ww = new UsuarioImple().verPersona(Loguin.getPegeId().toString());
+                        s.setAttribute("persona", ww);
                         response.sendRedirect("index.jsp");
                     } else {
                         RequestDispatcher a = request.getRequestDispatcher("index.jsp?msg=Usuario y/o contraseña incorrectos&msgAlt=danger");

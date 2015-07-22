@@ -11,15 +11,25 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utilidad de Encriptacion
+ *
+ * @author Miguel Angel Lemos
+ */
 public class md5 {
 
+    /**
+     * Metodo de encriptamiento estandar.
+     *
+     * @param input Valor de entrada para ser encriptado.
+     * @return Valor encriptado
+     */
     public static String getMD5(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger number = new BigInteger(1, messageDigest);
             String hashtext = number.toString(16);
-            // Now we need to zero pad it if you actually want the full 32 chars.
             while (hashtext.length() < 32) {
                 hashtext = "0" + hashtext;
             }
@@ -27,9 +37,5 @@ public class md5 {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-    
-}
-// public static void main(String[] args) throws NoSuchAlgorithmException {
-//        System.out.println(getMD5("Usuario$2015"));
-//    }
+    }
 }

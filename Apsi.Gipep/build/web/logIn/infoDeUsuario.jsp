@@ -22,16 +22,23 @@
 
         <div id="header" class="head">
             <!-- Encabezado cool!--> 
-            Bienvenido: <% HttpSession S = request.getSession();
-                Usuario x = (Usuario) S.getAttribute("ObjUsu");
-                out.print(x.getUsuario()+ " Rol: " + x.getPegeId()); %>            
+            Bienvenido: <%
+                HttpSession S= request.getSession();
+                try {
+                    
+                    Usuario x = (Usuario) S.getAttribute("ObjUsu");
+                    out.print(x.getUsuario() + " Rol: " + x.getPegeId());
+                } catch (NullPointerException e) {
+                    response.sendRedirect("index.jsp");
+
+                }
+
+            %>            
 
         </div>
         <div id="layout-principal" class="layout layout-principal">
 
-            <%
-
-                out.println(S.getAttribute("ObjUsu").toString());
+            <%                out.println(S.getAttribute("ObjUsu").toString());
             %>
             <form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post">
                 <div class="title">

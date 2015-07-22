@@ -4,6 +4,15 @@
     Author     : Miguel Angel Lemos
 --%>
 
+<%@page import="Entity.Rol"%>
+<%@page import="java.math.BigDecimal"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.TreeMap"%>
+<%@page import="Entity.Correospersona"%>
+<%@page import="Entity.Telefonos"%>
+<%@page import="java.util.List"%>
+<%@page import="Dao.UsuarioImple"%>
 <%@page import="Entity.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true"%>
@@ -111,6 +120,7 @@
                 </li>
             </ul>
         </nav>
+
         <section id="about" class="about">
 
             <div class="container">
@@ -120,16 +130,25 @@
 
                             <thead>
                                 <tr>
-                            <h1><b><label> Informaci&oacute;n de usuario </label></b></h1>
+                            <h1><b><label> Informaci&oacute;n de usuario</label></b></h1>
+                            <h2>
+                                <%
+                                    TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
+//        
+                                    for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
+                                        Map.Entry me = (Map.Entry) it.next();
+                                        BigDecimal key = (BigDecimal) me.getKey();
+                                        Rol value = (Rol) roles.get(key);
+                                        out.println("Rol: " + value.getNombre() + "<br>");
+                                    }
+                                %>
+                            </h2>
                             </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>
-
                                         <b><label class="form-control-static"> N&uacute;mero de identificaci&oacute;n </label></b>   
-
-
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" value="<%=p.getIdpersona()%>"/>
@@ -151,43 +170,100 @@
                                         <input type="text" class="form-control" value="<%=p.getApellidos()%>"/>
                                     </td>
                                 </tr>
+                                <%
+                                    List<Telefonos> telefonos = new UsuarioImple().cargarTelefonos(p.getUsuario().getPegeId() + "");
+                                    List<Correospersona> correos = new UsuarioImple().cargarCorreos(p.getUsuario().getPegeId() + "");
+                                    for (int i = 0; i < telefonos.size(); i++) {
+                                        out.println("<tr>\n"
+                                                + "                                    <td>\n"
+                                                + "                                        <b><label class=\"form-control-static\"> T&eacute;lefono " + (i + 1) + ": </label></b>\n"
+                                                + "                                    </td>\n"
+                                                + "                                    <td>\n"
+                                                + "                                        <input type=\"text\" class=\"form-control\" value=\"" + telefonos.get(i).getTelefono() + "\"/>\n"
+                                                + "                                    </td>\n"
+                                                + "                                </tr> ");
+                                    }
+                                    for (int i = 0; i < correos.size(); i++) {
+                                        out.println("<tr>\n"
+                                                + "                                    <td>\n"
+                                                + "                                        <b><label class=\"form-control-static\"> Correo " + (i + 1) + ": </label></b>\n"
+                                                + "                                    </td>\n"
+                                                + "                                    <td>\n"
+                                                + "                                        <input type=\"text\" class=\"form-control\" value=\"" + correos.get(i).getCorreo() + "\"/>\n"
+                                                + "                                    </td>\n"
+                                                + "                                </tr>");
+                                    }
+                                %>
                                 <tr>
                                     <td>
-                                        <b><label class="form-control-static"> Correo: </label></b>
+                                        <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" value="<%=p.getCorreospersonas()%>"/>
+                                        <input type="reset" class="btn btn-danger btn-lg" value="Cancelar"/>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <b><label class="form-control-static"> T&eacute;lefono: </label></b>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" value="<%=p.getCorreospersonas()%>"/>
-                                    </td>
-                                </tr>
+
                             </tbody>
 
                         </table>
-                        <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
+
 
                     </form>
+                    <hr>
+                    <form action="srvltOA" method="post" onsubmit="return validaIgualdad()">
+                        <table class="table-condensed">
+                            <thead>
+                                <tr>
+                            <b><label> Cambiar contrase&ntilde;a</label></b>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="form-control-static"> Nueva Contraseña: </label>     
+                                    </td>
+                                    <td>
+                                        <input type="password" name="pass1" id="pass1" class="form-control" placeholder="Contraseña" required="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b><label class="form-control-static"> Confirmar Contraseña: </label></b>     
+                                    </td>
+                                    <td>
+                                        <input type="password" name="pass2" id="pass2" class="form-control" placeholder="Contraseña" required="true"/>
+                                    </td>
+                                </tr>
+                            <input type="hidden" name="pegeId" id="pegeId" value="<%=p.getUsuario().getPegeId()%>">
+                            <input type="hidden" name="action" id="action" value="profile">
+                            <tr>
+                                <td>
+                                    <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
+                                </td>
+                                <td>
+                                    <input type="reset" class="btn btn-danger btn-lg" value="Cancelar"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </form>
+                    <br>
+                    <a href="http://www.uniajc.edu.co/index.php/component/content/article/14-sample-data-articles/197-politica-de-privacidad">
+                        Pol&iacute;ticas de Privacidad
+                    </a>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <h2>Breve descripci&oacute;n</h2>
-                        <p class="lead">&quot;Las m&aacute;quinas no son nada sin una mente humana que las opere, los cuerpos humanos no pueden hacer lograr la perfecci&oacute;n sin una m&aacute;quina que ayude en las labores m&aacute;s arduas e imposibles para la humanidad&quot;.</p>
-                    </div>
-                    <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
-                        <br><b><a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a></b>
-                    </div>
-                </div>
-                <!-- /.row -->
             </div>
             <!-- /.container -->
         </section>
-
+        <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
+            <br>
+            <b>
+                <h2 style="text-align: center;">
+                    <a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a>
+                </h2>
+            </b>
+        </div>
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
         <section id="services" class="services bg-primary">
@@ -266,7 +342,7 @@
                                                     + "                                        <strong>Perfil</strong>\n"
                                                     + "                                    </h4>\n"
                                                     + "                                    <p>Mant&eacute;n tu perfil actualizado, esto ayuda a que llegue tus correos a tiempo y al lugar indicado.</p>\n"
-                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Como registrarse</a>\n"
+                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Ver mi perfil</a>\n"
                                                     + "                                </div>");
                                         }
                                     } catch (java.lang.NullPointerException e) {
@@ -352,16 +428,39 @@
         <!-- Bootstrap Core JavaScript -->
         <script src="../js/bootstrap.js"></script>
 
+        <script>
+                        function validaIgualdad() {
+                            var p1 = document.getElementById("pass1").value;
+                            var p2 = document.getElementById("pass2").value;
+                            var espacios = false;
+                            var cont = 0;
+                            while (!espacios && (cont < p1.length)) {
+                                if (p1.charAt(cont) === " ")
+                                    espacios = true;
+                                cont++;
+                            }
+                            if (espacios) {
+                                alert("La contraseña no puede contener espacios en blanco");
+                                return false;
+                            }
+                            if (p1 !== p2) {
+                                alert("Las contraseñas deben de coincidir");
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+        </script>
+
         <!--Script ocultar Divs-->
         <script>
-                        $(document).ready(function () {
-                            $("#ingresa").hide();
-                            $('#opt1').click(function () {
-                                $("#ingresa").toggle("left", function () {
-                                });
-                            });
-                        });
-        </script>
+            $(document).ready(function () {
+                $("#ingresa").hide();
+                $('#opt1').click(function () {
+                    $("#ingresa").toggle("left", function () {
+                    });
+                });
+            });</script>
 
         <!-- Custom Theme JavaScript -->
         <script>
@@ -370,13 +469,11 @@
                 e.preventDefault();
                 $("#sidebar-wrapper").toggleClass("active");
             });
-
             // Opens the sidebar menu
             $("#menu-toggle").click(function (e) {
                 e.preventDefault();
                 $("#sidebar-wrapper").toggleClass("active");
             });
-
             // Scrolls to the selected menu item on the page
             $(function () {
                 $('a[href*=#]:not([href=#])').click(function () {

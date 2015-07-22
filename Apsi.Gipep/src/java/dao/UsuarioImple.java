@@ -5,11 +5,16 @@
  */
 package Dao;
 
+import Entity.Correospersona;
 import Entity.Persona;
+import Entity.Rol;
+import Entity.Telefonos;
+import Entity.UsuRol;
 import Entity.Usuario;
 import apsi.Security.md5;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.TreeMap;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -20,6 +25,12 @@ import util.HibernateUtil;
  */
 public class UsuarioImple implements UsuarioDao {
 
+    /**
+     * Metodos para acceder a la información de cada usuario.
+     *
+     * @param usu Entrada de un usuario para obtener su informarción
+     * @return Información completa de los usuarios
+     */
     @Override
     public Usuario Loguin(Usuario usu) {
         Usuario temp = null;
@@ -35,6 +46,13 @@ public class UsuarioImple implements UsuarioDao {
         return temp;
     }
 
+    /**
+     * Método para crear un usuario nuevo.
+     *
+     * @param usu Usuario que se desea crear en el sistema.
+     * @return Verdadero si el usuario es creado correctamente, de lo contrario
+     * falso
+     */
     @Override
     public boolean CrearUsuario(Usuario usu) {
         System.out.println("entro a crear usuario " + usu.getPegeId());
@@ -51,6 +69,12 @@ public class UsuarioImple implements UsuarioDao {
         return r;
     }
 
+    /**
+     * Buscar un usuario.
+     *
+     * @param usu Parámetro de entrada .Class usuario
+     * @return Verdadero en caso de que el usuario exista, de lo contrario false
+     */
     @Override
     public boolean BuscarUsuario(Usuario usu) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -71,6 +95,12 @@ public class UsuarioImple implements UsuarioDao {
         return r;
     }
 
+    /**
+     * Cargar un usuario a la session, para procesar datos en la pagina
+     *
+     * @param pege Parámetro de entrada para buscar un usuario nuevo
+     * @return Datos del usuario .class Usuario
+     */
     public Usuario cargarUsu(String pege) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
@@ -89,6 +119,12 @@ public class UsuarioImple implements UsuarioDao {
         return u;
     }
 
+    /**
+     * Cambia la contraseña según los protocolos establecidos por la IEEE
+     *
+     * @param pege Codigo del usuario al que se va a cambiar la contraseña
+     * @param nPass Nueva contraseña a asignar al usuario
+     */
     public void CambiarContraseña(String pege, String nPass) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
@@ -107,13 +143,19 @@ public class UsuarioImple implements UsuarioDao {
             session.close();
         }
     }
-    
-    public Persona verPersona(String id){
-         Session session = HibernateUtil.getSessionFactory().openSession();
+
+    /**
+     * Ver información de la persona apartir del pegeId de su usuario.
+     *
+     * @param id
+     * @return
+     */
+    public Persona verPersona(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         Persona p = new Persona();
         try {
-            p = (Persona) session.get(Persona.class, BigDecimal.valueOf(Integer.parseInt(id)));
+            p = (Persona) session.createQuery("from Persona where pege_id =" + id).uniqueResult();
             t.commit();
         } catch (Exception e) {
             if (t != null) {
@@ -124,5 +166,81 @@ public class UsuarioImple implements UsuarioDao {
             session.close();
         }
         return p;
+    }
+
+    /**
+     * Cargar lista telefonos de un usuario
+     *
+     * @param id Codigo del usuario
+     * @return Lista con los números posibles del usuario
+     */
+    public List cargarTelefonos(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        List<Telefonos> telefonos = null;
+
+        try {
+            telefonos = session.createQuery(" from Telefonos \n"
+                    + "where idPersona = " + id).list();
+            session.close();
+            return telefonos;
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            return null;
+        }
+
+    }
+
+    /**
+     * Cargar la lista de correos de un usuario
+     *
+     * @param id Codigo del usuario
+     * @return Lista de correos d un usuario
+     */
+    public List cargarCorreos(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        List<Correospersona> telefonos = null;
+
+        try {
+            telefonos = session.createQuery(" from Correospersona \n"
+                    + "where idPersona = " + id).list();
+            session.close();
+            return telefonos;
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Cargar un lista de roles que posee un usuario activo.
+     * @param id identificador del usuario
+     * @return Lista de Roles asignados al usuario
+     */
+    public TreeMap cargarRoles(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        List<UsuRol> usuRols = null;
+        TreeMap roles = new TreeMap();
+        try {
+            usuRols = session.createQuery(" from  UsuRol\n"
+                    + "where usuario.pegeId  = " + id).list();
+            for (UsuRol get : usuRols) {
+                Rol r = (Rol) session.get(Rol.class, get.getRol().getCodRol());
+                roles.put(r.getCodRol(), r);
+            }
+            session.close();
+            return roles;
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            return null;
+        }
     }
 }
