@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import static oracle.net.aso.C01.x;
 
 /*
  * The MIT License
@@ -41,21 +40,11 @@ public class prueba {
      */
     public static void main(String[] args) {
         TreeMap roles = new UsuarioImple().cargarRoles("1");
-//        
         for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
-                Map.Entry me = (Map.Entry) it.next();
-                BigDecimal key = (BigDecimal) me.getKey();
-                Rol value = (Rol) roles.get(key);
-               System.out.println("Rol: "+ value.getNombre());
-            }
-        
-//        for (int i = 0; i < roles.size(); i++) {
-//            UsuRol get = roles.get(i);
-//            //System.out.println(get.getRol().getNombre());
-//            
-//            
-//
-//        }
-
+            Map.Entry me = (Map.Entry) it.next();
+            BigDecimal key = (BigDecimal) me.getKey();
+            Rol value = (Rol) roles.get(key);
+            System.out.println("Rol: " + value.getNombre());
+        }
     }
 }

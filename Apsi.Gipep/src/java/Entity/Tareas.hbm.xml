@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-jul-2015 14:32:04 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Entity.Tareas" table="tareas" schema="public" optimistic-lock="version">
+        <id name="codTarea" type="long">
+            <column name="cod_tarea" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="asesoria" class="Entity.Asesoria" fetch="select">
+            <column name="cod_asesoria" precision="10" scale="0" />
+        </many-to-one>
+        <property name="responsable" type="string">
+            <column name="responsable" length="50" not-null="true" />
+        </property>
+        <property name="tarea" type="string">
+            <column name="tarea" length="2000" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

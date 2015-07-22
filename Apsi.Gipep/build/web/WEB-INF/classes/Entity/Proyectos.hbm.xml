@@ -1,21 +1,36 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
+<!-- Generated 22-jul-2015 14:32:04 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="Entity.Proyectos" table="proyectos" schema="public">
+    <class name="Entity.Proyectos" table="proyectos" schema="public" optimistic-lock="version">
         <id name="codigoProyecto" type="big_decimal">
             <column name="codigo_proyecto" precision="131089" scale="0" />
             <generator class="assigned" />
         </id>
+        <many-to-one name="tipoProyecto" class="Entity.TipoProyecto" fetch="select">
+            <column name="codigo_tipo" precision="10" scale="0" />
+        </many-to-one>
         <property name="nombre" type="string">
             <column name="nombre" length="250" not-null="true" />
         </property>
-        <property name="descripcion" type="string">
-            <column name="descripcion" not-null="true" />
-        </property>
         <property name="ruta" type="string">
             <column name="ruta" length="250" not-null="true" />
+        </property>
+        <property name="calificacion" type="java.lang.Long">
+            <column name="calificacion" precision="10" scale="0" />
+        </property>
+        <property name="porcentaje" type="string">
+            <column name="porcentaje" length="10" />
+        </property>
+        <property name="fechaInicio" type="date">
+            <column name="fecha_inicio" length="13" />
+        </property>
+        <property name="fechaFinal" type="date">
+            <column name="fecha_final" length="13" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" not-null="true" />
         </property>
         <set name="calificacions" table="calificacion" inverse="true" lazy="true" fetch="select">
             <key>
@@ -40,6 +55,12 @@
                 <column name="codigo_proyecto" precision="131089" scale="0" not-null="true" />
             </key>
             <one-to-many class="Entity.EstadoProyecto" />
+        </set>
+        <set name="objetivoses" table="objetivos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_proyecto" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.Objetivos" />
         </set>
     </class>
 </hibernate-mapping>

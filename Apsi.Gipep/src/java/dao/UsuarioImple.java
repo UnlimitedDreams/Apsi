@@ -229,7 +229,7 @@ public class UsuarioImple implements UsuarioDao {
         TreeMap roles = new TreeMap();
         try {
             usuRols = session.createQuery(" from  UsuRol\n"
-                    + "where usuario.pegeId  = " + id).list();
+                    + "where pege_Id  = " + id).list();
             for (UsuRol get : usuRols) {
                 Rol r = (Rol) session.get(Rol.class, get.getRol().getCodRol());
                 roles.put(r.getCodRol(), r);

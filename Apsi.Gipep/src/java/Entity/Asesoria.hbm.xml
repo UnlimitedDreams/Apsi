@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
+<!-- Generated 22-jul-2015 14:32:04 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="Entity.Asesoria" table="asesoria" schema="public">
+    <class name="Entity.Asesoria" table="asesoria" schema="public" optimistic-lock="version">
         <id name="codAsesoria" type="big_decimal">
             <column name="cod_asesoria" precision="131089" scale="0" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="ubicacion" class="Entity.Ubicacion" fetch="select">
-            <column name="ubicacion" precision="131089" scale="0" not-null="true" />
-        </many-to-one>
         <many-to-one name="disponibilidad" class="Entity.Disponibilidad" fetch="select">
             <column name="cod_dis" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ubicacion" class="Entity.Ubicacion" fetch="select">
+            <column name="ubicacion" precision="131089" scale="0" not-null="true" />
         </many-to-one>
         <property name="fechaAsesoria" type="date">
             <column name="fecha_asesoria" length="13" not-null="true" />
@@ -38,11 +38,23 @@
             </key>
             <one-to-many class="Entity.EstadosAsesoria" />
         </set>
+        <set name="detalleAsesorias" table="detalle_asesoria" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_asesoria" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.DetalleAsesoria" />
+        </set>
         <set name="asistentes" table="asistente" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="cod_asesoria" precision="131089" scale="0" not-null="true" />
             </key>
             <one-to-many class="Entity.Asistente" />
+        </set>
+        <set name="tareases" table="tareas" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_asesoria" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.Tareas" />
         </set>
     </class>
 </hibernate-mapping>

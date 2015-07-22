@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-jul-2015 14:32:04 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Entity.TipoProyecto" table="tipo_proyecto" schema="public" optimistic-lock="version">
+        <id name="codTipo" type="long">
+            <column name="cod_tipo" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="100" not-null="true" />
+        </property>
+        <set name="proyectoses" table="proyectos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="codigo_tipo" precision="10" scale="0" />
+            </key>
+            <one-to-many class="Entity.Proyectos" />
+        </set>
+    </class>
+</hibernate-mapping>

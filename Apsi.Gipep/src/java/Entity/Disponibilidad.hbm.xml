@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 02-jun-2015 13:38:42 by Hibernate Tools 3.6.0 -->
+<!-- Generated 22-jul-2015 14:32:04 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="Entity.Disponibilidad" table="disponibilidad" schema="public">
+    <class name="Entity.Disponibilidad" table="disponibilidad" schema="public" optimistic-lock="version">
         <id name="codDis" type="big_decimal">
             <column name="cod_dis" precision="131089" scale="0" />
             <generator class="assigned" />
@@ -22,6 +22,12 @@
         </property>
         <property name="periodo" type="big_decimal">
             <column name="periodo" precision="131089" scale="0" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="10" />
+        </property>
+        <property name="horasCumplidas" type="java.lang.Long">
+            <column name="horas_cumplidas" precision="10" scale="0" />
         </property>
         <set name="asesorias" table="asesoria" inverse="true" lazy="true" fetch="select">
             <key>
