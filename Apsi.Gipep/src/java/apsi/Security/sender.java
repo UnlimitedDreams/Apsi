@@ -16,10 +16,14 @@ import javax.mail.internet.MimeMessage;
 
 /**
  *
- * @author usuario
+ * @author Miguel Angel Lemos
  */
 public class sender {
 
+    /**
+     * Ajuste de parametros de configuración de envío de correos
+     *
+     */
     public static class EnviadorMail {
 
         final String miCorreo = "miglem0101@gmail.com";
@@ -30,6 +34,13 @@ public class sender {
         String asunto = null;
         String cuerpo = null;
 
+        /**
+         * Enviador de correos.
+         *
+         * @param mailReceptor Correo de quien se quiere enviar el correo
+         * @param asunto Asunto del correo
+         * @param cuerpo Mensaje del correo
+         */
         public EnviadorMail(String mailReceptor, String asunto,
                 String cuerpo) {
             this.mailReceptor = mailReceptor;
@@ -64,11 +75,11 @@ public class sender {
             } catch (Exception mex) {
                 mex.printStackTrace();
             }
-
         }
 
         private class autentificadorSMTP extends javax.mail.Authenticator {
 
+            @Override
             public PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(miCorreo, miContraseña);
             }

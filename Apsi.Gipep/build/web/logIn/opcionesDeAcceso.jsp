@@ -213,6 +213,7 @@
                             <h2>Digita tu n&uacute;mero de identificaci&oacute;n:</h2>
                             <hr> 
                             <form id="recuperar" name="recuperar" action="srvltOA" method="post">
+                                <input type="hidden" name="action" id="action" value="restore">
                                 <input id="pegeId" name="pegeId" type="number" placeholder="C&eacute;dula o TI" required=""/>
                                 <br>  <br>                                         
                                 <input class="btn btn-dark" type="reset" data-dismiss="modal" value="Cerrar"> 

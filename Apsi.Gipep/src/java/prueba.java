@@ -1,7 +1,11 @@
 
 import Dao.UsuarioImple;
-import Entity.Persona;
-import java.util.Set;
+import Entity.Rol;
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+import static oracle.net.aso.C01.x;
 
 /*
  * The MIT License
@@ -36,8 +40,22 @@ public class prueba {
      * @param args
      */
     public static void main(String[] args) {
-        Persona p = new UsuarioImple().verPersona("-1");
-        p.toString();
-    }
+        TreeMap roles = new UsuarioImple().cargarRoles("1");
+//        
+        for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
+                Map.Entry me = (Map.Entry) it.next();
+                BigDecimal key = (BigDecimal) me.getKey();
+                Rol value = (Rol) roles.get(key);
+               System.out.println("Rol: "+ value.getNombre());
+            }
+        
+//        for (int i = 0; i < roles.size(); i++) {
+//            UsuRol get = roles.get(i);
+//            //System.out.println(get.getRol().getNombre());
+//            
+//            
+//
+//        }
 
+    }
 }
