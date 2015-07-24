@@ -16,6 +16,8 @@
         <meta name="author" content="">
         <link rel="stylesheet" href="../css/ingreso.css"/>
         <link rel="stylesheet" href="../css/formas.css"/>
+        <!--Icon facelet-->
+        <link rel="icon" type="image/png" href="../img/unlimtd.ico"/>
         <title>Informacion de Usuario</title>
     </head>
     <body>

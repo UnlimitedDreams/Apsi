@@ -26,6 +26,7 @@
                 response.sendRedirect("index.jsp");
             }
         } catch (java.lang.NullPointerException e) {
+            response.sendRedirect("index.jsp");
         }
     %>
     <%Persona p = (Persona) sesion.getAttribute("persona");%>
@@ -48,7 +49,8 @@
         <!-- Custom Fonts -->
         <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
+        <!--Icon facelet-->
+        <link rel="icon" type="image/png" href="../img/unlimtd.ico"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -88,7 +90,7 @@
                                     + "<div id=\"ingresa\">"
                                     + "<ul>"
                                     + "<li><a href=\"#profile\">Mi perfil</a></li>"
-                                    + "<li><a href=\"#Activity\">Mi actividad</a></li>"
+                                    + "<li><a href=\"mainMenu.jsp\">Mi actividad</a></li>"
                                     + "</ul>"
                                     + "<form name=\"log\" action=\"ingresar\" method=\"GET\">"
                                     + "<table style=\"border-spacing: 6px 12px; border-collapse: separate\">"
@@ -298,7 +300,7 @@
                                                     + "                                        <strong>Menú Principal</strong>\n"
                                                     + "                                    </h4>\n"
                                                     + "                                    <p>Acceso al menu principal.</p>\n"
-                                                    + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
+                                                    + "                                    <a href=\"mainMenu.jsp\" class=\"btn btn-light\">Accede</a>\n"
                                                     + "                                </div>\n");
                                         }
                                     } catch (java.lang.NullPointerException e) {

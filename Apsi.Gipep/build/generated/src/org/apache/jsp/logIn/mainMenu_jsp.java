@@ -1,0 +1,343 @@
+package org.apache.jsp.logIn;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.jsp.*;
+import Entity.Persona;
+
+public final class mainMenu_jsp extends org.apache.jasper.runtime.HttpJspBase
+    implements org.apache.jasper.runtime.JspSourceDependent {
+
+  private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
+
+  private static java.util.List<String> _jspx_dependants;
+
+  private org.glassfish.jsp.api.ResourceInjector _jspx_resourceInjector;
+
+  public java.util.List<String> getDependants() {
+    return _jspx_dependants;
+  }
+
+  public void _jspService(HttpServletRequest request, HttpServletResponse response)
+        throws java.io.IOException, ServletException {
+
+    PageContext pageContext = null;
+    HttpSession session = null;
+    ServletContext application = null;
+    ServletConfig config = null;
+    JspWriter out = null;
+    Object page = this;
+    JspWriter _jspx_out = null;
+    PageContext _jspx_page_context = null;
+
+    try {
+      response.setContentType("text/html;charset=UTF-8");
+      pageContext = _jspxFactory.getPageContext(this, request, response,
+      			null, true, 8192, true);
+      _jspx_page_context = pageContext;
+      application = pageContext.getServletContext();
+      config = pageContext.getServletConfig();
+      session = pageContext.getSession();
+      out = pageContext.getOut();
+      _jspx_out = out;
+      _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
+
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write("<html lang=\"es\">\n");
+      out.write("    ");
+session = request.getSession();
+        try {
+            if (session.isNew() | session.getAttribute("user").equals(null)) {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (java.lang.NullPointerException e) {
+            response.sendRedirect("index.jsp");
+        }
+    
+      out.write("\n");
+      out.write("    ");
+Persona p = (Persona) session.getAttribute("persona");
+        out.print("Persona");
+        out.print(p);
+    
+      out.write("\n");
+      out.write("    <head>\n");
+      out.write("        <meta charset=\"utf-8\">\n");
+      out.write("        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n");
+      out.write("        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n");
+      out.write("        <meta name=\"description\" content=\"\">\n");
+      out.write("        <meta name=\"author\" content=\"\">\n");
+      out.write("        <title>ApSi.GiPep - Menú Principal</title>\n");
+      out.write("        <!-- Bootstrap Core CSS -->\n");
+      out.write("        <link href=\"../css/bootstrap.min.css\" rel=\"stylesheet\">\n");
+      out.write("\n");
+      out.write("        <!-- Custom CSS -->\n");
+      out.write("        <link rel=\"stylesheet\" href=\"../css/styles.css\" />\n");
+      out.write("        <link href=\"../css/stylish-portfolio.css\" rel=\"stylesheet\">\n");
+      out.write("        <!-- Link para panel menu-->\n");
+      out.write("        <link href=\"../css/style.css\" rel=\"stylesheet\"/>\n");
+      out.write("        <!-- Custom Fonts -->\n");
+      out.write("        <link href=\"../font-awesome/css/font-awesome.min.css\" rel=\"stylesheet\" type=\"text/css\">\n");
+      out.write("        <link href=\"//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css\" rel=\"stylesheet\" />\n");
+      out.write("        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->\n");
+      out.write("        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->\n");
+      out.write("        <!--[if lt IE 9]>\n");
+      out.write("            <script src=\"https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js\"></script>\n");
+      out.write("            <script src=\"https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js\"></script>\n");
+      out.write("        <![endif]-->\n");
+      out.write("    </head>\n");
+      out.write("    <body>\n");
+      out.write("        <!-- Navigation -->\n");
+      out.write("        <a id=\"menu-toggle\" href=\"#\" class=\"btn btn-dark btn-lg toggle\"><i class=\"fa fa-bars\"></i></a>\n");
+      out.write("        <nav id=\"sidebar-wrapper\">\n");
+      out.write("            <ul class=\"sidebar-nav\">\n");
+      out.write("                <a id=\"menu-close\" href=\"#\" class=\"btn btn-light btn-lg pull-right toggle\"><i class=\"fa fa-times\"></i></a>\n");
+      out.write("                <li class=\"sidebar-brand\">\n");
+      out.write("                    <a href=\"index.jsp\">ApSi</a>\n");
+      out.write("                </li>\n");
+      out.write("                <li>\n");
+      out.write("                    <a href=\"#top\"><i class=\"fa fa-home fa-stack-1x text-primary\"></i>Inicio</a>\n");
+      out.write("                </li>\n");
+      out.write("                <li>\n");
+      out.write("                    <a href=\"#contacto\"><i class=\"fa fa-comment fa-stack-1x text-primary\"></i>Contacto</a>\n");
+      out.write("                </li>\n");
+      out.write("            </ul>\n");
+      out.write("        </nav> \n");
+      out.write("        <!--<nav class=\"navbar navbar-trans \" role=\"navigation\">\n");
+      out.write("            <div class=\"container\">\n");
+      out.write("                <div class=\"navbar-header\">\n");
+      out.write("                    <button type=\"button\" class=\"navbar-toggle top\" data-toggle=\"collapse\" data-target=\"#navbar-collapsible\">\n");
+      out.write("                        <span class=\"sr-only\">Toggle navigation</span>\n");
+      out.write("                        <span class=\"icon-bar\"></span>\n");
+      out.write("                        <span class=\"icon-bar\"></span>\n");
+      out.write("                        <span class=\"icon-bar\"></span>\n");
+      out.write("                    </button>\n");
+      out.write("                    <a class=\"navbar-brand text-primary\" href=\"menuAdm.xhtml\">ApSi</a>\n");
+      out.write("                </div>\n");
+      out.write("                <div class=\"navbar-collapse collapse\" id=\"navbar-collapsible\">\n");
+      out.write("                    <ul class=\"nav navbar-nav navbar-left\">\n");
+      out.write("                        <li><a href=\"#\"><i class=\"fa fa-folder-o\"> Archivo</i></a></li>\n");
+      out.write("                        <li><a href=\"#\"><i class=\"fa fa-cog\"> Opciones</i></a></li>\n");
+      out.write("                        <li><a href=\"index.xhtml\"><i class=\"fa fa-sign-out \"> Salir</i></a></li>                       \n");
+      out.write("                        <li>&nbsp;</li>\n");
+      out.write("                    </ul>                   \n");
+      out.write("                </div>\n");
+      out.write("            </div>\n");
+      out.write("        </nav>-->\n");
+      out.write("\n");
+      out.write("        <section class=\"container-fluid\" id=\"section6\">\n");
+      out.write("            <div class=\"container-fluid\">\n");
+      out.write("                <div class=\"row\">                   \n");
+      out.write("                    <h3><i class=\"fa fa-user\"> </i> Name User : <outputLabel value=\"  \"></outputLabel></h3> \n");
+      out.write("                </div>\n");
+      out.write("            </div>\n");
+      out.write("        </section>\n");
+      out.write("\n");
+      out.write("        <section class=\"container-fluid\" id=\"section2\">\n");
+      out.write("            <div class=\"row\">\n");
+      out.write("                <div class=\"col-sm-3\">\n");
+      out.write("                    <aside>\n");
+      out.write("                        <div id=\"sidebar\"  class=\"nav-collapse  \">\n");
+      out.write("                            <!-- sidebar menu start-->\n");
+      out.write("                            <ul class=\"sidebar-menu\">                \n");
+      out.write("                                <li class=\"active\">\n");
+      out.write("                                    <a class=\"\" href=\"#\">\n");
+      out.write("                                        <i class=\"icon_house_alt\"></i>\n");
+      out.write("                                        <span>USER OPTIONS</span>\n");
+      out.write("                                    </a>\n");
+      out.write("                                </li>\n");
+      out.write("                                <li class=\"sub-menu\">\n");
+      out.write("                                    <a href=\"javascript:;\" class=\"\">\n");
+      out.write("                                        <i class=\"fa fa-male\"></i>\n");
+      out.write("                                        <span>Option 1</span>\n");
+      out.write("                                        <span class=\"menu-arrow arrow_carrot-right\"></span>\n");
+      out.write("                                    </a>\n");
+      out.write("                                    <ul class=\"sub\">\n");
+      out.write("                                        <li><a href=\"USUagregar.xhtml\"><i class=\"fa fa-plus\"></i>Item 1</a></li>\n");
+      out.write("                                        <li><a href=\"USUlistar.xhtml\"><i class=\"fa fa-cogs\"> </i>Item 2</a></li>\n");
+      out.write("                                    </ul>\n");
+      out.write("                                </li>       \n");
+      out.write("                                <li class=\"sub-menu\">\n");
+      out.write("                                    <a href=\"javascript:;\" class=\"\">\n");
+      out.write("                                        <i class=\"fa fa-users\"></i>\n");
+      out.write("                                        <span>Option 2</span>\n");
+      out.write("                                        <span class=\"menu-arrow arrow_carrot-right\"></span>\n");
+      out.write("                                    </a>\n");
+      out.write("                                    <ul class=\"sub\">\n");
+      out.write("                                        <li><a href=\"GRUagregar.xhtml\" ><i class=\"fa fa-plus\"> </i>Item 1</a></li>\n");
+      out.write("                                        <li><a href=\"GRUeliminar.xhtml\" ><i class=\"fa fa-cogs\"> </i>Item 1</a></li>\n");
+      out.write("\n");
+      out.write("                                    </ul>\n");
+      out.write("                                </li>\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("                            </ul>\n");
+      out.write("                        </div>\n");
+      out.write("                    </aside>\n");
+      out.write("                </div>\n");
+      out.write("                <div class=\"col-sm-9\">\n");
+      out.write("\n");
+      out.write("                    <div class=\"panel panel-default slideInUp animate\">\n");
+      out.write("                        <div class=\"panel-heading\">\n");
+      out.write("                            <h4>TITLE PANEL</h4></div>\n");
+      out.write("\n");
+      out.write("                        <h1>Text</h1>\n");
+      out.write("                        <h2 class=\"text-success\">Text color Green</h2>\n");
+      out.write("                        <h3 class=\"text-danger\">Text color Red</h3>\n");
+      out.write("                        <h3 class=\"text-primary\">Text color Blue</h3>\n");
+      out.write("                        <h1>Links</h1>\n");
+      out.write("                        <a class=\"btn-success\">Hello</a> - <a class=\"text-success\">Facelets</a>\n");
+      out.write("                        <a class=\"btn-danger\">Hello</a> - <a class=\"text-danger\">Facelets</a>\n");
+      out.write("                        <a class=\"btn-primary\">Hello</a> - <a class=\"text-primary\">Facelets</a>\n");
+      out.write("\n");
+      out.write("                        <h1>Buttons</h1>\n");
+      out.write("                        <button type=\"submit\" class=\"btn btn-success\">Submit</button>\n");
+      out.write("                        <button type=\"submit\" class=\"btn btn-danger\">Delete</button>\n");
+      out.write("                        <button type=\"submit\" class=\"btn btn-primary\">Options</button>\n");
+      out.write("\n");
+      out.write("                        <h1>Progres Var</h1>\n");
+      out.write("                        <div class=\"panel-body\">\n");
+      out.write("                            <div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 20%;\">\n");
+      out.write("                                20%\n");
+      out.write("                            </div>\n");
+      out.write("                        </div>\n");
+      out.write("                        <div class=\"panel-body\">\n");
+      out.write("                            <div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 50%;\">\n");
+      out.write("                                50%\n");
+      out.write("                            </div>\n");
+      out.write("                        </div>\n");
+      out.write("\n");
+      out.write("                        <h1>Panel examples</h1>\n");
+      out.write("\n");
+      out.write("                        <div class=\"panel panel-primary slideInUp animate\">\n");
+      out.write("                            <div class=\"panel-heading\">\n");
+      out.write("                                <h4>Title Panel</h4></div><h3>Center content</h3></div>\n");
+      out.write("\n");
+      out.write("                        <div class=\"panel panel-danger slideInUp animate\">\n");
+      out.write("                            <div class=\"panel-heading\">\n");
+      out.write("                                <h4>Title Panel</h4></div><h3>Center content</h3></div>\n");
+      out.write("\n");
+      out.write("                        <div class=\"panel panel-success slideInUp animate\">\n");
+      out.write("                            <div class=\"panel-heading\">\n");
+      out.write("                                <h4>Title Panel</h4></div><h3>Center content</h3></div>\n");
+      out.write("\n");
+      out.write("                    </div>\n");
+      out.write("                </div>\n");
+      out.write("            </div>\n");
+      out.write("\n");
+      out.write("        </section>\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("        <!-- Footer -->\n");
+      out.write("        <footer>\n");
+      out.write("            <div class=\"container\" id=\"contacto\">\n");
+      out.write("                <div class=\"row\">\n");
+      out.write("                    <div class=\"col-lg-10 col-lg-offset-1 text-center\">\n");
+      out.write("                        <h4><strong>ApSi&REG;</strong>\n");
+      out.write("                        </h4>\n");
+      out.write("                        <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br>Santiago de Cali, Colombia</p>\n");
+      out.write("                        <ul class=\"list-unstyled\">\n");
+      out.write("                            <li><i class=\"fa fa-phone fa-fw\"></i> (318) 265-7417</li>\n");
+      out.write("                            <li><i class=\"fa fa-envelope-o fa-fw\"></i>  <a href=\"mailto:unlimitedDreamsTi@gmail.com\">unlimitedDreamsTi@gmail.com</a>\n");
+      out.write("                            </li>\n");
+      out.write("                        </ul>\n");
+      out.write("                        <br>\n");
+      out.write("                        <ul class=\"list-inline\">\n");
+      out.write("                            <li>\n");
+      out.write("                                <a href=\"#\"><i class=\"fa fa-facebook fa-fw fa-3x\"></i></a>\n");
+      out.write("                            </li>\n");
+      out.write("                            <li>\n");
+      out.write("                                <a href=\"#\"><i class=\"fa fa-twitter fa-fw fa-3x\"></i></a>\n");
+      out.write("                            </li>\n");
+      out.write("                        </ul>\n");
+      out.write("                        <hr class=\"small\">\n");
+      out.write("                        <p class=\"text-muted\">Powered By Unlimited Dreams <br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>\n");
+      out.write("                    </div>\n");
+      out.write("                </div>\n");
+      out.write("            </div>\n");
+      out.write("        </footer>\n");
+      out.write("\n");
+      out.write("        <div class=\"scroll-up\">\n");
+      out.write("            <a href=\"#\"><i class=\"fa fa-angle-up\"></i></a>\n");
+      out.write("        </div>\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("        <!--scripts para panel menu-->\n");
+      out.write("\n");
+      out.write("        <!-- jQuery -->\n");
+      out.write("        <script src=\"../js/Jquery/jquery-1.11.2.js\"></script>\n");
+      out.write("        <script src=\"../js/Jquery/jquery.nicescroll.js\" type=\"text/javascript\"></script>\n");
+      out.write("\n");
+      out.write("        <!-- Bootstrap Core JavaScript -->\n");
+      out.write("        <script src=\"../js/bootstrap.js\"></script>\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("        <!--scripts loaded here-->\n");
+      out.write("        <script src=\"../js/custom/scripts.js\"></script>\n");
+      out.write("        <script src=\"../js/custom/scripts1.js\"></script>\n");
+      out.write("\n");
+      out.write("        <!--Script ocultar Divs-->\n");
+      out.write("        <script>\n");
+      out.write("            $(document).ready(function () {\n");
+      out.write("                $(\"#ingresa\").hide();\n");
+      out.write("                $('#opt1').click(function () {\n");
+      out.write("                    $(\"#ingresa\").toggle(\"left\", function () {\n");
+      out.write("                    });\n");
+      out.write("                });\n");
+      out.write("            });\n");
+      out.write("        </script>\n");
+      out.write("\n");
+      out.write("        <!-- Custom Theme JavaScript -->\n");
+      out.write("        <script>\n");
+      out.write("            // Closes the sidebar menu\n");
+      out.write("            $(\"#menu-close\").click(function (e) {\n");
+      out.write("                e.preventDefault();\n");
+      out.write("                $(\"#sidebar-wrapper\").toggleClass(\"active\");\n");
+      out.write("            });\n");
+      out.write("\n");
+      out.write("            // Opens the sidebar menu\n");
+      out.write("            $(\"#menu-toggle\").click(function (e) {\n");
+      out.write("                e.preventDefault();\n");
+      out.write("                $(\"#sidebar-wrapper\").toggleClass(\"active\");\n");
+      out.write("            });\n");
+      out.write("\n");
+      out.write("            // Scrolls to the selected menu item on the page\n");
+      out.write("            $(function () {\n");
+      out.write("                $('a[href*=#]:not([href=#])').click(function () {\n");
+      out.write("                    if (location.pathname.replace(/^\\//, '') === this.pathname.replace(/^\\//, '') || location.hostname === this.hostname) {\n");
+      out.write("\n");
+      out.write("                        var target = $(this.hash);\n");
+      out.write("                        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');\n");
+      out.write("                        if (target.length) {\n");
+      out.write("                            $('html,body').animate({\n");
+      out.write("                                scrollTop: target.offset().top\n");
+      out.write("                            }, 1000);\n");
+      out.write("                            return false;\n");
+      out.write("                        }\n");
+      out.write("                    }\n");
+      out.write("                });\n");
+      out.write("            });\n");
+      out.write("        </script>\n");
+      out.write("    </body>\n");
+      out.write("</html>\n");
+      out.write("\n");
+      out.write("\n");
+    } catch (Throwable t) {
+      if (!(t instanceof SkipPageException)){
+        out = _jspx_out;
+        if (out != null && out.getBufferSize() != 0)
+          out.clearBuffer();
+        if (_jspx_page_context != null) _jspx_page_context.handlePageException(t);
+        else throw new ServletException(t);
+      }
+    } finally {
+      _jspxFactory.releasePageContext(_jspx_page_context);
+    }
+  }
+}

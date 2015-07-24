@@ -26,7 +26,8 @@
         <!-- Custom Fonts -->
         <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
+        <!--Icon facelet-->
+        <link rel="icon" type="image/png" href="../img/unlimtd.ico"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -36,7 +37,14 @@
 
 
     <body> 
-
+        <%session = request.getSession();
+            try {
+                if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                    response.sendRedirect("index.jsp");
+                }
+            } catch (java.lang.NullPointerException e) {
+            }
+        %>
         <!-- Navigation -->
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
         <nav id="sidebar-wrapper">

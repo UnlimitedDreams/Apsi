@@ -1,0 +1,14 @@
+SMAP
+mainMenu_jsp.java
+JSP
+*S JSP
+*F
++ 0 mainMenu.jsp
+logIn/mainMenu.jsp
+*L
+5,7:45
+11,9:52
+19,2:61
+20,4:63
+23,265:67
+*E
