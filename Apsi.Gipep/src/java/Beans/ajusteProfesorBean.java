@@ -67,10 +67,23 @@ public final class ajusteProfesorBean implements Serializable {
 
     }
 
+    public void validarHora(String x) {
+        boolean r=false;
+        String hora;
+        if (x.length() == 5) {
+
+        }
+    }
+
+    public void ValidarRangoHora(String h1, String h2) {
+
+    }
+
     public void inicionombreProfe() {
         Profesor temp = null;
         temp = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
-        this.nombreProfesor = temp.getNombre()+" "+temp.getApellido();
+        this.nombreProfesor = temp.getNombre() + " " + temp.getApellido();
+        System.out.println("--- " + temp.toString());
         cargarDias();
         Recuerpar_informacion();
     }
@@ -171,37 +184,6 @@ public final class ajusteProfesorBean implements Serializable {
 
             }
         }
-    }
-
-    public void Cargar_horas() {
-//        HoraI.clear();
-//        HoraF.clear();
-//        Calendar Diadehoy = new GregorianCalendar();
-//        Diadehoy.set(01, 05, 2014, a, b, 00);
-//        for (int i = 0; i < ase; i++) {
-//            System.err.println("hora " + Diadehoy.get(Calendar.HOUR_OF_DAY) + " min " + Diadehoy.get(Calendar.MINUTE));
-//            hora_fi = Diadehoy.get(Calendar.HOUR_OF_DAY) + ":" + Diadehoy.get(Calendar.MINUTE);
-//            if (hora_fi.length() == 4) {
-//                hora_fi = hora_fi + "0";
-//            }
-//            Horas h = new Horas(hora_fi);
-//
-//            H_dia.add(h);
-//            Diadehoy.add(Calendar.MINUTE, c);
-//            hora_fi = "";
-//        }
-//        Calendar Diadehoy2 = new GregorianCalendar();
-//        Diadehoy2.set(01, 05, 2014, a, b, 00);
-//        for (int i = 0; i < ase; i++) {
-//            Diadehoy2.add(Calendar.MINUTE, c);
-//            System.err.println("hora " + Diadehoy2.get(Calendar.HOUR_OF_DAY) + " min " + Diadehoy2.get(Calendar.MINUTE));
-//            hora_fi = Diadehoy2.get(Calendar.HOUR_OF_DAY) + ":" + Diadehoy2.get(Calendar.MINUTE);
-//            if (hora_fi.length() == 4) {
-//                hora_fi = hora_fi + "0";
-//            }
-//            Horas h = new Horas(hora_fi);
-//            H_dia2.add(h);
-//        }
     }
 
     public String getNombreProfesor() {

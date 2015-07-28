@@ -79,6 +79,7 @@
                                     </a>
                                     <ul class="sub">
                                         <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
+                                        <li><a href="Asig_Festivos.xhtml" ><i class="fa fa-plus"> </i>Festivos</a></li>
                                     </ul>
                                 </li>
                                 <li class="sub-menu">
@@ -102,8 +103,8 @@
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
+                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Lista Proyectos</a></li>
+                                        <li><a href="AsignarDirector.xhtml" ><i class="fa fa-cogs"> </i>Asignar Director</a></li>
 
                                     </ul>
                                 </li>
@@ -122,53 +123,8 @@
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>TITLE PANEL</h4></div>
-                        <h:form id="vista_validar">
-                            <br/>
-                            <p:growl id="messages" showDetail="true" />
-                            <div class="form-group">
-                                <h:selectOneMenu id="car" value="#{validarProfesor.facultad}" >
-                                    <f:selectItem itemLabel="Seleccione Facultad" itemValue="" />
-                                    <f:selectItems value="#{validarProfesor.facul}" />
-                                    <p:ajax  event="change" listener="#{validarProfesor.cargarProfesores()}" update=":vista_validar:tabla,messages"></p:ajax>
-                                </h:selectOneMenu>
-                            </div>
-
-                            <br/><br/>
-                            <div class="form-group">
-                                <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
-                                             border="1">
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Selecionar"></h:outputText>
-                                        </f:facet>
-                                        <p:selectBooleanCheckbox >
-                                            <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,1)}" update=":vista_validar:messages"/>
-                                        </p:selectBooleanCheckbox>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Cedula"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.cedula}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Nombre"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.nombre}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Herramienta"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.apellido}" />
-
-                                    </h:column>
-                                </h:dataTable>
-                            </div>
 
 
-                        </h:form>
                     </div>
                 </div>
             </div>

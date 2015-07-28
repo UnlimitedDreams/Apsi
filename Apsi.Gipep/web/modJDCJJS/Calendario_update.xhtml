@@ -36,6 +36,7 @@
                         <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
                         <p:inputText id="h2" value="#{calendarioProfe_update.hora2}" />
                     </h:panelGrid>
+                    <p:commandButton value="Atras" actionListener="#{calendarioProfe_update.redirecionar()}"></p:commandButton>
                     <p:commandButton value="Actualizar" actionListener="#{calendarioProfe_update.update()}"></p:commandButton>
                 </h:form>
             </center>

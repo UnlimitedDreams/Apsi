@@ -5,6 +5,7 @@ import Dao.FestivosImple;
 import Dao.Sequence;
 import Entity.Aofestivo;
 import Entity.Festivos;
+import Modelo.Secuencia;
 import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -99,17 +100,15 @@ public class FestivosBeans implements Serializable {
         String año = fecha.toString();
         String año2 = año.substring((año.length() - 4), año.length());
         FestivosDao festi = new FestivosImple();
-        Sequence seque = new Sequence();
         long codigo = 0;
         try {
             Aofestivo temp = null;
             temp = festi.Traer_año(año2);
+            System.out.println("temp " + temp.toString()); 
             if (temp == null) {
-                Query query = Sequence.GetUltimoRegistro("FROM Dias order by codDias DESC");
-                String cod_salvador = "" + query.uniqueResult();
-                int codigo_año = Integer.parseInt(cod_salvador);
+                int codigo_año = Secuencia.seque("select max(cod_ao) from ao_festivo");
                 Aofestivo añofestivo = new Aofestivo();
-                añofestivo.setCodAo(new BigDecimal(codigo_año + 1));
+                añofestivo.setCodAo(new BigDecimal(codigo_año));
                 añofestivo.setAo(año2);
                 boolean r = festi.CrearAñoFestivo(añofestivo);
                 if (r) {
@@ -126,26 +125,32 @@ public class FestivosBeans implements Serializable {
         return codigo;
     }
 
-    public void addEvent(ActionEvent actionEvent) {
+    public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException {
         FestivosDao festi = new FestivosImple();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String fechaConFormato = sdf.format(fecha_hoy.getTime());
+        System.out.println("fecha hoy  " + fechaConFormato);
         Festivos festivos = null;
         festivos = festi.BuscarFestivo(fechaConFormato);
+        System.out.println("1");
         if (festivos == null) {
-            Query query = Sequence.GetUltimoRegistro("FROM Festivos order by festivo DESC");
-            String num_salvador = "" + query.uniqueResult();
-            int codigo_Festivo = Integer.parseInt(num_salvador);
+            System.out.println("2");
+            int codigo_Festivo = Secuencia.seque("select max(codigo_festivos) from festivos");
             int codigo_año = (int) traerAño(fecha_hoy.getTime());
+            System.out.println("3");
             if (codigo_año != 0) {
+                System.out.println("4");
                 Festivos festivo = new Festivos();
-                festivo.setCodigoFestivos(new BigDecimal(codigo_Festivo + 1));
+//                festivo.setCodigoFestivos(codigo_Festivo);
                 festivo.setFechaFestivo(fecha_hoy.getTime());
                 Aofestivo añoFes = new Aofestivo();
                 añoFes.setCodAo(new BigDecimal(codigo_año));
                 festivo.setAofestivo(añoFes);
+                System.out.println("5");
                 boolean r = festi.crearFestivo(festivo);
+                System.out.println("6");
                 if (r) {
+                    System.out.println("7");
                     eventModel.addEvent(new DefaultScheduleEvent("Festivo ", fecha_hoy.getTime(), fecha_hoy.getTime()));
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", ""));
                     event = new DefaultScheduleEvent();

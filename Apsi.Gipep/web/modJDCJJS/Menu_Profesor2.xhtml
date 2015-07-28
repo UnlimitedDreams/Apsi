@@ -2,8 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -14,7 +13,7 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{validarProfesor.cargar_facultad()}"> 
+    <h:body >
         <nav class="navbar navbar-trans " role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -61,44 +60,18 @@
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
                                         <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
+                                        <span>Calendario</span>
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
-
+                                        <li><a href="Asig_Festivos2.xhtml"><i class="fa fa-plus"></i>Mi calendario</a></li>
+                                        
                                     </ul>
                                 </li>       
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
                                         <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
+                                        <span>Option 2</span>
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
@@ -107,8 +80,6 @@
 
                                     </ul>
                                 </li>
-
-
 
 
 
@@ -122,53 +93,7 @@
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>TITLE PANEL</h4></div>
-                        <h:form id="vista_validar">
-                            <br/>
-                            <p:growl id="messages" showDetail="true" />
-                            <div class="form-group">
-                                <h:selectOneMenu id="car" value="#{validarProfesor.facultad}" >
-                                    <f:selectItem itemLabel="Seleccione Facultad" itemValue="" />
-                                    <f:selectItems value="#{validarProfesor.facul}" />
-                                    <p:ajax  event="change" listener="#{validarProfesor.cargarProfesores()}" update=":vista_validar:tabla,messages"></p:ajax>
-                                </h:selectOneMenu>
-                            </div>
-
-                            <br/><br/>
-                            <div class="form-group">
-                                <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
-                                             border="1">
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Selecionar"></h:outputText>
-                                        </f:facet>
-                                        <p:selectBooleanCheckbox >
-                                            <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,1)}" update=":vista_validar:messages"/>
-                                        </p:selectBooleanCheckbox>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Cedula"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.cedula}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Nombre"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.nombre}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Herramienta"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.apellido}" />
-
-                                    </h:column>
-                                </h:dataTable>
-                            </div>
-
-
-                        </h:form>
+                        hola
                     </div>
                 </div>
             </div>

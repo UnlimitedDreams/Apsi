@@ -84,6 +84,10 @@ public class CalendarioProfe_update {
         }
     }
 
+    public void redirecionar() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("Calendario_profesor.xhtml");
+    }
+
     public Date getFecha_final() {
         return fecha_final;
     }

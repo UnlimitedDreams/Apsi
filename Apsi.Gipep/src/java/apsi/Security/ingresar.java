@@ -63,7 +63,9 @@ public class ingresar extends HttpServlet {
                 response.sendRedirect("index.jsp");
             } else {
                 Usuario x;
-                x = new Usuario(new BigDecimal(1), md5.getMD5(request.getParameter("pass")), request.getParameter("user"));
+//                x = new Usuario(new BigDecimal(1), md5.getMD5(request.getParameter("pass")), request.getParameter("user"));
+                x = new Usuario(new BigDecimal(1), request.getParameter("pass"), request.getParameter("user"));
+
                 try {
                     Usuario Loguin = new UsuarioImple().Loguin(x);
                     if (Loguin.getContrasea().equals(x.getContrasea()) && Loguin.getUsuario().equals(x.getUsuario())) {

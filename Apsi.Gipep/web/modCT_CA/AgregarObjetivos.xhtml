@@ -14,7 +14,7 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{validarProfesor.cargar_facultad()}"> 
+    <h:body onload="#{objetivosDocumento.recuperarInfo()}"> 
         <nav class="navbar navbar-trans " role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -61,40 +61,14 @@
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
                                         <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
+                                        <span>Perfil</span>
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
-
+                                        <li><a href="USUagregar.xhtml"><i class="fa fa-plus"></i>Item 1</a></li>
+                                        <li><a href="USUlistar.xhtml"><i class="fa fa-cogs"> </i>Item 2</a></li>
                                     </ul>
                                 </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
                                         <i class="fa fa-users"></i>
@@ -102,70 +76,75 @@
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
+                                        <li><a href="SubirDoc.xhtml" ><i class="fa fa-plus"> </i>Subir Proyecto</a></li>
                                         <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
 
                                     </ul>
                                 </li>
-
-
-
-
-
-
                             </ul>
                         </div>
                     </aside>
                 </div>
                 <div class="col-sm-9">
-
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>TITLE PANEL</h4></div>
-                        <h:form id="vista_validar">
-                            <br/>
-                            <p:growl id="messages" showDetail="true" />
+                            <h4>PANEL USER</h4></div>
+
+
+                        <div class="panel-heading">
+                            <h4>AGREGAR OBJETIVOS</h4></div>
+                        <h:form id="uploadDoc" >
+                            <p:growl id="grwol" showDetail="true"></p:growl>
+                            <h3><h:outputLabel value="Titulo Proyecto : #{objetivosDocumento.nombre}"></h:outputLabel></h3>
+
                             <div class="form-group">
-                                <h:selectOneMenu id="car" value="#{validarProfesor.facultad}" >
-                                    <f:selectItem itemLabel="Seleccione Facultad" itemValue="" />
-                                    <f:selectItems value="#{validarProfesor.facul}" />
-                                    <p:ajax  event="change" listener="#{validarProfesor.cargarProfesores()}" update=":vista_validar:tabla,messages"></p:ajax>
-                                </h:selectOneMenu>
+                                <table>
+                                    <tr>
+                                        <td><h:outputLabel for="at3" value="Objetivos :" style="font-weight:bold" /></td>
+                                        <td> <h:inputTextarea id="at3" value="#{objetivosDocumento.descripcion}" style="width: 400px;" /></td>
+                                    </tr>
+                                </table>
+
+
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton class="botones1" style="width:90px"  value="agregar Objetivo" actionListener="#{objetivosDocumento.añadirObt()}">                           
+                                </h:commandButton>
                             </div>
 
-                            <br/><br/>
+                            <br></br>
                             <div class="form-group">
-                                <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
+                                <h:dataTable var="Obj" value="#{objetivosDocumento.obj}"
                                              border="1">
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Selecionar"></h:outputText>
+                                            <h:outputText value="Objetivo"></h:outputText>
                                         </f:facet>
-                                        <p:selectBooleanCheckbox >
-                                            <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,1)}" update=":vista_validar:messages"/>
-                                        </p:selectBooleanCheckbox>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Cedula"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.cedula}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Nombre"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.nombre}" />
+                                        <h:outputText value="#{Obj.obj}"></h:outputText>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
                                             <h:outputText value="Herramienta"></h:outputText>
                                         </f:facet>
-                                        <h:outputText value="#{Profesor.apellido}" />
-
+                                        <h:commandButton value="Borrar" 
+                                                         actionListener="#{objetivosDocumento.borrar_Obejtivo(Obj.cod)}"></h:commandButton>
                                     </h:column>
+
                                 </h:dataTable>
+
                             </div>
+                            <br></br>
+                            <table>
+                                <tr>
+                                    <td><h:commandButton class="botones1" style="width:90px"  value="Atras" actionListener="#{objetivosDocumento.atras()}">                           
+                                        </h:commandButton></td>
+                                    <td><h:commandButton class="botones1" style="width:90px"  value="Siguiente" actionListener="#{objetivosDocumento.upload()}">                           
+                                        </h:commandButton></td>
+                                    <td><h:commandButton class="botones1" style="width:90px"  value="Cancelar" actionListener="#{objetivosDocumento.cancelar()}">                           
+                                        </h:commandButton></td>
+                                </tr>
+                            </table>
+
 
 
                         </h:form>

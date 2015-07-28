@@ -31,7 +31,6 @@ and open the template in the editor.
             <h:form id="vista_validar">
                 <center>
                     <table>
-
                         <tr>
                             <td><h:outputLabel  value="Año :" /></td>
                             <td> <p:selectOneMenu id="car" value="#{listaProfesoresBeans.año}" >
@@ -48,8 +47,28 @@ and open the template in the editor.
                         </tr>
                     </table>
                     <h:commandButton value="Cargar" actionListener="#{listaProfesoresBeans.cargar_profesores()}"></h:commandButton>
+                    <br/>
+                    <p:dataTable id="tabla" var="Profesor" value="#{listaProfesoresBeans.profe}"
+                                 scrollable="true" scrollHeight="350" style="width: 1000px;height: 400px;margin-top: 20px;" >
+                        <p:column headerText="Cedula" >
+                            <h:outputText value="#{Profesor.cedula}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{Profesor.nombre}" />
+                        </p:column>
+                        <p:column headerText="Apellido" >
+                            <h:outputText value="#{Profesor.apellido}" />
+                        </p:column>
+                        <p:column headerText="-" >
+                            <h:commandButton value="Update" actionListener="#{listaProfesoresBeans.update(Profesor.pege_id, Profesor.nombre)}">
+                            </h:commandButton>
+                            <h:commandButton value="Delete" actionListener="#{listaProfesoresBeans.delete(Profesor.pege_id)}">
+                            </h:commandButton>
+                        </p:column>
+                    </p:dataTable>
                 </center>
             </h:form>
         </div>
+        <a href="Lista_ProfesorUpdate.xhtml"></a>
     </h:body>
 </html>

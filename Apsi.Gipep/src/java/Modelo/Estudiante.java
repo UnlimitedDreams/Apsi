@@ -5,9 +5,11 @@
  */
 package Modelo;
 
-import java.io.Serializable;
-
-public class Profesor implements Serializable {
+/**
+ *
+ * @author Britt
+ */
+public class Estudiante {
 
     private boolean activo;
     private String cedula;
@@ -15,7 +17,7 @@ public class Profesor implements Serializable {
     private String apellido;
     private String pege_id;
 
-    public Profesor(boolean activo, String cedula, String nombre, String apellido, String pege_id) {
+    public Estudiante(boolean activo, String cedula, String nombre, String apellido, String pege_id) {
         this.activo = activo;
         this.cedula = cedula;
         this.nombre = nombre;
@@ -23,7 +25,12 @@ public class Profesor implements Serializable {
         this.pege_id = pege_id;
     }
 
-    public Profesor() {
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     public String getCedula() {
@@ -50,14 +57,6 @@ public class Profesor implements Serializable {
         this.apellido = apellido;
     }
 
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
     public String getPege_id() {
         return pege_id;
     }
@@ -65,11 +64,6 @@ public class Profesor implements Serializable {
     public void setPege_id(String pege_id) {
         this.pege_id = pege_id;
     }
-
-    @Override
-    public String toString() {
-        return "Profesor{" + "activo=" + activo + ", cedula=" + cedula + ", nombre=" + nombre + ", apellido=" + apellido + ", pege_id=" + pege_id + '}';
-    }
     
-
+    
 }

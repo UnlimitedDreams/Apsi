@@ -6,14 +6,19 @@
 package Beans;
 
 import Entity.DispoUsuario;
+import Entity.Disponibilidad;
 import Entity.Usuario;
 import Modelo.Conecion_Oracle;
 import Modelo.Profesor;
+import com.sun.faces.spi.FacesConfigResourceProvider;
 import dao.ProfesoresDao;
 import dao.ProfesoresImple;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -75,6 +80,7 @@ public class ListaProfesoresBeans {
                 traer_profesor("" + Pege_idProfe.get(i).getPegeId());
             }
             System.out.println("size profe " + profe.size());
+            FacesContext.getCurrentInstance().getExternalContext().responseReset();
 //           
         } catch (Exception ex) {
 
@@ -101,11 +107,12 @@ public class ListaProfesoresBeans {
                 System.out.println("trajo");
                 if (Conecion_Oracle.rs.getString(4) == null) {
                     profe.add(new Profesor(false, Conecion_Oracle.rs.getString(2), Conecion_Oracle.rs.getString(3),
-                            Conecion_Oracle.rs.getString(5),Conecion_Oracle.rs.getString(1)));
+                            Conecion_Oracle.rs.getString(5), Conecion_Oracle.rs.getString(1)));
+
                 } else {
                     profe.add(new Profesor(false, Conecion_Oracle.rs.getString(2), Conecion_Oracle.rs.getString(3) + " "
                             + Conecion_Oracle.rs.getString(4),
-                            Conecion_Oracle.rs.getString(5),Conecion_Oracle.rs.getString(1)));
+                            Conecion_Oracle.rs.getString(5), Conecion_Oracle.rs.getString(1)));
                 }
 
             }
@@ -113,6 +120,44 @@ public class ListaProfesoresBeans {
 
         }
 
+    }
+
+    public void delete(String pege_id) {
+        String codDis = cod_dispoProfe(pege_id);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        try {
+            session.createQuery("delete from Dia where disponibilidad.codDis=" + codDis).executeUpdate();
+            session.createQuery("delete from DispoUsuario where disponibilidad.codDis=" + codDis).executeUpdate();
+            session.createQuery("delete from Disponibilidad where codDis=" + codDis).executeUpdate();
+            t.commit();
+            FacesContext.getCurrentInstance().getExternalContext().responseReset();
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", ""));
+
+        }
+    }
+
+    public void update(String cod, String nombre) throws IOException {
+        String cod_dis = cod_dispoProfe(cod);
+        String codigo = cod + "-" + nombre + "-" + año + "-" + periodo + "-" + cod_dis;
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Pege_idProfe", codigo);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("Lista_ProfesorUpdate.xhtml");
+    }
+
+    public String cod_dispoProfe(String x) {
+        String fechaI = "", FechaF = "";
+        fechaI = "01-01-" + año;
+        FechaF = "01-12-" + año;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Disponibilidad d = new Disponibilidad();
+        d = (Disponibilidad) session.createQuery("select D from Disponibilidad D "
+                + " INNER JOIN D.dispoUsuarios UD "
+                + " INNER JOIN UD.usuarioByProfesor Usu WHERE Usu.pegeId=" + x + " and D.periodo=" + periodo + " "
+                + " and D.fechaInicial>='" + fechaI + "' and  D.fechaFinal<='" + FechaF + "'").uniqueResult();
+        t.commit();
+        return "" + d.getCodDis();
     }
 
     public String getAño() {

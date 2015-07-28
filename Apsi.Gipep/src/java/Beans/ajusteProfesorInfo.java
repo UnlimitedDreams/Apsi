@@ -8,11 +8,15 @@ package Beans;
 import Dao.Sequence;
 import Dao.UsuarioDao;
 import Dao.UsuarioImple;
+import Entity.Dia;
 import Entity.DispoUsuario;
 import Entity.Disponibilidad;
+import Entity.Rol;
+import Entity.UsuRol;
 import Entity.Usuario;
 import Modelo.MDias;
 import Modelo.Profesor;
+import Modelo.Secuencia;
 import dao.DisponibilidadDao;
 import dao.DisponibilidadImple;
 import java.io.IOException;
@@ -51,50 +55,45 @@ public class ajusteProfesorInfo {
 
     public void recuperarInfo() {
         System.out.println("recupero");
-//        ajusteProfesorBean ajuste;
-//        ajuste = new ajusteProfesorBean();
-//        ajuste = (ajusteProfesorBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste");
-//        Dias = (ArrayList) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Dias_ajuste");
-//        System.out.println("dias qe trajo " + Dias.size());
-//        nombreProfesor = ajuste.getNombreProfesor();
-//        fecha_inicial = ajuste.getFecha_inicial();
-//        fecha_final = ajuste.getFecha_final();
-//        RamgoHora = ajuste.getRamgoHora();
-//        Cantidad_horas = ajuste.getCantidad_horas();
+        ajusteProfesorBean ajuste;
+        ajuste = new ajusteProfesorBean();
+        ajuste = (ajusteProfesorBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste");
+        Dias = (ArrayList) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Dias_ajuste");
+        System.out.println("dias qe trajo " + Dias.size());
+        nombreProfesor = ajuste.getNombreProfesor();
+        fecha_inicial = ajuste.getFecha_inicial();
+        fecha_final = ajuste.getFecha_final();
+        RamgoHora = ajuste.getRamgoHora();
+        Cantidad_horas = ajuste.getCantidad_horas();
     }
 
-//    public void insertar_ajuste() throws ClassNotFoundException, IOException {
-//
-//        System.out.println("Entro al ajuste");
-//        Usuario temp = Crearusuario();
-//        int perido = validarPeriodo(fecha_inicial);
-////            try {
-//        int Codigo_Dispo = 0, codigo_dispoUsu = 0;
-//        Session session = HibernateUtil.getSessionFactory().openSession();
-//        Transaction t = session.beginTransaction();
-//        Query query = session.createQuery("FROM Disponibilidad order by codDis DESC ").setMaxResults(1);
-////            Query query = Sequence.GetUltimoRegistro("FROM Disponibilidad order by codDis DESC");
-//        System.out.println("query " + query.uniqueResult());
-//        if (query.uniqueResult() == null) {
-//            Codigo_Dispo = 1;
-//        } else {
-//            String cod_salvador = "" + query.uniqueResult();
-//            Codigo_Dispo = Integer.parseInt(cod_salvador);
-//        }
-//        Disponibilidad dispo = new Disponibilidad();
-//        dispo.setCodDis(new BigDecimal(Codigo_Dispo + 1));
-//        dispo.setFechaInicial(fecha_inicial);
-//        dispo.setFechaFinal(fecha_final);
-//        dispo.setNumHoras(new BigDecimal(Integer.parseInt(Cantidad_horas)));
-//        dispo.setRango(new BigDecimal(Integer.parseInt(RamgoHora)));
-//        dispo.setPeriodo(new BigDecimal(perido));
-//        DisponibilidadDao disponi = new DisponibilidadImple();
-//        System.out.println("----");
-//        boolean CrearDispo = disponi.Insert_Dispo(dispo);
-//        System.out.println("---------" + CrearDispo);
-//        if (CrearDispo) {
-//            System.out.println("creo dispo");
-//            DispoUsuario dispo_usu = new DispoUsuario();
+    public void insertar_ajuste() throws ClassNotFoundException, IOException {
+
+        System.out.println("Entro al ajuste");
+        Usuario temp = Crearusuario();
+        Date fecha = new Date();
+        int perido = validarPeriodo(fecha);
+//            try {
+        int Codigo_Dispo = 0, codigo_dispoUsu = 0;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Codigo_Dispo = Modelo.Secuencia.seque("select max(cod_dis) from disponibilidad");
+        Disponibilidad dispo = new Disponibilidad();
+        dispo.setCodDis(new BigDecimal(Codigo_Dispo));
+
+        dispo.setFechaInicial(fecha);
+        dispo.setFechaFinal(fecha);
+        dispo.setNumHoras(new BigDecimal(Integer.parseInt(Cantidad_horas)));
+        dispo.setRango(new BigDecimal(Integer.parseInt(RamgoHora)));
+        dispo.setPeriodo(new BigDecimal(perido));
+        dispo.setEstado("A");
+        dispo.setHorasCumplidas(new Long(0));
+        System.out.println("----");
+        boolean CrearDispo = Insert_Dispo(dispo);
+        System.out.println("---------" + CrearDispo);
+        if (CrearDispo) {
+            System.out.println("creo dispo");
+            DispoUsuario dispo_usu = new DispoUsuario();
 //            Query query2 = session.createQuery("FROM DispoUsuario order by codDispousu DESC ").setMaxResults(1);
 //            if (query2.uniqueResult() == null) {
 //                codigo_dispoUsu = 1;
@@ -102,32 +101,93 @@ public class ajusteProfesorInfo {
 //                String cod_salvador = "" + query2.uniqueResult();
 //                codigo_dispoUsu = Integer.parseInt(cod_salvador);
 //            }
-//            System.out.println("codigo de dispop_usu " + codigo_dispoUsu + 1);
-//            Usuario temp2 = new Usuario();
-//            temp2.setPegeId(new BigDecimal(1));
-//            dispo_usu.setCodDispousu(new BigDecimal(codigo_dispoUsu + 1));
-//            dispo_usu.setDisponibilidad(dispo);
-//            dispo_usu.setUsuarioByProfesor(temp);
-//            dispo_usu.setUsuarioByAdmon(temp2);
-//            boolean dis_usu = disponi.InsertDispo_Usu(dispo_usu);
-//            if (dis_usu) {
-//                boolean dispo_dias = disponi.Insert_Dias(dispo, Dias);
-//                if (dispo_dias) {
-//                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ok", ""));
-//                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Datos_ajuste");
-//                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Dias_ajuste");
-//                    FacesContext.getCurrentInstance().getExternalContext().redirect("ValidarProfesor.xhtml");
-//                } else {
-//                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error Comunicarce Con el Administrador", ""));
-//                }
-//            } else {
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error Comunicarce Con el Administrador", ""));
-//            }
-//        } else {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error Comunicarce Con el Administrador", ""));
-//        }
-//
-//    }
+            codigo_dispoUsu = Modelo.Secuencia.seque("select max(cod_dispousu) from dispo_usuario");
+            System.out.println("codigo de dispop_usu " + codigo_dispoUsu + 1);
+            Usuario temp2 = new Usuario();
+            temp2.setPegeId(new BigDecimal(1));
+            dispo_usu.setCodDispousu(new BigDecimal(codigo_dispoUsu));
+            dispo_usu.setDisponibilidad(dispo);
+            dispo_usu.setUsuarioByProfesor(temp);
+            dispo_usu.setUsuarioByAdmon(temp2);
+            boolean dis_usu = InsertDispo_Usu(dispo_usu);
+            if (dis_usu) {
+                boolean dispo_dias = Insert_Dias(dispo, Dias);
+                if (dispo_dias) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ok", ""));
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Datos_ajuste");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Dias_ajuste");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("ValidarProfesor.xhtml");
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error Comunicarce Con el Administrador", ""));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error Comunicarce Con el Administrador", ""));
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error Comunicarce Con el Administrador", ""));
+        }
+
+    }
+
+    public boolean Insert_Dispo(Disponibilidad dis) {
+        System.out.println("entro al insert dispo " + dis.getCodDis());
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        boolean r = false;
+        try {
+            session.save(dis);
+            t.commit();
+            r = true;
+        } catch (Exception ex) {
+            System.out.println("Error Insert Dispo " + ex.toString());
+            r = false;
+        }
+        return r;
+    }
+
+    public boolean InsertDispo_Usu(DispoUsuario dis_usu) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        boolean r = false;
+        try {
+            session.save(dis_usu);
+            t.commit();
+            r = true;
+        } catch (Exception ex) {
+            System.out.println("Error Insert Dispo_Usu" + ex.toString());
+            r = false;
+        }
+        return r;
+    }
+
+    public boolean Insert_Dias(Disponibilidad dis, ArrayList dias) {
+        boolean r = false;
+        MDias temp = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        int cod_dia = 0;
+        System.out.println("codigo de dispo " + dis.getCodDis());
+        try {
+            cod_dia = Secuencia.seque("select max(codigo_dia) from dia");
+            for (int i = 0; i < dias.size(); i++) {
+                temp = (MDias) dias.get(i);
+                Dia d = new Dia();
+                d.setCodigoDia(new BigDecimal(cod_dia));
+                d.setDia(temp.getDia());
+                d.setHoraInicial(temp.getHora_inicio());
+                d.setHoraFinal(temp.getHora_final());
+                d.setDisponibilidad(dis);
+                session.save(d);
+                cod_dia++;
+                r = true;
+            }
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error Dias " + ex.toString());
+            r = false;
+        }
+        return r;
+    }
 
     public int validarPeriodo(Date x) {
 //        valida la fecha que se ingreso que sea la correcta 
@@ -147,22 +207,29 @@ public class ajusteProfesorInfo {
     public Usuario Crearusuario() {
         Usuario temp = new Usuario();
         Usuario u = new Usuario();
-        try {
 
+        try {
+            System.out.println("entro a usuario");
             Profesor profe = null;
             profe = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
             Session session = HibernateUtil.getSessionFactory().openSession();
             Transaction t = session.beginTransaction();
-            u = (Usuario) session.createQuery("FROM Usuario as usu where usu.pegeId=" + profe.getCedula()).uniqueResult();
+            System.out.println("" + profe.toString());
+            System.out.println("-------------------------------- profe " + profe.getPege_id());
+            u = (Usuario) session.createQuery("FROM Usuario as usu where usu.pegeId=" + profe.getPege_id()).uniqueResult();
             if (u != null) {
                 System.out.println("ya existe");
                 temp = u;
             } else {
-                temp.setPegeId(new BigDecimal(profe.getCedula()));
+
+                temp.setPegeId(new BigDecimal(profe.getPege_id()));
                 temp.setUsuario(profe.getNombre());
                 temp.setContrasea("123456");
                 session.save(temp);
                 t.commit();
+                System.out.println("usuario----- " + temp.toString());
+
+                crearUsuRol(temp);
             }
 
         } catch (Exception ex) {
@@ -172,6 +239,29 @@ public class ajusteProfesorInfo {
 //            temp = temp2;
         }
         return temp;
+    }
+
+    public void crearUsuRol(Usuario u) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        try {
+            System.out.println("entro");
+            Rol r = new Rol();
+            r.setCodRol(new BigDecimal(4));
+            r.setEstado("esta");
+            r.setNombre("nombre");
+            UsuRol usuR = new UsuRol();
+            int cod_U = Secuencia.seque("select max(cod_usurol) from usu_rol");
+            usuR.setCodUsurol(new BigDecimal(cod_U));
+            usuR.setUsuario(u);
+            usuR.setRol(r);
+            session.save(usuR);
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error al crear usu_rol");
+            System.out.println("-- " + ex.toString());
+        }
+
     }
 
     public ArrayList<MDias> getDias() {
