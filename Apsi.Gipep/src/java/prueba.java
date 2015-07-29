@@ -1,11 +1,3 @@
-
-import Dao.UsuarioImple;
-import Entity.Rol;
-import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-
 /*
  * The MIT License
  *
@@ -29,6 +21,13 @@ import java.util.TreeMap;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+import Dao.UsuarioImple;
+import Entity.Persona;
+import Entity.Usuario;
+import Dao.PersonaHelper;
+import java.math.BigDecimal;
+
 /**
  *
  * @author usuario
@@ -39,12 +38,18 @@ public class prueba {
      * @param args
      */
     public static void main(String[] args) {
-        TreeMap roles = new UsuarioImple().cargarRoles("1");
-        for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
-            Map.Entry me = (Map.Entry) it.next();
-            BigDecimal key = (BigDecimal) me.getKey();
-            Rol value = (Rol) roles.get(key);
-            System.out.println("Rol: " + value.getNombre());
+        UsuarioImple MiUser = new UsuarioImple();
+        PersonaHelper myPeople = new PersonaHelper();
+        Usuario u = new Usuario(BigDecimal.valueOf(MiUser.cargarTodo().size() + 1), "123", "Probe");
+        Persona p = new Persona(BigDecimal.valueOf(Integer.parseInt("12123")),
+                u, "Probwe", "Cosa");
+        try {
+            MiUser.CrearUsuario(u);
+            myPeople.agregar(p);
+            System.out.println("ok");       
+        } catch (Exception e) {
+            System.out.println("ERROR " + e.toString());
+            System.out.println(e.getMessage());
         }
     }
 }

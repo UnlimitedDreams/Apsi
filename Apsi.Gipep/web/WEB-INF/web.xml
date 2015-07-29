@@ -17,6 +17,10 @@
         <servlet-name>srvltOA</servlet-name>
         <servlet-class>apsi.Security.srvltOA</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>crearUsuario</servlet-name>
+        <servlet-class>org.ApSi.crearUsuario</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -25,12 +29,17 @@
         <servlet-name>ingresar</servlet-name>
         <url-pattern>/ingresar</url-pattern>
         <url-pattern>/logIn/ingresar</url-pattern>
-         <url-pattern>/modJDCJJS/ingresar</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>srvltOA</servlet-name>
         <url-pattern>/srvltOA</url-pattern>
         <url-pattern>/logIn/srvltOA</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>crearUsuario</servlet-name>
+        <url-pattern>/crearUsuario</url-pattern>
+        <url-pattern>/logIn/crearUsuario</url-pattern>
+
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -31,8 +31,7 @@
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
         <!--Icon facelet-->
-        <link rel="icon" type="image/png" href="../img/unlimtd.ico"/>
-
+        <link rel="icon" type="image/png" href="../img/apsi.ico"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -42,6 +41,14 @@
     </head>
 
     <body>
+<%session = request.getSession();
+        try {
+            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                response.sendRedirect("../modJDCJJS/Menu_Admon2.xhtml");
+            }
+        } catch (java.lang.NullPointerException e) {
+        }
+    %>
         <!-- Navigation -->
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
         <nav id="sidebar-wrapper">
@@ -108,7 +115,7 @@
         <!-- Header -->
         <header id="top" class="header">
             <div class="text-vertical-center">
-                <h1>ApSi&reg;</h1>
+                <h1><img src="../img/Logo.png"/>&reg;</h1>
                 <h3>Asesorias y proyectos en cualquier momento</h3>
                 <br>
                 <a href="#about" class="btn btn-dark btn-lg">Aprende m&aacute;s sobre ApSi.</a>
@@ -274,7 +281,7 @@
             <div class="container" id="contacto">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h4><strong>ApSi&reg;</strong>
+                        <h4><strong><img src="../img/LogoMin.png"/>&reg;</strong>
                         </h4>
                         <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br>Santiago de Cali, Colombia</p>
                         <ul class="list-unstyled">

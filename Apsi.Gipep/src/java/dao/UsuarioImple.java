@@ -26,6 +26,20 @@ import util.HibernateUtil;
 public class UsuarioImple implements UsuarioDao {
 
     /**
+     * Crear una lista para todos los usuarios del sistema
+     *
+     * @return Lista con todos los usuarios del sistema
+     */
+    public List cargarTodo() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            return session.createQuery("FROM Usuario").list();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
      * Metodos para acceder a la información de cada usuario.
      *
      * @param usu Entrada de un usuario para obtener su informarción
@@ -55,18 +69,25 @@ public class UsuarioImple implements UsuarioDao {
      */
     @Override
     public boolean CrearUsuario(Usuario usu) {
-        System.out.println("entro a crear usuario " + usu.getPegeId());
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
-        boolean r = false;
         try {
-            session.save(usu);
-            t.commit();
-            r = true;
-        } catch (Exception ex) {
-            r = false;
+            if (!BuscarUsuario(usu)) {
+                session.save(usu);
+                t.commit();
+                session.clear();
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+                return false;
+            }
+            throw e;
         }
-        return r;
     }
 
     /**
@@ -219,6 +240,7 @@ public class UsuarioImple implements UsuarioDao {
 
     /**
      * Cargar un lista de roles que posee un usuario activo.
+     *
      * @param id identificador del usuario
      * @return Lista de Roles asignados al usuario
      */

@@ -1,7 +1,7 @@
 <%-- 
-    Document   : opcionesDeAcceso
-    Created on : 16-jun-2015, 10:02:23
-    Author     : Miguel Angel Lemos
+    Document   : agregarUsuario
+    Created on : 28-jul-2015, 13:09:53
+    Author     : usuario
 --%>
 
 <%@page import="Entity.Rol"%>
@@ -11,14 +11,14 @@
 <%@page import="java.util.TreeMap"%>
 <%@page import="Entity.Correospersona"%>
 <%@page import="Entity.Telefonos"%>
-<%@page import="java.util.List"%>
 <%@page import="Dao.UsuarioImple"%>
+<%@page import="Dao.UsuarioImple"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.List"%>
 <%@page import="Entity.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page session="true"%>
-
 <!DOCTYPE html>
-<html lang="es" >
+<html lang="es">
     <%session = request.getSession();
         try {
             if (session.isNew() | session.getAttribute("user").equals(null)) {
@@ -29,6 +29,23 @@
         }
     %>
     <%Persona p = (Persona) session.getAttribute("persona");%>
+    <%
+
+        TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
+        boolean accede = false;
+        for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
+            Map.Entry me = (Map.Entry) it.next();
+            BigDecimal key = (BigDecimal) me.getKey();
+            Rol value = (Rol) roles.get(key);
+            if (value.getNombre().equals("SuperUsuario")
+                    | value.getNombre().equals("Director")) {
+                accede = true;
+            }
+        }
+        if (!accede) {
+            response.sendRedirect("index.jsp");
+        }
+    %>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -121,29 +138,17 @@
                 </li>
             </ul>
         </nav>
-
         <section id="about" class="about">
-
+            <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
+                <br><b><a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a></b>
+            </div>
             <div class="container">
                 <div class="form-group">
-                    <form>
+                    <form method="post" action="crearUsuario" onsubmit="return validaIgualdad()">
                         <table class="table-condensed">
-
                             <thead>
                                 <tr>
-                            <h1><b><label> Informaci&oacute;n de usuario</label></b></h1>
-                            <h2>
-                                <%
-                                    TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
-//        
-                                    for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
-                                        Map.Entry me = (Map.Entry) it.next();
-                                        BigDecimal key = (BigDecimal) me.getKey();
-                                        Rol value = (Rol) roles.get(key);
-                                        out.println("Rol: " + value.getNombre() + "<br>");
-                                    }
-                                %>
-                            </h2>
+                            <h1><b><label> Informaci&oacute;n del nuevo usuario</label></b></h1>
                             </tr>
                             </thead>
                             <tbody>
@@ -152,7 +157,7 @@
                                         <b><label class="form-control-static"> N&uacute;mero de identificaci&oacute;n </label></b>   
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" value="<%=p.getIdpersona()%>"/>
+                                        <input type="text" id="id" name="id" class="form-control" placeholder="CC / TI / CE" required=""/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -160,7 +165,7 @@
                                         <b><label class="form-control-static"> Nombres: </label></b>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" value="<%=p.getNombres()%>"/>
+                                        <input type="text" id="name"  name="name" class="form-control" placeholder="Nombres" required=""/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -168,57 +173,28 @@
                                         <b><label class="form-control-static"> Apellidos: </label></b>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" value="<%=p.getApellidos()%>"/>
+                                        <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Apellidos" required=""/>
                                     </td>
                                 </tr>
-                                <%
-                                    List<Telefonos> telefonos = new UsuarioImple().cargarTelefonos(p.getUsuario().getPegeId() + "");
-                                    List<Correospersona> correos = new UsuarioImple().cargarCorreos(p.getUsuario().getPegeId() + "");
-                                    for (int i = 0; i < telefonos.size(); i++) {
-                                        out.println("<tr>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <b><label class=\"form-control-static\"> T&eacute;lefono " + (i + 1) + ": </label></b>\n"
-                                                + "                                    </td>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <input type=\"text\" class=\"form-control\" value=\"" + telefonos.get(i).getTelefono() + "\"/>\n"
-                                                + "                                    </td>\n"
-                                                + "                                </tr> ");
-                                    }
-                                    for (int i = 0; i < correos.size(); i++) {
-                                        out.println("<tr>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <b><label class=\"form-control-static\"> Correo " + (i + 1) + ": </label></b>\n"
-                                                + "                                    </td>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <input type=\"text\" class=\"form-control\" value=\"" + correos.get(i).getCorreo() + "\"/>\n"
-                                                + "                                    </td>\n"
-                                                + "                                </tr>");
-                                    }
-                                %>
-                                <tr>
-                                    <td>
-                                        <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
-                                    </td>
-                                    <td>
-                                        <input type="reset" class="btn btn-danger btn-lg" value="Cancelar"/>
-                                    </td>
-                                </tr>
-
                             </tbody>
-
                         </table>
-
-
-                    </form>
-                    <hr>
-                    <form action="srvltOA" method="post" onsubmit="return validaIgualdad()">
+                        <hr>
                         <table class="table-condensed">
                             <thead>
                                 <tr>
-                            <b><label> Cambiar contrase&ntilde;a</label></b>
+                            <b><label> Informaci&oacute;n de acceso</label></b>
                             </tr>
                             </thead>
                             <tbody>
+
+                                <tr>
+                                    <td>
+                                        <label class="form-control-static"> Nombre de usuario: </label>     
+                                    </td>
+                                    <td>
+                                        <input type="text" name="user" id="user" class="form-control" placeholder="Usuario" required="true"/>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         <label class="form-control-static"> Nueva Contraseña: </label>     
@@ -239,7 +215,7 @@
                             <input type="hidden" name="action" id="action" value="profile">
                             <tr>
                                 <td>
-                                    <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
+                                    <input type="submit" class="btn btn-dark btn-lg" value="Guardar"/>
                                 </td>
                                 <td>
                                     <input type="reset" class="btn btn-danger btn-lg" value="Cancelar"/>
@@ -256,142 +232,6 @@
                 </div>
             </div>
             <!-- /.container -->
-        </section>
-        <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
-            <br>
-            <b>
-                <h2 style="text-align: center;">
-                    <a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a>
-                </h2>
-            </b>
-        </div>
-                 <!-- Services -->
-        <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
-        <section id="services" class="services bg-primary">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <%
-                            try {
-                                if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                    out.print("<h2>Bienvenido</h2>");
-                                } else {
-                                    out.print("<h2>A&uacute;n sin registrarte?</h2>");
-                                }
-                            } catch (java.lang.NullPointerException e) {
-                                out.print("<h2>A&uacute;n sin registrarte?</h2>");
-                            }
-
-                        %>
-
-
-                        <hr class="small">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-6">
-                                <%                                    try {
-                                        if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                            out.print("                               <div class=\"service-item\">\n"
-                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                    + "                                        <i class=\"fa fa-bookmark fa-stack-1x text-primary\"></i>\n"
-                                                    + "                                    </span>\n"
-                                                    + "                                    <h4>\n"
-                                                    + "                                        <strong>Menú Principal</strong>\n"
-                                                    + "                                    </h4>\n"
-                                                    + "                                    <p>Acceso al menu principal.</p>\n"
-                                                    + "                                    <a href=\"mainMenu.jsp\" class=\"btn btn-light\">Accede</a>\n"
-                                                    + "                                </div>\n");
-                                        }
-                                    } catch (java.lang.NullPointerException e) {
-                                    }
-                                %>
-
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="service-item">
-                                    <span class="fa-stack fa-4x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-compass fa-stack-1x text-primary"></i>
-                                    </span>
-                                    <h4>
-                                        <strong>Pide una asesoria</strong>
-                                    </h4>
-                                    <p>Capacitate, esfuerzate y trabaja con los mejores asesores. Tu tesis lo amerita.</p>
-                                    <%
-                                        try {
-                                            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                                out.print("<a href=\"#NewAsesoria\" class=\"btn btn-light\">Accede</a>");
-                                            }
-                                        } catch (java.lang.NullPointerException e) {
-                                            out.print("<a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>");
-                                        }
-                                    %>
-
-
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <%
-                                    try {
-                                        if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                            out.print("<div class=\"service-item\">\n"
-                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                    + "                                        <i class=\"fa fa-user fa-stack-1x text-primary\"></i>\n"
-                                                    + "                                    </span>\n"
-                                                    + "                                    <h4>\n"
-                                                    + "                                        <strong>Perfil</strong>\n"
-                                                    + "                                    </h4>\n"
-                                                    + "                                    <p>Mant&eacute;n tu perfil actualizado, esto ayuda a que llegue tus correos a tiempo y al lugar indicado.</p>\n"
-                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Ver mi perfil</a>\n"
-                                                    + "                                </div>");
-                                        }
-                                    } catch (java.lang.NullPointerException e) {
-                                        out.print("<div class=\"service-item\">\n"
-                                                + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                + "                                        <i class=\"fa fa-cloud fa-stack-1x text-primary\"></i>\n"
-                                                + "                                    </span>\n"
-                                                + "                                    <h4>\n"
-                                                + "                                        <strong>¡Pide tu usuario!</strong>\n"
-                                                + "                                    </h4>\n"
-                                                + "                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>\n"
-                                                + "                                    <a href=\"http://uniajc.edu.co/index.php/estudiantes\" class=\"btn btn-light\">Como registrarse</a>\n"
-                                                + "                                </div>");
-                                    }
-                                %>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="service-item">
-                                    <%
-                                        try {
-                                            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                                out.print("                               <div class=\"service-item\">\n"
-                                                        + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                        + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                        + "                                        <i class=\"fa fa-users fa-stack-1x text-primary\"></i>\n"
-                                                        + "                                    </span>\n"
-                                                        + "                                    <h4>\n"
-                                                        + "                                        <strong>Ajustes personales</strong>\n"
-                                                        + "                                    </h4>\n"
-                                                        + "                                    <p>Mant&eacute;n al d&iacute;a tus datos.</p>\n"
-                                                        + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
-                                                        + "                                </div>\n");
-                                            }
-                                        } catch (java.lang.NullPointerException e) {
-                                        }
-                                    %>
-                                </div>
-                            </div>
-
-                            <!-- /.row (nested) -->
-                        </div>
-                        <!-- /.col-lg-10 -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.container -->
-            </div>
         </section>
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
@@ -521,7 +361,6 @@
                 <!-- /.container -->
             </div>
         </section>
-
         <!-- Footer -->
         <footer>
             <div class="container" id="contacto">
@@ -550,7 +389,6 @@
                 </div>
             </div>
         </footer>
-
         <!-- jQuery -->
         <script src="../js/Jquery/jquery-1.11.2.js"></script>
 
@@ -620,6 +458,5 @@
                 });
             });
         </script>
-
     </body>
 </html>
