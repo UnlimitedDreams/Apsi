@@ -25,11 +25,8 @@ and open the template in the editor.
         <link href="../css/style.css" rel="stylesheet"/>
 
     </h:head>
-    <!--<h:body onload="#/{listaProfesoresBeans.cargar_años()}"> -->
-    <h:body>
-
+    <h:body onload="#{listaProfesoresBeans.cargar_años()}"> 
        
-
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
@@ -114,48 +111,63 @@ and open the template in the editor.
 
                         <div id="layoutAjuste">
                             <h:form id="vista_validar">
-                               
-                                    <div class="form-group">
-                                        <label for="exampleInputFile"> AÑO </label>
-                                        <h:selectOneMenu id="car" value="#{listaProfesoresBeans.año}" class="form-control input-lg" >
-                                            <f:selectItem itemLabel="Seleccione " itemValue="" /> 
-                                            <f:selectItems value="#{listaProfesoresBeans.b_año}"/>   
-                                        </h:selectOneMenu>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputFile"> PERIODO </label>
-                                        <h:selectOneMenu id="car2" value="#{listaProfesoresBeans.periodo}" class="form-control input-lg" >
-                                            <f:selectItem itemLabel="Seleccione " itemValue="" /> 
-                                            <f:selectItems value="#{listaProfesoresBeans.peri}"/>   
-                                        </h:selectOneMenu>
-                                    </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputFile"> AÑO </label>
+                                    <h:selectOneMenu id="car" value="#{listaProfesoresBeans.año}" class="form-control input-lg" >
+                                        <f:selectItem itemLabel="Seleccione " itemValue="" /> 
+                                        <f:selectItems value="#{listaProfesoresBeans.b_año}"/>   
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile"> PERIODO </label>
+                                    <h:selectOneMenu id="car2" value="#{listaProfesoresBeans.periodo}" class="form-control input-lg" >
+                                        <f:selectItem itemLabel="Seleccione " itemValue="" /> 
+                                        <f:selectItems value="#{listaProfesoresBeans.peri}"/>   
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <div class="form-group">
+                                    <h:commandButton value="Cargar" class="btn btn-primary btn-lg btn-block" actionListener="#{listaProfesoresBeans.cargar_profesores()}"></h:commandButton>
+                                </div>
+
+                                <br/>
                                 <center>
-                                    <div class="form-group">
-                                        <h:commandButton value="Cargar" class="btn btn-primary btn-lg btn-block" actionListener="#{listaProfesoresBeans.cargar_profesores()}"></h:commandButton>
-                                    </div>
-                                </center>
-                                    <br/>
-                                    <center>
-                                    <p:dataTable id="tabla" var="Profesor" value="#{listaProfesoresBeans.profe}"
-                                                 scrollable="true" scrollHeight="350" style="width: 1000px;height: 400px;margin-top: 20px;"  class="table table-hover" >
-                                        <p:column headerText="Cedula" >
+                                    <h:dataTable id="tabla" var="Profesor" value="#{listaProfesoresBeans.profe}"
+                                                  class="table" >
+                                        <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Cedula"></h:outputText>
+                                        </f:facet>
                                             <h:outputText value="#{Profesor.cedula}" />
-                                        </p:column>
-                                        <p:column headerText="Nombre">
+                                        </h:column>
+                                        
+                                        <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre"></h:outputText>
+                                        </f:facet>
                                             <h:outputText value="#{Profesor.nombre}" />
-                                        </p:column>
-                                        <p:column headerText="Apellido" >
+                                        </h:column>
+                                        
+                                        <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Apellido"></h:outputText>
+                                        </f:facet>
                                             <h:outputText value="#{Profesor.apellido}" />
-                                        </p:column>
-                                        <p:column headerText="-" >
+                                        </h:column>
+                                        
+                                         <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="-"></h:outputText>
+                                        </f:facet>
                                             <h:commandButton value="Update" actionListener="#{listaProfesoresBeans.update(Profesor.pege_id, Profesor.nombre)}">
                                             </h:commandButton>
                                             <h:commandButton value="Delete" actionListener="#{listaProfesoresBeans.delete(Profesor.pege_id)}">
                                             </h:commandButton>
-                                        </p:column>
-                                    </p:dataTable>
-                                        </center>
-                                
+                                        </h:column>
+                                    </h:dataTable>
+                                </center>
+
                             </h:form>
                         </div>
                         <a href="Lista_ProfesorUpdate.xhtml"></a>
