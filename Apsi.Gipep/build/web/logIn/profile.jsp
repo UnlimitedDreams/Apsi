@@ -12,7 +12,7 @@
 <%@page import="Entity.Correospersona"%>
 <%@page import="Entity.Telefonos"%>
 <%@page import="java.util.List"%>
-<%@page import="Dao.UsuarioImple"%>
+<%@page import="dao.UsuarioImple"%>
 <%@page import="Entity.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true"%>

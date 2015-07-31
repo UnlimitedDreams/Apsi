@@ -5,9 +5,6 @@
  */
 package Beans;
 
-import Dao.Sequence;
-import Dao.UsuarioDao;
-import Dao.UsuarioImple;
 import Entity.Dia;
 import Entity.DispoUsuario;
 import Entity.Disponibilidad;
@@ -17,19 +14,14 @@ import Entity.Usuario;
 import Modelo.MDias;
 import Modelo.Profesor;
 import Modelo.Secuencia;
-import dao.DisponibilidadDao;
-import dao.DisponibilidadImple;
 import java.io.IOException;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;

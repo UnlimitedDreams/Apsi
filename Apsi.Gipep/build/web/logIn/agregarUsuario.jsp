@@ -11,8 +11,8 @@
 <%@page import="java.util.TreeMap"%>
 <%@page import="Entity.Correospersona"%>
 <%@page import="Entity.Telefonos"%>
-<%@page import="Dao.UsuarioImple"%>
-<%@page import="Dao.UsuarioImple"%>
+<%@page import="dao.UsuarioImple"%>
+<%@page import="dao.UsuarioImple"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
 <%@page import="Entity.Persona"%>

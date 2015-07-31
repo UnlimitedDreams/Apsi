@@ -1,7 +1,6 @@
 package Beans;
 
-import Dao.UsuarioDao;
-import Dao.UsuarioImple;
+import dao.UsuarioImple;
 import Entity.Usuario;
 import java.awt.event.ActionEvent;
 import javax.faces.bean.ManagedBean;

@@ -9,7 +9,7 @@
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.TreeMap"%>
-<%@page import="Dao.UsuarioImple"%>
+<%@page import="dao.UsuarioImple"%>
 <%@page import="Entity.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

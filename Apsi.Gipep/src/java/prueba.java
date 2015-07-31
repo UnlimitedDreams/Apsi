@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import Dao.UsuarioImple;
+import dao.UsuarioImple;
 import Entity.Persona;
 import Entity.Usuario;
 import Dao.PersonaHelper;

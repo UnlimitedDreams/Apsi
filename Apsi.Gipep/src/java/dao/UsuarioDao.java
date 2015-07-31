@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Dao;
+package dao;
 
 import Entity.Usuario;
 
