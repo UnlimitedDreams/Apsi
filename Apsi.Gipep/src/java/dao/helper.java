@@ -8,6 +8,8 @@ package dao;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 /**
  *
@@ -23,7 +25,13 @@ public interface helper {
     /**
      * Invalidar sesion cada vez que se crea la consulta
      */
-    Session s = null;
+    // Initialize the Hibernate environment
+    Configuration cfg = new Configuration().configure();
+
+// Create the session factory
+    SessionFactory factory = cfg.buildSessionFactory();
+
+    Session s = factory.openSession();
 
     /**
      * Buscar si existe el registro

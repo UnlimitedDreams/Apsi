@@ -1,18 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-jul-2015 14:32:04 by Hibernate Tools 4.3.1 -->
+<!-- Generated 31-jul-2015 12:11:46 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="Entity.Festivos" table="festivos" schema="public" optimistic-lock="version">
-        <id name="codigoFestivos" type="big_decimal">
-            <column name="codigo_festivos" precision="131089" scale="0" />
+        <id name="codigoFestivos" type="long">
+            <column name="codigo_festivos" precision="10" scale="0" />
             <generator class="assigned" />
         </id>
         <many-to-one name="aofestivo" class="Entity.Aofestivo" fetch="select">
-            <column name="cod_ao" precision="131089" scale="0" not-null="true" />
-        </many-to-one>
-        <many-to-one name="disponibilidad" class="Entity.Disponibilidad" fetch="select">
-            <column name="cod_dis" precision="131089" scale="0" not-null="true" />
+            <column name="cod_ao" precision="10" scale="0" />
         </many-to-one>
         <property name="fechaFestivo" type="date">
             <column name="fecha_festivo" length="13" not-null="true" />
