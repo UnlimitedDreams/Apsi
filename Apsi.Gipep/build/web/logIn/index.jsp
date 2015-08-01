@@ -22,8 +22,6 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="../css/ingreso.css"/>
-        <link rel="stylesheet" href="../css/formas.css"/>
         <link href="../css/stylish-portfolio.css" rel="stylesheet">
 
         <!-- Custom Fonts -->

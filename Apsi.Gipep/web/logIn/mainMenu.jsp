@@ -43,7 +43,7 @@
         <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
         <!--Icon facelet-->
-        <link rel="icon" type="image/png" href="../img/unlimtd.ico"/>        
+        <link rel="icon" type="image/png" href="../img/apsi.ico"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>

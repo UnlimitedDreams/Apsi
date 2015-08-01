@@ -41,7 +41,6 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="../css/ingreso.css"/>
         <link rel="stylesheet" href="../css/formas.css"/>
         <link href="../css/stylish-portfolio.css" rel="stylesheet">
 
@@ -49,7 +48,7 @@
         <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
         <!--Icon facelet-->
-        <link rel="icon" type="image/png" href="../img/unlimtd.ico"/>
+         <link rel="icon" type="image/png" href="../img/apsi.ico"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -320,14 +319,14 @@
                                     <%
                                         try {
                                             if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                                out.print("<a href=\"#NewAsesoria\" class=\"btn btn-light\">Accede</a>");
+                                                out.print("<a href=\"../modJDOG/calendario.jsp\" class=\"btn btn-light\">Accede</a>");
                                             }
                                         } catch (java.lang.NullPointerException e) {
                                             out.print("<a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>");
                                         }
                                     %>
 
-
+                                   
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
@@ -393,135 +392,7 @@
                 <!-- /.container -->
             </div>
         </section>
-        <!-- Services -->
-        <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
-        <section id="services" class="services bg-primary">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <%
-                            try {
-                                if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                    out.print("<h2>Bienvenido</h2>");
-                                } else {
-                                    out.print("<h2>A&uacute;n sin registrarte?</h2>");
-                                }
-                            } catch (java.lang.NullPointerException e) {
-                                out.print("<h2>A&uacute;n sin registrarte?</h2>");
-                            }
-
-                        %>
-
-
-                        <hr class="small">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-6">
-                                <%                                    try {
-                                        if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                            out.print("                               <div class=\"service-item\">\n"
-                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                    + "                                        <i class=\"fa fa-bookmark fa-stack-1x text-primary\"></i>\n"
-                                                    + "                                    </span>\n"
-                                                    + "                                    <h4>\n"
-                                                    + "                                        <strong>Menú Principal</strong>\n"
-                                                    + "                                    </h4>\n"
-                                                    + "                                    <p>Acceso al menu principal.</p>\n"
-                                                    + "                                    <a href=\"mainMenu.jsp\" class=\"btn btn-light\">Accede</a>\n"
-                                                    + "                                </div>\n");
-                                        }
-                                    } catch (java.lang.NullPointerException e) {
-                                    }
-                                %>
-
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="service-item">
-                                    <span class="fa-stack fa-4x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-compass fa-stack-1x text-primary"></i>
-                                    </span>
-                                    <h4>
-                                        <strong>Pide una asesoria</strong>
-                                    </h4>
-                                    <p>Capacitate, esfuerzate y trabaja con los mejores asesores. Tu tesis lo amerita.</p>
-                                    <%
-                                        try {
-                                            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                                out.print("<a href=\"#NewAsesoria\" class=\"btn btn-light\">Accede</a>");
-                                            }
-                                        } catch (java.lang.NullPointerException e) {
-                                            out.print("<a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>");
-                                        }
-                                    %>
-
-
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <%
-                                    try {
-                                        if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                            out.print("<div class=\"service-item\">\n"
-                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                    + "                                        <i class=\"fa fa-user fa-stack-1x text-primary\"></i>\n"
-                                                    + "                                    </span>\n"
-                                                    + "                                    <h4>\n"
-                                                    + "                                        <strong>Perfil</strong>\n"
-                                                    + "                                    </h4>\n"
-                                                    + "                                    <p>Mant&eacute;n tu perfil actualizado, esto ayuda a que llegue tus correos a tiempo y al lugar indicado.</p>\n"
-                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Ver mi perfil</a>\n"
-                                                    + "                                </div>");
-                                        }
-                                    } catch (java.lang.NullPointerException e) {
-                                        out.print("<div class=\"service-item\">\n"
-                                                + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                + "                                        <i class=\"fa fa-cloud fa-stack-1x text-primary\"></i>\n"
-                                                + "                                    </span>\n"
-                                                + "                                    <h4>\n"
-                                                + "                                        <strong>¡Pide tu usuario!</strong>\n"
-                                                + "                                    </h4>\n"
-                                                + "                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>\n"
-                                                + "                                    <a href=\"http://uniajc.edu.co/index.php/estudiantes\" class=\"btn btn-light\">Como registrarse</a>\n"
-                                                + "                                </div>");
-                                    }
-                                %>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="service-item">
-                                    <%
-                                        try {
-                                            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                                                out.print("                               <div class=\"service-item\">\n"
-                                                        + "                                    <span class=\"fa-stack fa-4x\">\n"
-                                                        + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
-                                                        + "                                        <i class=\"fa fa-users fa-stack-1x text-primary\"></i>\n"
-                                                        + "                                    </span>\n"
-                                                        + "                                    <h4>\n"
-                                                        + "                                        <strong>Ajustes personales</strong>\n"
-                                                        + "                                    </h4>\n"
-                                                        + "                                    <p>Mant&eacute;n al d&iacute;a tus datos.</p>\n"
-                                                        + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
-                                                        + "                                </div>\n");
-                                            }
-                                        } catch (java.lang.NullPointerException e) {
-                                        }
-                                    %>
-                                </div>
-                            </div>
-
-                            <!-- /.row (nested) -->
-                        </div>
-                        <!-- /.col-lg-10 -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.container -->
-            </div>
-        </section>
-
+       
         <!-- Footer -->
         <footer>
             <div class="container" id="contacto">
