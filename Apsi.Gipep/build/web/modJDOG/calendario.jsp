@@ -1,7 +1,7 @@
 <%-- 
     Document   : calendario
     Created on : 28-jul-2015, 13:09:06
-    Author     : usuario
+    Author     : Miguel Angel Lemos
 --%>
 <%@page import="Entity.Rol"%>
 <%@page import="java.math.BigDecimal"%>
@@ -15,7 +15,6 @@
 <%@page import="Entity.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true"%>
-
 <!DOCTYPE html>
 <html lang="es">
     <%session = request.getSession();
@@ -35,14 +34,11 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>ApSi.GiPep - Tus asesorias Faciles</title>
-
         <!-- Bootstrap Core CSS -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-
         <!-- Custom CSS -->
         <link rel="stylesheet" href="../css/Calendar.css"/>
         <link href="../css/stylish-portfolio.css" rel="stylesheet">
-
         <!-- Custom Fonts -->
         <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
@@ -54,10 +50,6 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-
-
-    <body> 
-
     <body>
         <!-- Navigation -->
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
@@ -108,20 +100,14 @@
                     }
                 %>
 
-
-                <li>
-                    <a href="#about"><i class="fa fa-bookmark fa-stack-1x text-primary"></i>Acerca de ApSi</a>
-                </li>
                 <li>
                     <a href="#services"><i class="fa fa-info fa-stack-1x text-primary"></i>Solicitar Registro</a>
                 </li>
-
                 <li>
                     <a href="#contacto"><i class="fa fa-comment fa-stack-1x text-primary"></i>Contacto</a>
                 </li>
             </ul>
         </nav>
-
         <div class="container">
             <section class="container-fluid">
                 <div class="container-fluid">
@@ -131,85 +117,333 @@
                 </div>
             </section>
             <hr>
-            <div id="calendar"></div>
+            <div id="calendar" data-toggle="modal" data-target="#modalVentana1"></div>
         </div>
+        <!-- MODALES -->
+        <!-- MODAL 1 -->
+        <div id="modalVentana1" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <form id="registrarAsesoria" name="registrarAsesoria" method="post">
+                            <table class="table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <h3>Nueva Asesor&iacute;a | <a href="#" data-dismiss="modal" >Volver</a></h3> 
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Fecha:
+                                        </td>
+                                        <td>
+                                            <input type="text" id="date" name="date" class="form-control" disabled="" value="" required=""/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Docente:
+                                        </td>
+                                        <td>
+                                            <select name="docentes" id="docentes" class="form-control" 
+                                                    required="" 
+                                                    onchange="mostrarHora()"> 
+                                                <option value="none">--Seleccione una opci&oacute;n--</option>
+                                                <option value="1">TutorJava</option>
+                                                <option value="2">TutorHTML</option>
+                                                <option value="4">TutorPHP</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label id="horita" style="visibility: hidden">Horas disponibles:</label> 
+                                        </td>
+                                        <td>
+                                            <select name="horasDisponibles" id="horasDisponibles" class="form-control" required="" style="visibility: hidden;">
+                                                <option value="1">21 : 30</option>
+                                                <option value="2">22 : 00</option>
+                                                <option value="4">22 : 30</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Descripci&oacute;n:
+                                        </td>
+                                        <td>
+                                            <textarea id="Descripcion" name="Descripcion" style="resize: none" class="form-control">
+                                                
+                                            </textarea>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <hr>
+                            <br>
+                            <input class="btn btn-dark" type="reset" data-dismiss="modal" value="Cerrar"> 
+                            <input id="proceso" name="proceso" class="btn btn-dark" type="submit" value="Enviar">      
+                        </form> 
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Alertas -->
+        <div class="alert alert-<%=request.getParameter("msgAlt") != null ? request.getParameter("msgAlt") : ""%>" role="alert">   
+            <br>
+            <b>
+                <h2 style="text-align: center;">
+                    <a style="color:red"><%= request.getParameter("msg") != null ? request.getParameter("msg") : ""%></a>
+                </h2>
+            </b>
+        </div>
+
+        <!-- Services -->
+        <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+        <section id="services" class="services bg-primary">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <%
+                            try {
+                                if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                                    out.print("<h2>Bienvenido</h2>");
+                                } else {
+                                    out.print("<h2>A&uacute;n sin registrarte?</h2>");
+                                }
+                            } catch (java.lang.NullPointerException e) {
+                                out.print("<h2>A&uacute;n sin registrarte?</h2>");
+                            }
+
+                        %>
+                        <hr class="small">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6">
+                                <%                                    try {
+                                        if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                                            out.print("                               <div class=\"service-item\">\n"
+                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                    + "                                        <i class=\"fa fa-bookmark fa-stack-1x text-primary\"></i>\n"
+                                                    + "                                    </span>\n"
+                                                    + "                                    <h4>\n"
+                                                    + "                                        <strong>Menú Principal</strong>\n"
+                                                    + "                                    </h4>\n"
+                                                    + "                                    <p>Acceso al menu principal.</p>\n"
+                                                    + "                                    <a href=\"mainMenu.jsp\" class=\"btn btn-light\">Accede</a>\n"
+                                                    + "                                </div>\n");
+                                        }
+                                    } catch (java.lang.NullPointerException e) {
+                                    }
+                                %>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="service-item">
+                                    <span class="fa-stack fa-4x">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-compass fa-stack-1x text-primary"></i>
+                                    </span>
+                                    <h4>
+                                        <strong>Pide una asesoria</strong>
+                                    </h4>
+                                    <p>Capacitate, esfuerzate y trabaja con los mejores asesores. Tu tesis lo amerita.</p>
+                                    <%
+                                        try {
+                                            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                                                out.print("<a href=\"../modJDOG/calendario.jsp\" class=\"btn btn-light\">Accede</a>");
+                                            }
+                                        } catch (java.lang.NullPointerException e) {
+                                            out.print("<a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>");
+                                        }
+                                    %>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <%
+                                    try {
+                                        if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                                            out.print("<div class=\"service-item\">\n"
+                                                    + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                    + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                    + "                                        <i class=\"fa fa-user fa-stack-1x text-primary\"></i>\n"
+                                                    + "                                    </span>\n"
+                                                    + "                                    <h4>\n"
+                                                    + "                                        <strong>Perfil</strong>\n"
+                                                    + "                                    </h4>\n"
+                                                    + "                                    <p>Mant&eacute;n tu perfil actualizado, esto ayuda a que llegue tus correos a tiempo y al lugar indicado.</p>\n"
+                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Ver mi perfil</a>\n"
+                                                    + "                                </div>");
+                                        }
+                                    } catch (java.lang.NullPointerException e) {
+                                        out.print("<div class=\"service-item\">\n"
+                                                + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                + "                                        <i class=\"fa fa-cloud fa-stack-1x text-primary\"></i>\n"
+                                                + "                                    </span>\n"
+                                                + "                                    <h4>\n"
+                                                + "                                        <strong>¡Pide tu usuario!</strong>\n"
+                                                + "                                    </h4>\n"
+                                                + "                                    <p>La &uacute;nica forma de acceder a esta herramienta es que estes registrado. H&aacute;slo pronto!.</p>\n"
+                                                + "                                    <a href=\"http://uniajc.edu.co/index.php/estudiantes\" class=\"btn btn-light\">Como registrarse</a>\n"
+                                                + "                                </div>");
+                                    }
+                                %>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="service-item">
+                                    <%
+                                        try {
+                                            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                                                out.print("                               <div class=\"service-item\">\n"
+                                                        + "                                    <span class=\"fa-stack fa-4x\">\n"
+                                                        + "                                        <i class=\"fa fa-circle fa-stack-2x\"></i>\n"
+                                                        + "                                        <i class=\"fa fa-users fa-stack-1x text-primary\"></i>\n"
+                                                        + "                                    </span>\n"
+                                                        + "                                    <h4>\n"
+                                                        + "                                        <strong>Ajustes personales</strong>\n"
+                                                        + "                                    </h4>\n"
+                                                        + "                                    <p>Mant&eacute;n al d&iacute;a tus datos.</p>\n"
+                                                        + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
+                                                        + "                                </div>\n");
+                                            }
+                                        } catch (java.lang.NullPointerException e) {
+                                        }
+                                    %>
+                                </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.col-lg-10 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container -->
+            </div>
+        </section>
+        <!-- Footer -->
+        <footer>
+            <div class="container" id="contacto">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>ApSi&reg;</strong>
+                        </h4>
+                        <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br>Santiago de Cali, Colombia</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small">
+                        <p class="text-muted">Powered By Unlimited Dreams <br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <!-- jQuery -->
         <script type="text/javascript" src="../js/Jquery/jquery-1.11.2.js"></script>
-
         <!-- Bootstrap Core JavaScript -->
         <script type="text/javascript" src="../js/bootstrap.js"></script>
-
         <!--Script ocultar Divs-->
         <script>
-                        $.getScript('http://arshaw.com/js/fullcalendar-1.6.4/fullcalendar/fullcalendar.min.js', function () {
+                                                        $.getScript('http://arshaw.com/js/fullcalendar-1.6.4/fullcalendar/fullcalendar.min.js', function () {
 
-                            var date = new Date();
-                            var d = date.getDate();
-                            var m = date.getMonth();
-                            var y = date.getFullYear();
+                                                            var date = new Date();
+                                                            var d = date.getDate();
+                                                            var m = date.getMonth();
+                                                            var y = date.getFullYear();
 
-                            $('#calendar').fullCalendar({
-                                header: {
-                                    left: 'prev,next today',
-                                    center: 'title',
-                                    right: 'month,agendaWeek,agendaDay'
-                                },
-                                dayClick: function () {
-                                    alert('a day has been clicked! \n'+ m + '-'+d+'-'+y);
-                                },
-                                editable: true,
-                                events: [
-                                    {
-                                        title: 'All Day Event',
-                                        start: new Date(y, m, 1)
-                                    },
-                                    {
-                                        title: 'Long Event',
-                                        start: new Date(y, m, d - 5),
-                                        end: new Date(y, m, d - 2)
-                                    },
-                                    {
-                                        id: 999,
-                                        title: 'Repeating Event',
-                                        start: new Date(y, m, d - 3, 16, 0),
-                                        allDay: false
-                                    },
-                                    {
-                                        id: 999,
-                                        title: 'Repeating Event',
-                                        start: new Date(y, m, d + 4, 16, 0),
-                                        allDay: false
-                                    },
-                                    {
-                                        title: 'Meeting',
-                                        start: new Date(y, m, d, 10, 30),
-                                        allDay: false
-                                    },
-                                    {
-                                        title: 'Lunch',
-                                        start: new Date(y, m, d, 12, 0),
-                                        end: new Date(y, m, d, 14, 0),
-                                        allDay: false
-                                    },
-                                    {
-                                        title: 'Birthday Party',
-                                        start: new Date(y, m, d + 1, 19, 0),
-                                        end: new Date(y, m, d + 1, 22, 30),
-                                        allDay: false
-                                    },
-                                    {
-                                        title: 'Click for Google',
-                                        start: new Date(y, m, 28),
-                                        end: new Date(y, m, 29),
-                                        url: 'http://google.com/'
-                                    }
-                                ]
+                                                            $('#calendar').fullCalendar({
+                                                                header: {
+                                                                    left: 'prev,next today',
+                                                                    center: 'title',
+                                                                    right: 'month,agendaWeek,agendaDay'
+                                                                },
+                                                                dayClick: function (date) {
+                                                                    if (date < new Date()) {
+                                                                        alert('No puedes seleccionar fechas menores a la actual');
+                                                                        location.reload();
+                                                                    } else {
+                                                                        $("input[name=date]").val(date.getFullYear() + '-' + date.getMonth() + '-' + date.getUTCDate());
+                                                                    }
 
-                            });
-                        })
+                                                                },
+                                                                editable: true,
+                                                                /*events: [
+                                                                 {
+                                                                 title: 'All Day Event',
+                                                                 start: new Date(y, m, 30)
+                                                                 },
+                                                                 {
+                                                                 title: 'Long Event',
+                                                                 start: new Date(y, m, d - 5),
+                                                                 end: new Date(y, m, d - 2)
+                                                                 },
+                                                                 {
+                                                                 id: 999,
+                                                                 title: 'Repeating Event',
+                                                                 start: new Date(y, m, d - 3, 16, 0),
+                                                                 allDay: false
+                                                                 },
+                                                                 {
+                                                                 id: 999,
+                                                                 title: 'Repeating Event',
+                                                                 start: new Date(y, m, d + 4, 16, 0),
+                                                                 allDay: false
+                                                                 },
+                                                                 {
+                                                                 title: 'Meeting',
+                                                                 start: new Date(y, m, d, 10, 30),
+                                                                 allDay: false
+                                                                 },
+                                                                 {
+                                                                 title: 'Lunch',
+                                                                 start: new Date(y, m, d, 12, 0),
+                                                                 end: new Date(y, m, d, 14, 0),
+                                                                 allDay: false
+                                                                 },
+                                                                 {
+                                                                 title: 'Birthday Party',
+                                                                 start: new Date(y, m, d + 1, 19, 0),
+                                                                 end: new Date(y, m, d + 1, 22, 30),
+                                                                 allDay: false
+                                                                 },
+                                                                 {
+                                                                 title: 'Click for Google',
+                                                                 start: new Date(y, m, 28),
+                                                                 end: new Date(y, m, 29),
+                                                                 url: 'http://google.com/'
+                                                                 }
+                                                                 ]*/
+
+                                                            });
+                                                        })
         </script>
-
+        <script>
+            function mostrarHora(){
+                if(document.getElementById("docentes").value === 'none'){
+                    document.getElementById('horasDisponibles').style.visibility = 'hidden'
+                    document.getElementById('horita').style.visibility = 'hidden'
+                }else{
+                    document.getElementById('horasDisponibles').style.visibility = 'visible'
+                    document.getElementById('horita').style.visibility = 'visible'
+                }
+            }
+        </script>
         <script>
             $(document).ready(function () {
                 $("#ingresa").hide();
@@ -218,7 +452,6 @@
                     });
                 });
             });</script>
-
         <!-- Custom Theme JavaScript -->
         <script>
             // Closes the sidebar menu
@@ -247,8 +480,5 @@
                     }
                 });
             });</script>
-
-        <script src="http://code.jquery.com/jquery-latest.js"></script>
-
     </body>
 </html>

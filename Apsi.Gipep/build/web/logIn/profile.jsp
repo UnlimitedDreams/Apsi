@@ -48,7 +48,7 @@
         <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
         <!--Icon facelet-->
-         <link rel="icon" type="image/png" href="../img/apsi.ico"/>
+        <link rel="icon" type="image/png" href="../img/apsi.ico"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -67,7 +67,7 @@
                     <a onclick="document.location = 'index.jsp'">ApSi</a>
                 </li>
                 <li>
-                    <a href="#top"><i class="fa fa-home fa-stack-1x text-primary"></i>Inicio</a>
+                    <a href="index.jsp"><i class="fa fa-home fa-stack-1x text-primary"></i>Inicio</a>
                 </li>
                 <%                    String page1 = "<li><a id=\"opt1\">Acceder</a>"
                             + "<div id=\"ingresa\" >"
@@ -106,13 +106,8 @@
                         out.print(page1);
                     }
                 %>
-
-
                 <li>
-                    <a href="#about"><i class="fa fa-bookmark fa-stack-1x text-primary"></i>Acerca de ApSi</a>
-                </li>
-                <li>
-                    <a href="#services"><i class="fa fa-info fa-stack-1x text-primary"></i>Solicitar Registro</a>
+                    <a href="#services"><i class="fa fa-info fa-stack-1x text-primary"></i>Solicitar Asesor&iacute;as</a>
                 </li>
 
                 <li>
@@ -133,14 +128,19 @@
                             <h1><b><label> Informaci&oacute;n de usuario</label></b></h1>
                             <h2>
                                 <%
-                                    TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
+                                    try {
+                                        TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
 //        
-                                    for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
-                                        Map.Entry me = (Map.Entry) it.next();
-                                        BigDecimal key = (BigDecimal) me.getKey();
-                                        Rol value = (Rol) roles.get(key);
-                                        out.println("Rol: " + value.getNombre() + "<br>");
+                                        for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
+                                            Map.Entry me = (Map.Entry) it.next();
+                                            BigDecimal key = (BigDecimal) me.getKey();
+                                            Rol value = (Rol) roles.get(key);
+                                            out.println("Rol: " + value.getNombre() + "<br>");
+                                        }
+                                    } catch (Exception e) {
+                                        out.println("Rol: SIN ROL<br>");
                                     }
+
                                 %>
                             </h2>
                             </tr>
@@ -264,7 +264,7 @@
                 </h2>
             </b>
         </div>
-                 <!-- Services -->
+        <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
         <section id="services" class="services bg-primary">
             <div class="container">
@@ -326,7 +326,7 @@
                                         }
                                     %>
 
-                                   
+
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6">
@@ -392,7 +392,7 @@
                 <!-- /.container -->
             </div>
         </section>
-       
+
         <!-- Footer -->
         <footer>
             <div class="container" id="contacto">
