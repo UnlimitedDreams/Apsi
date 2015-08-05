@@ -4,10 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/modJDCJJS/Menu_Admon2.xhtml</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/logIn/index.jsp</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/logIn/profile.jsp</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/css/styles.css</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/modJDOG/calendario.jsp</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/logIn/recuperaAcceso.jsp</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/web/logIn/opcionesDeAcceso.jsp</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/src/java/dao/UsuarioImple.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/src/java/dao/helper.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/src/java/apsi/Security/ingresar.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/Apsi/Apsi.Gipep/src/java/dao/CalendarioImple.java</file>
         </group>
     </open-files>
 </project-private>

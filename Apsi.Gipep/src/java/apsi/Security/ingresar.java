@@ -35,6 +35,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import util.HibernateUtil;
 
 /**
  *
@@ -59,6 +63,9 @@ public class ingresar extends HttpServlet {
             HttpSession s;
             s = request.getSession();
             if (request.getParameter("operar").equalsIgnoreCase("Cerrar sesión")) {
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                session.clear();
+                session.close();
                 s.invalidate();
                 response.sendRedirect("index.jsp");
             } else {

@@ -256,6 +256,7 @@ public class UsuarioImple implements UsuarioDao {
                 Rol r = (Rol) session.get(Rol.class, get.getRol().getCodRol());
                 roles.put(r.getCodRol(), r);
             }
+            session.clear();
             session.close();
             return roles;
         } catch (Exception e) {

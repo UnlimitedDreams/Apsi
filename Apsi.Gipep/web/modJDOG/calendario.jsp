@@ -117,7 +117,10 @@
                 </div>
             </section>
             <hr>
-            <div id="calendar" data-toggle="modal" data-target="#modalVentana1"></div>
+            <div id="calendar"></div>
+            <button Style="visibility: hidden" data-toggle="modal" 
+                    data-target="#modalVentana1" value="Holi"
+                    name="">Hola que tal </button>
         </div>
         <!-- MODALES -->
         <!-- MODAL 1 -->
@@ -378,67 +381,68 @@
                                                                         alert('No puedes seleccionar fechas menores a la actual');
                                                                         location.reload();
                                                                     } else {
+                                                                        $("Button").click();
                                                                         $("input[name=date]").val(date.getFullYear() + '-' + date.getMonth() + '-' + date.getUTCDate());
                                                                     }
 
                                                                 },
                                                                 editable: true,
-                                                                /*events: [
-                                                                 {
-                                                                 title: 'All Day Event',
-                                                                 start: new Date(y, m, 30)
-                                                                 },
-                                                                 {
-                                                                 title: 'Long Event',
-                                                                 start: new Date(y, m, d - 5),
-                                                                 end: new Date(y, m, d - 2)
-                                                                 },
-                                                                 {
-                                                                 id: 999,
-                                                                 title: 'Repeating Event',
-                                                                 start: new Date(y, m, d - 3, 16, 0),
-                                                                 allDay: false
-                                                                 },
-                                                                 {
-                                                                 id: 999,
-                                                                 title: 'Repeating Event',
-                                                                 start: new Date(y, m, d + 4, 16, 0),
-                                                                 allDay: false
-                                                                 },
-                                                                 {
-                                                                 title: 'Meeting',
-                                                                 start: new Date(y, m, d, 10, 30),
-                                                                 allDay: false
-                                                                 },
-                                                                 {
-                                                                 title: 'Lunch',
-                                                                 start: new Date(y, m, d, 12, 0),
-                                                                 end: new Date(y, m, d, 14, 0),
-                                                                 allDay: false
-                                                                 },
-                                                                 {
-                                                                 title: 'Birthday Party',
-                                                                 start: new Date(y, m, d + 1, 19, 0),
-                                                                 end: new Date(y, m, d + 1, 22, 30),
-                                                                 allDay: false
-                                                                 },
-                                                                 {
-                                                                 title: 'Click for Google',
-                                                                 start: new Date(y, m, 28),
-                                                                 end: new Date(y, m, 29),
-                                                                 url: 'http://google.com/'
-                                                                 }
-                                                                 ]*/
+                                                                events: [
+                                                                    {
+                                                                        title: 'Rumba',
+                                                                        start: new Date('2015-08-01T22:00:00'),
+                                                                    },
+                                                                    {
+                                                                        title: 'Long Event',
+                                                                        start: new Date(y, m, d - 5),
+                                                                        end: new Date(y, m, d - 2)
+                                                                    }]
+                                                                        /*{
+                                                                         id: 999,
+                                                                         title: 'Repeating Event',
+                                                                         start: new Date(y, m, d - 3, 16, 0),
+                                                                         allDay: false
+                                                                         },
+                                                                         {
+                                                                         id: 999,
+                                                                         title: 'Repeating Event',
+                                                                         start: new Date(y, m, d + 4, 16, 0),
+                                                                         allDay: false
+                                                                         },
+                                                                         {
+                                                                         title: 'Meeting',
+                                                                         start: new Date(y, m, d, 10, 30),
+                                                                         allDay: false
+                                                                         },
+                                                                         {
+                                                                         title: 'Lunch',
+                                                                         start: new Date(y, m, d, 12, 0),
+                                                                         end: new Date(y, m, d, 14, 0),
+                                                                         allDay: false
+                                                                         },
+                                                                         {
+                                                                         title: 'Birthday Party',
+                                                                         start: new Date(y, m, d + 1, 19, 0),
+                                                                         end: new Date(y, m, d + 1, 22, 30),
+                                                                         allDay: false
+                                                                         },
+                                                                         {
+                                                                         title: 'Click for Google',
+                                                                         start: new Date(y, m, 28),
+                                                                         end: new Date(y, m, 29),
+                                                                         url: 'http://google.com/'
+                                                                         }
+                                                                         ]*/
 
                                                             });
                                                         })
         </script>
         <script>
-            function mostrarHora(){
-                if(document.getElementById("docentes").value === 'none'){
+            function mostrarHora() {
+                if (document.getElementById("docentes").value === 'none') {
                     document.getElementById('horasDisponibles').style.visibility = 'hidden'
                     document.getElementById('horita').style.visibility = 'hidden'
-                }else{
+                } else {
                     document.getElementById('horasDisponibles').style.visibility = 'visible'
                     document.getElementById('horita').style.visibility = 'visible'
                 }
