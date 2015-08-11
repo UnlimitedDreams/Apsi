@@ -5,22 +5,11 @@
  */
 package Dao;
 
-import Entity.Asesoria;
-import Entity.Asistente;
-import Entity.Calendario;
-
-import Entity.Festivos;
 
 import Entity.Usuario;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.type.BigDecimalType;
-import org.hibernate.type.IntegerType;
 import util.HibernateUtil;
 
 /**
