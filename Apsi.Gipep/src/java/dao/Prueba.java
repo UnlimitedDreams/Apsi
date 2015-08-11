@@ -63,7 +63,7 @@ public class Prueba {
                     + " and D.fechaInicial>='01-01-2015' and  D.fechaFinal<='01-12-2015'").list();
 
             for (int i = 0; i < calen.size(); i++) {
-                System.out.println("-" + calen.get(i).getPegeId());
+                System.out.println("<li><a href=\"#\"><i class=\"fa fa-plus\"></i>Actividad</a></li>");
             }
             t.commit();
  

@@ -22,11 +22,14 @@
  * THE SOFTWARE.
  */
 
+import Entity.Actividades;
 import dao.UsuarioImple;
-import Entity.Persona;
-import Entity.Usuario;
-import Dao.PersonaHelper;
+import Entity.Rol;
+import static java.lang.System.out;
 import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -38,18 +41,12 @@ public class prueba {
      * @param args
      */
     public static void main(String[] args) {
-        UsuarioImple MiUser = new UsuarioImple();
-        PersonaHelper myPeople = new PersonaHelper();
-        Usuario u = new Usuario(BigDecimal.valueOf(MiUser.cargarTodo().size() + 1), "123", "Probe");
-        Persona p = new Persona(BigDecimal.valueOf(Integer.parseInt("12123")),
-                u, "Probwe", "Cosa");
-        try {
-            MiUser.CrearUsuario(u);
-            myPeople.agregar(p);
-            System.out.println("ok");       
-        } catch (Exception e) {
-            System.out.println("ERROR " + e.toString());
-            System.out.println(e.getMessage());
+        TreeMap x = new UsuarioImple().cargarActividades("-1");
+        for (Iterator it = x.entrySet().iterator(); it.hasNext();) {
+            Map.Entry me = (Map.Entry) it.next();
+            BigDecimal key = (BigDecimal) me.getKey();
+            Actividades value = (Actividades) x.get(key);
+            out.println("Rol: " + value.getDescripcion()+ "<br>");
         }
     }
 }

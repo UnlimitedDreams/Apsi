@@ -3,20 +3,79 @@
        xmlns:f="http://xmlns.jcp.org/jsf/core"
        xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Bienvenido</title>
-        <link rel="stylesheet" href="../css/Calendar.css"/>
-        <link rel="stylesheet" href="../css/Tablas.css"/>
-        <link rel="stylesheet" href="../css/formas.css"/>
-        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
-        <script src="Jquery/jquery-1.11.2.js"></script>
+        <f:metadata>
+            <f:viewParam name="viewport" value="width=device-width, initial-scale=1"/>
+            <f:viewParam name="author" value="UnlimitedDreams"/>
+            <f:viewParam name="description" value="Sistema Apsi  de asesorias"/>
+        </f:metadata>
+        <title>ApSi.GiPep - Tus asesorias Faciles</title>
+        <!-- Bootstrap Core CSS -->
+        <link href="../css/bootstrap.min.css" rel="stylesheet"></link>
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="../css/Calendar.css"></link>
+        <link href="../css/stylish-portfolio.css" rel="stylesheet"></link>
+        <!-- Custom Fonts -->
+        <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"></link>
+        <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css"></link>
+        <!--Icon facelet-->
+        <link rel="icon" type="image/png" href="../img/apsi.ico"></link>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
 
 
     </h:head>
     <h:body >
+        <nav id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+                <li class="sidebar-brand">
+                    <a href="index.jsp">ApSi</a>
+                </li>
+                <li>
+                    <a href="#top">Inicio</a>
+                </li>
+                <li>
+                    <a id="opt1">Acceder</a>
+                    <div id="ingresa" >
+                        <form name="log" action="ingresar" method="POST">
+                            <table style="border-spacing: 6px 12px; border-collapse: separate">
+                                <tr style="text-align: right;">
+                                    <td></td>
+                                    <td>
+                                        <input placeholder="Usuario" type="text" id="user" class="form-in" name="user" required="" />
+                                    </td>
+                                </tr>
+                                <tr style="text-align: right;">
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <input placeholder="Constraseña" type="password" id="pass" class="form-in" name="pass" required="" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <input type="submit" class="btn-log" value="Iniciar sesión"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <b><a href="opcionesDeAcceso.jsp">No puedes acceder?</a></b>
+                            <b><a href="http://www.uniajc.edu.co">Registrate</a></b>
+                        </form>
+                    </div>
+                </li>
+                <li>
+                    <a href="#contacto">Contacto</a>
+                </li>
+            </ul>
+        </nav>
         <div id="header" class="head">
-            <div id="menu" style="position: fixed;top:0%">
-                <img id="btn-menu" src="../img/men.png"/>
-            </div>
             <div style="text-align: center;">
                 <b> Ajuste Tiempo</b>    
             </div>
@@ -35,6 +94,7 @@
                 </h:form>
             </center>
         </div>
+        <script src="../js/Jquery/jquery-1.11.2.js"></script>
     </h:body>
 </html>
 

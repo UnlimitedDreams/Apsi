@@ -5,9 +5,11 @@
  */
 package dao;
 
+import Entity.Actividades;
 import Entity.Correospersona;
 import Entity.Persona;
 import Entity.Rol;
+import Entity.RolActividad;
 import Entity.Telefonos;
 import Entity.UsuRol;
 import Entity.Usuario;
@@ -255,6 +257,28 @@ public class UsuarioImple implements UsuarioDao {
             for (UsuRol get : usuRols) {
                 Rol r = (Rol) session.get(Rol.class, get.getRol().getCodRol());
                 roles.put(r.getCodRol(), r);
+            }
+            session.clear();
+            session.close();
+            return roles;
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            return null;
+        }
+    }
+    
+    public TreeMap cargarActividades(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        List<RolActividad> rolActividad = null;
+        TreeMap roles = new TreeMap();
+        try {
+            rolActividad = session.createQuery(" from RolActividad  where cod_rol = " + id).list();
+            for (RolActividad get : rolActividad) {
+                Actividades act = (Actividades) session.get(Actividades.class, get.getActividades().getCodigoActividad());
+                roles.put(act.getCodigoActividad(), act);
             }
             session.clear();
             session.close();

@@ -4,6 +4,7 @@
     Author     : Miguel Angel Lemos
 --%>
 
+<%@page import="Entity.Actividades"%>
 <%@page import="Entity.Rol"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.math.BigDecimal"%>
@@ -147,25 +148,33 @@
                                 </li>
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Accion</span>
+                                        <i class="fa fa-meanpath"></i>
+                                        <span>Actividades</span>
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="#"><i class="fa fa-plus"></i>Actividad</a></li>
-                                        <li><a href="#"><i class="fa fa-cogs"> </i>Actividad</a></li>
+                                        <%
+                                            TreeMap x = new UsuarioImple().cargarActividades("-1");
+                                            for (Iterator it = x.entrySet().iterator(); it.hasNext();) {
+                                                Map.Entry me = (Map.Entry) it.next();
+                                                BigDecimal key = (BigDecimal) me.getKey();
+                                                Actividades value = (Actividades) x.get(key);
+                                                out.println("<li><a href=\"" + value.getNombre() + "\"><i class=\"fa fa-bookmark\"></i>" + value.getDescripcion() + "</a></li>");
+                                            }
+                                        %>
                                     </ul>
-                                </li>       
+                                </li> 
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Accion</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                        <i class="fa fa-meanpath"></i>
+                                        <span>Ayuda</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span></a>
+                                        <ul class="sub">
+                                            <li><a href="#"><i class="fa fa-bookmark"></i>Instructivos</a></li>
+                                            <li><a href="#"><i class="fa fa-bookmark"></i>Recomendaciones</a></li>
+                                            <li><a href="#"><i class="fa fa-bookmark"></i>Informaci&oacute;n &uacute;til</a></li>
+                                        </ul>
                                     </a>
-                                    <ul class="sub">
-                                        <li><a href="#" ><i class="fa fa-plus"> </i>Actividad</a></li>
-                                        <li><a href="#" ><i class="fa fa-cogs"> </i>Actividad</a></li>
-                                    </ul>
                                 </li>
                             </ul>
                         </div>
