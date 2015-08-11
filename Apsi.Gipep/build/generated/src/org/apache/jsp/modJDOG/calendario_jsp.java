@@ -347,7 +347,7 @@ Persona p = (Persona) session.getAttribute("persona");
                                                     + "                                        <strong>Perfil</strong>\n"
                                                     + "                                    </h4>\n"
                                                     + "                                    <p>Mant&eacute;n tu perfil actualizado, esto ayuda a que llegue tus correos a tiempo y al lugar indicado.</p>\n"
-                                                    + "                                    <a href=\"#profile\" class=\"btn btn-light\">Ver mi perfil</a>\n"
+                                                    + "                                    <a href=\"../logIn/profile.jsp\" class=\"btn btn-light\">Ver mi perfil</a>\n"
                                                     + "                                </div>");
                                         }
                                     } catch (java.lang.NullPointerException e) {
@@ -381,7 +381,7 @@ Persona p = (Persona) session.getAttribute("persona");
                                                         + "                                        <strong>Ajustes personales</strong>\n"
                                                         + "                                    </h4>\n"
                                                         + "                                    <p>Mant&eacute;n al d&iacute;a tus datos.</p>\n"
-                                                        + "                                    <a href=\"logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
+                                                        + "                                    <a href=\"../logIn/logIn.jsp\" class=\"btn btn-light\">Accede</a>\n"
                                                         + "                                </div>\n");
                                             }
                                         } catch (java.lang.NullPointerException e) {
