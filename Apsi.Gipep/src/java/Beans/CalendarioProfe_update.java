@@ -5,8 +5,8 @@
  */
 package Beans;
 
-import Dao.CalendarioImple;
-import Dao.CalendarioP;
+import dao.CalendarioImple;
+import dao.CalendarioP;
 import Entity.Calendario;
 import Entity.Usuario;
 import java.io.IOException;

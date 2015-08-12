@@ -5,7 +5,7 @@
  */
 package Beans;
 
-import Dao.Sequence;
+import dao.Sequence;
 import Entity.Objetivos;
 import Entity.Proyectos;
 import Entity.TipoProyecto;
