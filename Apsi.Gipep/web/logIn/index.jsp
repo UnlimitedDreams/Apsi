@@ -42,7 +42,7 @@
 <%session = request.getSession();
         try {
             if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                response.sendRedirect("../modJDCJJS/Menu_Admon.xhtml");
+                response.sendRedirect("../logIn/mainMenu.jsp");
             }
         } catch (java.lang.NullPointerException e) {
         }

@@ -120,9 +120,9 @@
             <div class="container-fluid">
                 <div class="row">                   
                     <h3><i class="fa fa-tag"></i> <%
-                        TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
                         String rol = "";
                         String idRol = "";
+                        TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
                         for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
                             Map.Entry me = (Map.Entry) it.next();
                             BigDecimal key = (BigDecimal) me.getKey();
@@ -196,57 +196,92 @@
                             }
                                     %>:</label></center></div>
 
-                        <div class="container">
-                            <%
-                                List listaProyectos = new proyectoHelper().listarTodo();
-                            %>
 
-                            <h2 class="text-info">Numero de Proyectos Activos: <%=listaProyectos.size()%></h2>
-                            <h3 class="text-info">
-                                <%
-                                    double PromedioDeCumplimiento = 0.0;
-                                    for (Object proyectoTemp : listaProyectos) {
-                                        Proyectos ww = (Proyectos) proyectoTemp;
-                                        PromedioDeCumplimiento = PromedioDeCumplimiento + Double.parseDouble(ww.getPorcentaje());
-                                        out.println("Proyectos Activos: " + ww.getNombre()
-                                                + "<br> Fecha de Inicio: " + ww.getFechaInicio() + "<br>"
-                                                + "<div class=\"panel-body\">\n"
-                                                + "Progreso del proyecto: <br>"
-                                                + "<div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" "
-                                                + "style=\"width: " + ww.getPorcentaje() + "%;\">\n"
-                                                + ww.getPorcentaje() + "%</div>\n"
-                                                + "</div>"
-                                                + "<p>");
-                                    }
-                                %>
-                            </h3>
-                            <h2 class="text-info">Promedio de Cumplimiento hasta el momento:</h2>
+                        <%
+                            List listaProyectos = new proyectoHelper().listarTodo();
+                        %>
+
+                        <h2 class="text-info">Numero de Proyectos Activos: <%=listaProyectos.size()%></h2>
+                        <table class="table-condensed">
+
                             <%
-                                PromedioDeCumplimiento = PromedioDeCumplimiento / listaProyectos.size();
-                                if (PromedioDeCumplimiento < 50.0) {
-                                    out.print("<h2 class=\"text-danger\">" + PromedioDeCumplimiento + "%</h2>");
-                                } else if (PromedioDeCumplimiento >= 50.0 && PromedioDeCumplimiento < 90.0) {
-                                    out.print("<h2 class=\"text-primary\">" + PromedioDeCumplimiento + "%</h2>");
-                                } else if (PromedioDeCumplimiento > 90.0) {
-                                    out.print("<h2 class=\"text-success\">" + PromedioDeCumplimiento + "%</h2>");
+                                double PromedioDeCumplimiento = 0.0;
+                                for (Object proyectoTemp : listaProyectos) {
+                                    Proyectos ww = (Proyectos) proyectoTemp;
+                                    PromedioDeCumplimiento = PromedioDeCumplimiento + Double.parseDouble(ww.getPorcentaje());
+                                    out.println("<tr>"
+                                            + "<td><b>Nombre de Proyecto:</b> <a class=\"text-primary\" href='#'>" + ww.getNombre()
+                                            + "</a></td><td><b> Fecha de Inicio:</b> " + ww.getFechaInicio() + "<br></td>"
+                                            + "</td><td><b> Fecha de Finalizaci&oacute;n:</b> " + ww.getFechaFinal() + "<br></td>"
+                                            + "</tr>"
+                                            + "<tr><td>"
+                                            + "<div class=\"panel-body\">\n"
+                                            + "<b>Progreso del proyecto: </b><br>"
+                                            + "<div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" "
+                                            + "style=\"width: " + ww.getPorcentaje() + "%;\">\n"
+                                            + ww.getPorcentaje() + "%</div>\n"
+                                            + "</div>"
+                                            + "</td>");
+                                    if (ww.getCalificacion() < 3.5) {
+                                        out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-danger\">" + ww.getCalificacion() + "</label></td>"
+                                                + "</tr>");
+                                    } else if (ww.getCalificacion() >= 3.5 && ww.getCalificacion() < 4.5) {
+                                        out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-primary\">" + ww.getCalificacion() + "</label></td>"
+                                                + "</tr>");
+                                    } else if (ww.getCalificacion() >= 4.5) {
+                                        out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-success\">" + ww.getCalificacion() + "</label></td>"
+                                                + "</tr>");
+                                    }
                                 }
                             %>
+                        </table>
 
-                            <table class="table table-responsive">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                            <h2 class="text-info">Promedio de Cumplimiento hasta el momento:</h2> 
+                            </tr>
+                            <tr>
+                                <%
+                                    PromedioDeCumplimiento = PromedioDeCumplimiento / listaProyectos.size();
+                                    if (PromedioDeCumplimiento < 50.0) {
+                                        out.print("<h2 class=\"text-danger\">" + PromedioDeCumplimiento + "%</h2>"
+                                                + "<div class=\"panel-body\">\n"
+                                                + "<div class=\"progress-bar-danger\" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + PromedioDeCumplimiento + "%;\">\n"
+                                                + "<center>" + PromedioDeCumplimiento + "%</center>"
+                                                + "</div>\n"
+                                                + "</div>");
+                                    } else if (PromedioDeCumplimiento >= 50.0 && PromedioDeCumplimiento < 90.0) {
+                                        out.print("<h2 class=\"text-primary\">" + PromedioDeCumplimiento + "%</h2>"
+                                                + "<div class=\"panel-body\">\n"
+                                                + "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + PromedioDeCumplimiento + "%;\">\n"
+                                                + PromedioDeCumplimiento + "%\n"
+                                                + "</div>\n"
+                                                + "</div>");
+                                    } else if (PromedioDeCumplimiento >= 90.0) {
+                                        out.print("<h2 class=\"text-success\">" + PromedioDeCumplimiento + "%</h2>"
+                                                + "<div class=\"panel-body\">\n"
+                                                + "<div class=\"progress-bar-success\" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " + PromedioDeCumplimiento + "%;\">\n"
+                                                + "<center>" + PromedioDeCumplimiento + "%</center>"
+                                                + "</div>\n"
+                                                + "</div>");
+                                    }
+                                %>
+                            </tr>
+                            </thead>
 
-                                <tbody>
-                                    <tr>
-                                        <td><h3 class="text-success">Color verde Completado</h3></td>
-                                        <td><h3 class="text-danger">Color Rojo Critico</h3></td>
-                                        <td><h3 class="text-primary">Color Azul Normal</h3></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <tbody class="table-bordered">
+                                <tr>
+                                    <td><h3 class="text-danger">Critico</h3></td>
+                                    <td><h3 class="text-primary">En construcci&oacute;n / En espera</h3></td>
+                                    <td><h3 class="text-success">Completado</h3></td>
+                                </tr>
+                            </tbody>
+                        </table>
 
 
-                           
-                        </div>
-                        <div class="panel-heading"><center>Tablero de noticias</center></div>
+
+                        <div class="panel-heading"><center>Detalle de las revisiones</center></div>
 
                         <h1>Text</h1>
                         <h2 class="text-success">Text color Green</h2>
@@ -264,7 +299,7 @@
 
                         <h1>Progres Var</h1>
                         <div class="panel-body">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
+                            <div class="progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
                                 20%
                             </div>
                         </div>
