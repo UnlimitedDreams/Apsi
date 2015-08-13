@@ -170,8 +170,8 @@ public class UsuarioImple implements UsuarioDao {
     /**
      * Ver información de la persona apartir del pegeId de su usuario.
      *
-     * @param id Identificador de una persona
-     * @return Entidad persona 
+     * @param id identificador de la persona
+     * @return Entidad de persona
      */
     public Persona verPersona(String id) {
         Session session = HibernateUtil.getSessionFactory().openSession();

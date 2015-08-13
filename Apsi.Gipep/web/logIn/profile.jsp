@@ -115,7 +115,15 @@
                 </li>
             </ul>
         </nav>
+        <header class="container-fluid" id="top">
+            <div class="container-fluid">
+                <div class="row">                   
+                    <img src="../img/LogoMin.png"/>
 
+                    <hr>
+                </div>
+            </div>
+        </header>
         <section id="about" class="about">
 
             <div class="container">

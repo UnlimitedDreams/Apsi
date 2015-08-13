@@ -4,6 +4,9 @@
     Author     : Miguel Angel Lemos
 --%>
 
+<%@page import="Entity.Proyectos"%>
+<%@page import="dao.proyectoHelper"%>
+<%@page import="java.util.List"%>
 <%@page import="Entity.Actividades"%>
 <%@page import="Entity.Rol"%>
 <%@page import="java.util.Map"%>
@@ -62,7 +65,7 @@
                     <a href="index.jsp">ApSi</a>
                 </li>
                 <li>
-                    <a href="#top"><i class="fa fa-home fa-stack-1x text-primary"></i>Inicio</a>
+                    <a href="index.jsp"><i class="fa fa-home fa-stack-1x text-primary"></i>Inicio</a>
                 </li>
                 <%                    String page1 = "<li><a id=\"opt1\">Acceder</a>"
                             + "<div id=\"ingresa\" >"
@@ -102,10 +105,10 @@
                     }
                 %>
                 <li>
-                    <a href="#Archivos"><i class="fa fa-folder-o fa-stack-1x text-primary"></i>Archivo</a>
+                    <a href="../modCT_CA/SubirDoc.xhtml"><i class="fa fa-folder-o fa-stack-1x text-primary"></i>Archivo</a>
                 </li>
                 <li>
-                    <a href="#Opciones"><i class="fa fa-cog fa-stack-1x text-primary"></i>Opciones</a>
+                    <a href="profile.jsp"><i class="fa fa-cog fa-stack-1x text-primary"></i>Opciones</a>
                 </li>
                 <li>
                     <a href="#contacto"><i class="fa fa-comment fa-stack-1x text-primary"></i>Contacto</a>
@@ -119,11 +122,13 @@
                     <h3><i class="fa fa-tag"></i> <%
                         TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
                         String rol = "";
+                        String idRol = "";
                         for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
                             Map.Entry me = (Map.Entry) it.next();
                             BigDecimal key = (BigDecimal) me.getKey();
                             Rol value = (Rol) roles.get(key);
                             rol = value.getNombre();
+                            idRol = value.getCodRol().toString();
                             out.println(value.getNombre());
                         }
                         %>
@@ -154,7 +159,7 @@
                                     </a>
                                     <ul class="sub">
                                         <%
-                                            TreeMap x = new UsuarioImple().cargarActividades("-1");
+                                            TreeMap x = new UsuarioImple().cargarActividades(idRol);
                                             for (Iterator it = x.entrySet().iterator(); it.hasNext();) {
                                                 Map.Entry me = (Map.Entry) it.next();
                                                 BigDecimal key = (BigDecimal) me.getKey();
@@ -169,11 +174,11 @@
                                         <i class="fa fa-meanpath"></i>
                                         <span>Ayuda</span>
                                         <span class="menu-arrow arrow_carrot-right"></span></a>
-                                        <ul class="sub">
-                                            <li><a href="#"><i class="fa fa-bookmark"></i>Instructivos</a></li>
-                                            <li><a href="#"><i class="fa fa-bookmark"></i>Recomendaciones</a></li>
-                                            <li><a href="#"><i class="fa fa-bookmark"></i>Informaci&oacute;n &uacute;til</a></li>
-                                        </ul>
+                                    <ul class="sub">
+                                        <li><a href="#"><i class="fa fa-bookmark"></i>Instructivos</a></li>
+                                        <li><a href="#"><i class="fa fa-bookmark"></i>Recomendaciones</a></li>
+                                        <li><a href="#"><i class="fa fa-bookmark"></i>Informaci&oacute;n &uacute;til</a></li>
+                                    </ul>
                                     </a>
                                 </li>
                             </ul>
@@ -183,21 +188,63 @@
                 <div class="col-sm-9">
 
                     <div class="panel panel-default slideInUp animate">
-                        <div class="panel-heading"><center><label>Avance de proyecto</label></center></div>
-                        <div class="panel panel-primary slideInUp animate">
-                            <div class="panel-heading">
-                                Mis proyectos:
-                            </div>
-                            <div class="container">
-                                <h3>Center content</h3>    
-                            </div>
+                        <div class="panel-heading"><center><label> <%
+                            if (!rol.equals("SuperUsuario")) {
+                                out.print("Mis proyectos");
+                            } else {
+                                out.print("Información de Proyectos");
+                            }
+                                    %>:</label></center></div>
 
-                        </div>
                         <div class="container">
-                            <h2 class="text-info">Mis proyectos:</h2>
-                            <h2 class="text-success">Text color Green</h2>
-                            <h3 class="text-danger">Text color Red</h3>
-                            <h3 class="text-primary">Text color Blue</h3>   
+                            <%
+                                List listaProyectos = new proyectoHelper().listarTodo();
+                            %>
+
+                            <h2 class="text-info">Numero de Proyectos Activos: <%=listaProyectos.size()%></h2>
+                            <h3 class="text-info">
+                                <%
+                                    double PromedioDeCumplimiento = 0.0;
+                                    for (Object proyectoTemp : listaProyectos) {
+                                        Proyectos ww = (Proyectos) proyectoTemp;
+                                        PromedioDeCumplimiento = PromedioDeCumplimiento + Double.parseDouble(ww.getPorcentaje());
+                                        out.println("Proyectos Activos: " + ww.getNombre()
+                                                + "<br> Fecha de Inicio: " + ww.getFechaInicio() + "<br>"
+                                                + "<div class=\"panel-body\">\n"
+                                                + "Progreso del proyecto: <br>"
+                                                + "<div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" "
+                                                + "style=\"width: " + ww.getPorcentaje() + "%;\">\n"
+                                                + ww.getPorcentaje() + "%</div>\n"
+                                                + "</div>"
+                                                + "<p>");
+                                    }
+                                %>
+                            </h3>
+                            <h2 class="text-info">Promedio de Cumplimiento hasta el momento:</h2>
+                            <%
+                                PromedioDeCumplimiento = PromedioDeCumplimiento / listaProyectos.size();
+                                if (PromedioDeCumplimiento < 50.0) {
+                                    out.print("<h2 class=\"text-danger\">" + PromedioDeCumplimiento + "%</h2>");
+                                } else if (PromedioDeCumplimiento >= 50.0 && PromedioDeCumplimiento < 90.0) {
+                                    out.print("<h2 class=\"text-primary\">" + PromedioDeCumplimiento + "%</h2>");
+                                } else if (PromedioDeCumplimiento > 90.0) {
+                                    out.print("<h2 class=\"text-success\">" + PromedioDeCumplimiento + "%</h2>");
+                                }
+                            %>
+
+                            <table class="table table-responsive">
+
+                                <tbody>
+                                    <tr>
+                                        <td><h3 class="text-success">Color verde Completado</h3></td>
+                                        <td><h3 class="text-danger">Color Rojo Critico</h3></td>
+                                        <td><h3 class="text-primary">Color Azul Normal</h3></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                           
                         </div>
                         <div class="panel-heading"><center>Tablero de noticias</center></div>
 
@@ -217,7 +264,7 @@
 
                         <h1>Progres Var</h1>
                         <div class="panel-body">
-                            <div class="progress-bar " role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
                                 20%
                             </div>
                         </div>
