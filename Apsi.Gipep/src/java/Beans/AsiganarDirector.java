@@ -108,7 +108,7 @@ public class AsiganarDirector {
             }
             t.commit();
             if (r) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("Menu_Admon2.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("Menu_Admon.xhtml");
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", ""));
 
