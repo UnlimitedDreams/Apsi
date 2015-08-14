@@ -82,7 +82,7 @@ HttpSession sesion = request.getSession();
 session = request.getSession();
         try {
             if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                response.sendRedirect("../modJDCJJS/Menu_Admon2.xhtml");
+                response.sendRedirect("../modJDCJJS/Menu_Admon.xhtml");
             }
         } catch (java.lang.NullPointerException e) {
         }
