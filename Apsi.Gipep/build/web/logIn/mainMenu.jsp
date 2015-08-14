@@ -278,15 +278,15 @@
                                 </tr>
                             </tbody>
                         </table>
-
-
-
-                        <div class="panel-heading"><center>Detalle de las revisiones</center></div>
-
-                        <h1>Text</h1>
-                        <h2 class="text-success">Text color Green</h2>
+                        <p></p>
+                        <div class="panel-heading"><center><b>Detalle de las revisiones</b></center></div>
+                        <h1>Mi Proyecto: </h1>
+                        <h2>Detalle de las revisiones:</h2>
+                        <h3 class="text-primary">Las revisiones Aqui<-</h3>
+                        
+                        <!--<h2 class="text-success">Text color Green</h2>
                         <h3 class="text-danger">Text color Red</h3>
-                        <h3 class="text-primary">Text color Blue</h3>
+
                         <h1>Links</h1>
                         <a class="btn-success">Hello</a> - <a class="text-success">Facelets</a>
                         <a class="btn-danger">Hello</a> - <a class="text-danger">Facelets</a>
@@ -323,7 +323,7 @@
                             <div class="panel-heading">
                                 <h4>Title Panel</h4></div><h3>Center content</h3></div>
 
-                    </div>
+                    </div>-->
                 </div>
             </div>
 
