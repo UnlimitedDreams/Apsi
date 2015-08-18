@@ -2,9 +2,10 @@ package Beans;
 
 import dao.FestivosDao;
 import dao.FestivosImple;
-import dao.Sequence;
 import Entity.Aofestivo;
 import Entity.Festivos;
+import Modelo.Conecion_postgres1;
+import Modelo.FEsti;
 import Modelo.Secuencia;
 import java.awt.BorderLayout;
 import java.io.Serializable;
@@ -19,7 +20,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import org.hibernate.Query;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -43,7 +43,7 @@ public class FestivosBeans implements Serializable {
 
     @PostConstruct
     public void init() {
-
+        System.out.println("entro a contru");
         try {
             traer_fechas();
 
@@ -60,16 +60,39 @@ public class FestivosBeans implements Serializable {
         this.fecha_hoy = fecha_hoy;
     }
 
-    public void traer_fechas() {
-        eventModel = new DefaultScheduleModel();
-        ArrayList<Festivos> fes = new ArrayList();
-        FestivosDao festi = new FestivosImple();
-        fes = festi.listaFestivos();
-        Festivos temp = null;
-        for (int i = 0; i < fes.size(); i++) {
-            temp = (Festivos) fes.get(i);
-            eventModel.addEvent(new DefaultScheduleEvent("Festivo ", temp.getFechaFestivo(), temp.getFechaFestivo()));
+    public void traer_fechas() throws ClassNotFoundException {
+        try {
+            if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Dia_festivo") != null) {
+                System.out.println("Existe");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Dia_festivo");
+            } else {
+                System.out.println("No existe");
+            }
+            if (fecha_hoy != null) {
+                fecha_hoy = null;
+            }
+
+            eventModel = new DefaultScheduleModel();
+            Conecion_postgres1.conectar();
+            Conecion_postgres1.ejecuteQuery("select * from festivos");
+            ArrayList<FEsti> fes = new ArrayList();
+            try {
+                while (Conecion_postgres1.rs.next()) {
+                    fes.add(new FEsti(Conecion_postgres1.rs.getInt(1), Conecion_postgres1.rs.getDate(2),
+                            Conecion_postgres1.rs.getInt(3)));
+                }
+            } catch (Exception ex) {
+
+            }
+            FEsti temp = null;
+            for (int i = 0; i < fes.size(); i++) {
+                temp = (FEsti) fes.get(i);
+                eventModel.addEvent(new DefaultScheduleEvent("Festivo ", temp.getFecha(), temp.getFecha()));
+            }
+        } catch (Exception ex) {
+            System.out.println("Error traerFechas: " + ex.toString());
         }
+
     }
 
     public Date getFecha_Borrar() {
@@ -96,6 +119,17 @@ public class FestivosBeans implements Serializable {
         this.event = event;
     }
 
+    public void agregarFes() throws ClassNotFoundException {
+        int codigo = Secuencia.seque("select max(codigo_festivos) from festivos");
+        Conecion_postgres1.conectar();
+        System.out.println("--------------------");
+        System.out.println("entro fecha " + fecha_Borrar);
+        Conecion_postgres1.ejecuteUpdate("insert into festivos values(" + codigo + ",'" + fecha_Borrar + "',1)");
+        Conecion_postgres1.cerrarConexion();
+        traer_fechas();
+//        fecha_Borrar = null;
+    }
+
     public static long traerAño(Date fecha) {
         String año = fecha.toString();
         String año2 = año.substring((año.length() - 4), año.length());
@@ -104,7 +138,7 @@ public class FestivosBeans implements Serializable {
         try {
             Aofestivo temp = null;
             temp = festi.Traer_año(año2);
-            System.out.println("temp " + temp.toString()); 
+            System.out.println("temp " + temp.toString());
             if (temp == null) {
                 int codigo_año = Secuencia.seque("select max(cod_ao) from ao_festivo");
                 Aofestivo añofestivo = new Aofestivo();
@@ -126,63 +160,106 @@ public class FestivosBeans implements Serializable {
     }
 
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException {
-        FestivosDao festi = new FestivosImple();
+//        FestivosDao festi = new FestivosImple();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String fechaConFormato = sdf.format(fecha_hoy.getTime());
-        System.out.println("fecha hoy  " + fechaConFormato);
-        Festivos festivos = null;
-        festivos = festi.BuscarFestivo(fechaConFormato);
-        System.out.println("1");
-        if (festivos == null) {
-            System.out.println("2");
-            int codigo_Festivo = Secuencia.seque("select max(codigo_festivos) from festivos");
-            int codigo_año = (int) traerAño(fecha_hoy.getTime());
-            System.out.println("3");
-            if (codigo_año != 0) {
-                System.out.println("4");
-                Festivos festivo = new Festivos();
-//                festivo.setCodigoFestivos(codigo_Festivo);
-                festivo.setFechaFestivo(fecha_hoy.getTime());
-                Aofestivo añoFes = new Aofestivo();
-                añoFes.setCodAo(new BigDecimal(codigo_año));
-                festivo.setAofestivo(añoFes);
-                System.out.println("5");
-                boolean r = festi.crearFestivo(festivo);
-                System.out.println("6");
-                if (r) {
-                    System.out.println("7");
-                    eventModel.addEvent(new DefaultScheduleEvent("Festivo ", fecha_hoy.getTime(), fecha_hoy.getTime()));
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", ""));
-                    event = new DefaultScheduleEvent();
-                    traer_fechas();
-                } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRROR", ""));
-                }
-            }
+        if (traerCodFecha(fechaConFormato) == 0) {
+            int codigo = Secuencia.seque("select max(codigo_festivos) from festivos");
+            Conecion_postgres1.conectar();
+            System.out.println("--------------------");
+            Conecion_postgres1.ejecuteUpdate("insert into festivos values(" + codigo + ",'" + fechaConFormato + "',1)");
+            Conecion_postgres1.cerrarConexion();
+            fecha_hoy = null;
+            traer_fechas();
+        } else {
+            System.out.println("ya existe");
         }
+
+//        System.out.println("fecha hoy  " + fechaConFormato);
+//        Festivos festivos = null;
+//        festivos = festi.BuscarFestivo(fechaConFormato);
+//        System.out.println("1");
+//        if (festivos == null) {
+//            System.out.println("2");
+//            int codigo_Festivo = Secuencia.seque("select max(codigo_festivos) from festivos");
+//            int codigo_año = (int) traerAño(fecha_hoy.getTime());
+//            System.out.println("3");
+//            if (codigo_año != 0) {
+//                System.out.println("4");
+//                Festivos festivo = new Festivos();
+////                festivo.setCodigoFestivos(codigo_Festivo);
+//                festivo.setFechaFestivo(fecha_hoy.getTime());
+//                Aofestivo añoFes = new Aofestivo();
+//                añoFes.setCodAo(new BigDecimal(codigo_año));
+//                festivo.setAofestivo(añoFes);
+//                System.out.println("5");
+//                boolean r = festi.crearFestivo(festivo);
+//                System.out.println("6");
+//                if (r) {
+//                    System.out.println("7");
+//                    eventModel.addEvent(new DefaultScheduleEvent("Festivo ", fecha_hoy.getTime(), fecha_hoy.getTime()));
+//                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", ""));
+//                    event = new DefaultScheduleEvent();
+//                    traer_fechas();
+//                } else {
+//                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRROR", ""));
+//                }
+//            }
+//        }
     }
+//    
 
     public void DeleteEvent(ActionEvent actionEvent) throws ClassNotFoundException {
         FestivosDao festi = new FestivosImple();
         Festivos festivos = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String fechaConFormato = sdf.format(fecha_Borrar.getTime());
-        festivos = festi.BuscarFestivo(fechaConFormato);
-        System.out.println("--" + festivos.getFechaFestivo());
-        boolean r = festi.EliminarFestivo(festivos);
-        if (r) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", ""));
-            event = new DefaultScheduleEvent();
-            traer_fechas();
+        Date fecha = (Date) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Dia_festivo");
+        System.out.println("Fecha borrar " + fecha.toString());
+        int codfes = traerCodFecha(fecha.toString());
+        Conecion_postgres1.conectar();
+        Conecion_postgres1.ejecuteUpdate("delete from festivos where "
+                + "codigo_festivos=" + codfes);
+        Conecion_postgres1.cerrarConexion();
+        traer_fechas();
 
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRROR", ""));
+//        boolean r = festi.EliminarFestivo(festivos);
+//        if (r) {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", ""));
+//            event = new DefaultScheduleEvent();
+//            traer_fechas();
+//
+//        } else {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRROR", ""));
+//        }
+//        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Dia_festivo");
+    }
+
+    public int traerCodFecha(String fecha) throws ClassNotFoundException {
+        Conecion_postgres1.conectar();
+        Conecion_postgres1.ejecuteQuery("select * from festivos where fecha_festivo='" + fecha + "'");
+        int cod = 0;
+        try {
+            while (Conecion_postgres1.rs.next()) {
+                cod = Conecion_postgres1.rs.getInt(1);
+            }
+            Conecion_postgres1.cerrarConexion();
+        } catch (Exception ex) {
+            System.out.println("Error traerCod " + ex.toString());
         }
+        return cod;
     }
 
     public void onEventSelect(SelectEvent selectEvent) {
-        event = (ScheduleEvent) selectEvent.getObject();
-        fecha_Borrar = (Date) event.getStartDate();
+        try {
+            event = (ScheduleEvent) selectEvent.getObject();
+////            event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+            Date fecha = (Date) event.getStartDate();
+            fecha_Borrar = fecha;
+            System.out.println("fecha " + fecha_Borrar);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Dia_festivo", fecha_Borrar);
+        } catch (Exception ex) {
+            System.out.println("Error " + ex.toString());
+        }
+
     }
 
     public void onDateSelect(SelectEvent selectEvent) {

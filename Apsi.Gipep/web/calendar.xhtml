@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:form>
+            <br/>
+            <p:growl id="messages" showDetail="true" />
+            <b:container>
+                <b:panelGrid colSpans="2,10">
+                    <b:button value="Nuevo" look="success" onclick="$('.modalPseudoClass').modal();
+                            return false;" size="lg"/>
+                    <p:schedule id="scheduleLocale" value="#{festivosBeans.eventModel}" locale="tr" />
+                </b:panelGrid>
+            </b:container>
+            <b:modal id="amodal" title="Modal Example" >
+                <h:outputLabel for="popup" value="Popup:" />
+                <p:calendar id="popup"  value="#{festivosBeans.fecha_Borrar}"/>
+                <b:commandButton value="Agregar" actionListener="#{festivosBeans.agregarFes()}"></b:commandButton>
+                <f:facet name="footer">
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                    <b:button value="Ok" look="primary" dismiss="modal" onclick="return false;"/>
+                </f:facet>
+            </b:modal>
+        </h:form>
+
+    </h:body>
+</html>

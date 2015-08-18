@@ -42,8 +42,8 @@ public class Calendario_profesorInfo implements Serializable {
 
     private ScheduleModel eventModel;
     private ScheduleModel lazyEventModel;
-    private String hora1;
-    private String hora2;
+    private Date hora1;
+    private Date hora2;
     private String titulo;
     private Date fecha_final;
     private Date fecha_inicio;
@@ -111,7 +111,7 @@ public class Calendario_profesorInfo implements Serializable {
             for (int i = 0; i < usu.size(); i++) {
                 temp = (Asesoria) usu.get(i);
                 cod = temp.getCodAsesoria().intValue();
-                MDias d = new MDias(cod, "" + temp.getFechaAsesoria(), "", temp.getHoraAsesoria(), temp.getHoraAsesoria(), "");
+                MDias d = new MDias(cod, "" + temp.getFechaAsesoria(), "",""+ temp.getHoraIni(), ""+temp.getHoraFin(), "");
                 dias.add(d);
             }
         } catch (Exception ex) {
@@ -136,8 +136,8 @@ public class Calendario_profesorInfo implements Serializable {
         c.setFechaInicial(fecha_inicio);
         c.setFechaFinal(fecha_final);
         c.setUsuario(usu);
-        c.setHoraInicial(hora1);
-        c.setHoraFinal(hora2);
+        c.setHoraIni(hora1);
+        c.setHoraFin(hora2);
         c.setDescripcion(titulo);
         boolean r = calen.CrearCalendario(c);
         if (r) {
@@ -151,8 +151,8 @@ public class Calendario_profesorInfo implements Serializable {
             event.setId("" + Codigo_calendario);
             eventModel.addEvent(new DefaultScheduleEvent(titulo, date2, date1));
             event = new DefaultScheduleEvent();
-            hora1 = "";
-            hora2 = "";
+            hora1 = null;
+            hora2 = null;
             añadir_eventos();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Executed", ""));
         } else {
@@ -213,16 +213,17 @@ public class Calendario_profesorInfo implements Serializable {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
             calendario = calen.BuscarCalendario(cod);
-            String hora1 = "", hora2 = "", titul = "";
+            String  titul = "";
+            Date hora1 = null, hora2 = null;
             Date fecha1 = null, fecha2 = null;
             try {
                 System.out.println("-");
                 fecha_inicio = calendario.getFechaInicial();
                 fecha2 = calendario.getFechaFinal();
-                hora1 = calendario.getHoraInicial();
-                hora2 = calendario.getHoraFinal();
+                hora1 = calendario.getHoraIni();
+                hora2 = calendario.getHoraFin();
                 titul = calendario.getDescripcion();
-                cal.add(new CalendarioProfe_update(titul, fecha_inicio, fecha2, hora1, hora2));
+//                cal.add(new CalendarioProfe_update(titul, fecha_inicio, fecha2, hora1, hora2));
 //                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("DetalleCalen", cal);
 //                FacesContext.getCurrentInstance().getExternalContext().responseReset();
                 System.out.println("tra  " + titul + "size " + cal.size());
@@ -237,8 +238,8 @@ public class Calendario_profesorInfo implements Serializable {
         System.err.println("----" + (Date) selectEvent.getObject() + "-" + (Date) selectEvent.getObject());
         esta = (Date) selectEvent.getObject();
         event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), null);
-        hora1 = "";
-        hora2 = "";
+        hora1 = null;
+        hora2 = null;
         fecha_final = null;
     }
 
@@ -398,7 +399,7 @@ public class Calendario_profesorInfo implements Serializable {
         this.fecha_inicio = fecha_inicio;
     }
 
-    public String getHora1() {
+    public Date getHora1() {
         return hora1;
     }
 
@@ -410,15 +411,15 @@ public class Calendario_profesorInfo implements Serializable {
         this.fecha_final = fecha_final;
     }
 
-    public void setHora1(String hora1) {
+    public void setHora1(Date hora1) {
         this.hora1 = hora1;
     }
 
-    public String getHora2() {
+    public Date getHora2() {
         return hora2;
     }
 
-    public void setHora2(String hora2) {
+    public void setHora2(Date hora2) {
         this.hora2 = hora2;
     }
 

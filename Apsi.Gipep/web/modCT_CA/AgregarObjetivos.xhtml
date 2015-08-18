@@ -14,8 +14,29 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
- <h:body onload="#{objetivosDocumento.recuperarInfo()}"> 
-   
+    <h:body onload="#{objetivosDocumento.recuperarInfo()}"> 
+        <nav class="navbar navbar-trans " role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar-collapsible">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
+                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
+                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
+                        <li>&nbsp;</li>
+                    </ul>                   
+                </div>
+            </div>
+        </nav>
+
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
@@ -40,41 +61,14 @@
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
                                         <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
+                                        <span>Perfil</span>
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
-
+                                        <li><a href="USUagregar.xhtml"><i class="fa fa-plus"></i>Item 1</a></li>
+                                        <li><a href="USUlistar.xhtml"><i class="fa fa-cogs"> </i>Item 2</a></li>
                                     </ul>
                                 </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                        <li><a href="Asig_Festivos.xhtml" ><i class="fa fa-plus"> </i>Festivos</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
                                 <li class="sub-menu">
                                     <a href="javascript:;" class="">
                                         <i class="fa fa-users"></i>
@@ -82,21 +76,23 @@
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Lista Proyectos</a></li>
-                                        <li><a href="AsignarDirector.xhtml" ><i class="fa fa-cogs"> </i>Asignar Director</a></li>
+                                        <li><a href="SubirDoc.xhtml" ><i class="fa fa-plus"> </i>Subir Proyecto</a></li>
+                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
 
                                     </ul>
                                 </li>
-
                             </ul>
                         </div>
                     </aside>
                 </div>
                 <div class="col-sm-9">
-
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>OPCIONES</h4></div>
+                            <h4>PANEL USER</h4></div>
+
+
+                        <div class="panel-heading">
+                            <h4>AGREGAR OBJETIVOS</h4></div>
                         <h:form id="uploadDoc" >
                             <p:growl id="grwol" showDetail="true"></p:growl>
                             <h3><h:outputLabel value="Titulo Proyecto : #{objetivosDocumento.nombre}"></h:outputLabel></h3>
@@ -111,15 +107,15 @@
 
 
                             </div>
-                            <center>
-                                <h:commandButton  class="btn btn-primary btn-lg "  value="agregar Objetivo" actionListener="#{objetivosDocumento.añadirObt()}">                           
+                            <div class="form-group">
+                                <h:commandButton class="botones1" style="width:90px"  value="agregar Objetivo" actionListener="#{objetivosDocumento.añadirObt()}">                           
                                 </h:commandButton>
-                            </center>
+                            </div>
 
                             <br></br>
                             <div class="form-group">
                                 <h:dataTable var="Obj" value="#{objetivosDocumento.obj}"
-                                             class="table">
+                                             border="1">
                                     <h:column>
                                         <f:facet name="header">
                                             <h:outputText value="Objetivo"></h:outputText>
@@ -140,56 +136,32 @@
                             <br></br>
                             <table>
                                 <tr>
-                                    <td><h:commandButton class="btn btn-primary btn-lg " style="width:90px"  value="Atras" actionListener="#{objetivosDocumento.atras()}">                           
+                                    <td><h:commandButton class="botones1" style="width:90px"  value="Atras" actionListener="#{objetivosDocumento.atras()}">                           
                                         </h:commandButton></td>
-
-
-                                    <td><h:commandButton class="btn btn-primary btn-lg " style="width:90px"  value="Atras" actionListener="#{objetivosDocumento.upload()}">                           
+                                    <td><h:commandButton class="botones1" style="width:90px"  value="Siguiente" actionListener="#{objetivosDocumento.upload()}">                           
                                         </h:commandButton></td>
-
-
-                                    <td><h:commandButton class="btn btn-primary btn-lg " style="width:90px"  value="Cancelar" actionListener="#{objetivosDocumento.cancelar()}">                           
+                                    <td><h:commandButton class="botones1" style="width:90px"  value="Cancelar" actionListener="#{objetivosDocumento.cancelar()}">                           
                                         </h:commandButton></td>
                                 </tr>
                             </table>
 
+
+
                         </h:form>
                     </div>
-
                 </div>
             </div>
 
         </section>
 
 
-
-
-
         <footer id="footer">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h4><strong>ApSi;</strong>
-                        </h4>
-                        <p>Institucin Universitaria Antonio Jos; Camacho<br></br>Santiago de Cali, Colombia</p>
-                        <ul class="list-unstyled">
-                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
-                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
-                            </li>
-                        </ul>
-                        <br></br>
-                        <ul class="list-inline">
-                            <li>
-                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
-                            </li>
-                        </ul>
-                        <hr class="small"></hr>
-                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright  Unlimited Dreams, Todos los derechos reservados.</p>
-                    </div>
+                    <p class="text-muted text-center"> ApSi <br></br>UNIAJC</p>
                 </div>
+                <br></br>
+                <p class="text-center text-muted">©2015</p>
             </div>
         </footer>
 
@@ -198,15 +170,18 @@
         </div>
 
 
-
         <!--scripts loaded here-->
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-
+        <script src="../js/scripts.js"></script>
         <!--scripts para panel menu-->
-        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
-        <script src="../js/custom/scripts1.js"></script>
+        <script src="../js/jquery.js"></script>
+        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/scripts1.js"></script>
+
+
     </h:body>
 </html>
+

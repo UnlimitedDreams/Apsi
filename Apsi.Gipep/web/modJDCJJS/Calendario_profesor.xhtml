@@ -6,8 +6,9 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>TODO supply a title</title>
@@ -16,56 +17,106 @@ and open the template in the editor.
         <link rel="stylesheet" href="../css/Tablas.css"/>
         <link rel="stylesheet" href="../css/formas.css"/>
         <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <!-- Link para panel menu-->
+        <link href="../css/style.css" rel="stylesheet"/> 
     </h:head>
-    <h:body> 
-        <div id="header" class="head">
-            <div id="menu" style="position: fixed;top:0%">
-                <img id="btn-menu" src="../img/men.png" />
+    <h:body > 
+        <nav class="navbar navbar-trans " role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand text-primary" href="Menu_Admon2.xhtml">ApSi</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar-collapsible">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
+                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
+                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
+
+                    </ul>                   
+                </div>
             </div>
-            <div  style="text-align: center;">
-                <b> Calendario</b>    
+        </nav>
+        <section class="container-fluid" id="section6">
+            <div class="container-fluid">
+                <div class="row">                   
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                </div>
             </div>
-        </div>
-        <br/><br/>
-        <div id="layoutAjuste">
-            <h:form>
-                <center>
-                    <div id="calendar" style="width: 600Px;height: 500px;">
-                        <p:growl id="messages" showDetail="true" />
+        </section>
+
+        <h:form>
+            <center>
+                <div id="calendar" >
+                    <p:growl id="messages" showDetail="true" />
+                    <b:container>
                         <h:panelGrid columnClasses="value">
                             <h3 style="margin-top: 0">Calendario Profesor</h3>
-                            <p:schedule  id="schedule" value="#{calendario_profesor.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false" showWeekends="true" resizable="false" > 
+                            <p:schedule  id="schedule" value="#{calendario_profesor.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false" showWeekends="true" resizable="false"  > 
                                 <p:ajax event="dateSelect" listener="#{calendario_profesor.onDateSelect}"  oncomplete="PF('eventDialog2').show();" />
                                 <p:ajax event="eventSelect" listener="#{calendario_profesor.onEventSelect}"  oncomplete="PF('eventDialog').show();" />
                             </p:schedule>
                         </h:panelGrid>
                         <br/><br/>
-                        <p:dialog widgetVar="eventDialog"  header="Event Details" showEffect="clip" hideEffect="clip">
+                        <p:dialog widgetVar="eventDialog"  modal="true" header="Event Details" showEffect="clip" hideEffect="clip">
                             <h:panelGrid id="eventDetails" columns="2">
-                                <p:commandButton id="addButton" value="Info" actionListener="#{calendario_profesor.actualizar()}" icon="ui-icon-check" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
-                                <p:commandButton id="addButton23" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
+                                <b:commandButton id="addButton" value="Info" actionListener="#{calendario_profesor.actualizar()}" icon="ui-icon-check" update="messages" />
+                                <b:commandButton id="addButton23" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
                             </h:panelGrid>
                         </p:dialog> 
-                        <p:dialog widgetVar="eventDialog2" header="Even" showEffect="clip" hideEffect="clip">
+                        <p:dialog  modal="true" widgetVar="eventDialog2" header="Actividad" showEffect="clip" hideEffect="clip">
                             <h:panelGrid id="eventDetails2" columns="2">
                                 <h:outputLabel for="at" value="Actividad :" style="font-weight:bold" />
-                                <p:inputText id="at" value="#{calendario_profesor.titulo}" />
-                                <h:outputLabel for="f1" value="Fecha inicio:" style="font-weight:bold" />
-                                <p:calendar id="f1" value="#{calendario_profesor.fecha_inicio}" showOn="button" />
+                                <b:inputText id="at" value="#{calendario_profesor.titulo}" />
+                                <h:outputLabel for="f1" value="Fecha inicio:" style="font-weight:bold"  />
+                                <p:calendar id="f1" value="#{calendario_profesor.fecha_inicio}" showOn="button" size="30" /> 
                                 <h:outputLabel for="f2" value="Fecha Final:" style="font-weight:bold" />
-                                <p:calendar id="f2" value="#{calendario_profesor.fecha_final}" showOn="button" />
+                                <p:calendar id="f2" value="#{calendario_profesor.fecha_final}" showOn="button" size="30" style="top: 3px;"/>
                                 <h:outputLabel for="h1" value="Hora inicial :" style="font-weight:bold" />
-                                <p:inputText id="h1" value="#{calendario_profesor.hora1}" />
+                                <b:inputText id="h1" value="#{calendario_profesor.hora1}" type="time"/>
                                 <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
-                                <p:inputText id="h2" value="#{calendario_profesor.hora2}" />
+                                <b:inputText id="h2" value="#{calendario_profesor.hora2}" type="time" >
+                                </b:inputText>
                             </h:panelGrid>
-                            <p:commandButton id="Guardar" value="Guardar" actionListener="#{calendario_profesor.addEvent(actionEvent)}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
-                            <p:commandButton id="Cancelar" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
-                        </p:dialog> 
 
-                    </div>
-                </center>
-            </h:form>
+                            <b:commandButton id="Guardar" value="Guardar" tooltip="Guardar Actividad"  actionListener="#{calendario_profesor.addEvent(actionEvent)}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
+                            <b:commandButton id="Cancelar" value="Resest" type="reset" />
+                        </p:dialog>   
+                    </b:container>
+
+                </div>
+            </center>
+        </h:form>
+        <br/>
+
+        <footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <p class="text-muted text-center"> ApSi <br></br>UNIAJC</p>
+                </div>
+                <br></br>
+                <p class="text-center text-muted">©2015</p>
+            </div>
+        </footer>
+
+        <div class="scroll-up">
+            <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="../js/scripts.js"></script>
+        <!--scripts para panel menu-->
+        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/scripts1.js"></script>
     </h:body>
+
 </html>

@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:b="http://bootsfaces.net/ui"
+
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+    </h:head>
+    <h:body onload="#{revision.cargar_años()}"> 
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png" />
+            </div>
+            <div  style="text-align: center;">
+                <b> Validar Profesor</b>    
+            </div>
+        </div>
+        <br/><br/>
+        <div id="layoutAjuste">
+            <h:form id="vista_validar">
+                <center>
+                    <br/>
+                    <b:container>
+                        <p:growl id="messages" showDetail="true" />
+                        <h:outputLabel  value="Año :" />
+                        <h:selectOneMenu value="#{revision.año}" >
+                            <f:selectItems value="#{revision.b_año}"/>   
+                        </h:selectOneMenu>
+                        <br/>
+                        <h:commandButton value="Cargar" actionListener="#{revision.listaProfeProyect()}"></h:commandButton>
+                        <br/>
+                        <h:dataTable id="tabla" var="Proyecto" value="#{revision.p}" border="1">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{Proyecto.nombre}" />
+                            </h:column>
+                            <h:column>
+                                <center>
+                                    <f:facet name="header">
+                                        <h:outputText value="Porcentaje"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{Proyecto.porcentaje} %" />
+                                </center>
+                            </h:column>
+                            <h:column>
+                                <center>
+                                    <f:facet name="header">
+                                        <h:outputText value="Opciones"></h:outputText>
+                                    </f:facet>
+                                    <b:commandButton value="R" actionListener="#{validarProfesor.validarProyecto(Proyecto,1)}"></b:commandButton>
+                                    <b:commandButton value="V" actionListener="#{validarProfesor.validarProyecto(Proyecto,2)}"></b:commandButton>
+
+                                </center>
+                            </h:column>
+                        </h:dataTable>
+                        
+                    </b:container>
+                </center>
+            </h:form>
+        </div>
+    </h:body>
+</html>

@@ -1,5 +1,6 @@
 package Beans;
 
+import dao.UsuarioDao;
 import dao.UsuarioImple;
 import Entity.Usuario;
 import java.awt.event.ActionEvent;

@@ -1,81 +1,226 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>TODO supply a title</title>
+        <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="../css/ingreso.css"/>
-        <link rel="stylesheet" href="../css/Tablas.css"/>
-        <link rel="stylesheet" href="../css/formas.css"/>
-        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <!-- Link para panel menu-->
+        <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
     <h:body onload="#{listaProfesoresBeansUpdate.recuperar_info()}"> 
-        <div id="header" class="head">
-            <div id="menu" style="position: fixed;top:0%">
-                <img id="btn-menu" src="../img/men.png" />
+        <nav class="navbar navbar-trans " role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar-collapsible">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
+                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
+                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
+                        <li>&nbsp;</li>
+                    </ul>                   
+                </div>
             </div>
-            <div  style="text-align: center;">
-                <b> Validar Profesor</b>    
-            </div>
-        </div>
-        <br/><br/>
-        <div id="layoutAjuste">
-            <h:form id="vista_validar">
-                <center>
+        </nav>
 
-                    <p:growl id="messages" showDetail="true" />
-                    <h3> <h:outputLabel   value="PROFESOR: #{listaProfesoresBeansUpdate.nombreProfesor}" /></h3>
-                    <table>
-                        <tr>
-                            <td> <h:outputLabel for="fechaI" value="Fecha inicial :"  /></td>
-                            <td><p:calendar id="fechaI" value="#{listaProfesoresBeansUpdate.fecha_inicial}"  /></td>
-                        </tr>
-                        <tr>
-                            <td><h:outputLabel for="fecha2" value="Fecha Final :"  /></td>
-                            <td> <p:calendar id="fecha2" value="#{listaProfesoresBeansUpdate.fecha_final}"  /></td>
-                        </tr>
-                        <tr>
-                            <td><h:outputLabel for="ho" value="Cantidad de Horas :" /></td>
-                            <td> <p:inputText id="ho" value="#{listaProfesoresBeansUpdate.cantidad_horas}" /></td>
-                        </tr>
-                        <tr>
-                            <td> <h:outputLabel for="Ra" value="Rango de Asesoria :"  /></td>
-                            <td> <p:inputText id="Ra" value="#{listaProfesoresBeansUpdate.ramgoHora}" /></td>
-                        </tr>
-                    </table>
-                    <br/>
-                    <p:dataTable var="dias" value="#{listaProfesoresBeansUpdate.dias}" style="width: 1000px;height: 300px;">
-                        <p:column headerText="Dia" >
-                            <h:outputText value="#{dias.dia}" />
-                        </p:column>
-                        <p:column  headerText="Hora Inicial">
+        <section class="container-fluid" id="section6">
+            <div class="container-fluid">
+                <div class="row">                   
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                </div>
+            </div>
+        </section>
+
+        <section class="container-fluid" id="section2">
+            <div class="row">
+                <div class="col-sm-3">
+                    <aside>
+                        <div id="sidebar"  class="nav-collapse  ">
+                            <!-- sidebar menu start-->
+                            <ul class="sidebar-menu">                
+                                <li class="active">
+                                    <a class="" href="#">
+                                        <i class="icon_house_alt"></i>
+                                        <span>USER OPTIONS</span>
+                                    </a>
+                                </li>
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-male"></i>
+                                        <span>Profesores</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
+                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
+                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
+
+                                    </ul>
+                                </li>       
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-users"></i>
+                                        <span>Mi Calendario</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
+                                        <li><a href="Asig_Festivos.xhtml" ><i class="fa fa-plus"> </i>Festivos</a></li>
+                                    </ul>
+                                </li>
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-users"></i>
+                                        <span>Reportes</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
+                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
+                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
+
+                                    </ul>
+                                </li>
+
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-users"></i>
+                                        <span>Proyectos</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Lista Proyectos</a></li>
+                                        <li><a href="AsignarDirector.xhtml" ><i class="fa fa-cogs"> </i>Asignar Director</a></li>
+
+                                    </ul>
+                                </li>
+
+
+
+
+
+
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-sm-9">
+
+                    <div class="panel panel-default slideInUp animate">
+                        <div class="panel-heading">
+                            <h4>TITLE PANEL</h4></div>
+
+                        <h:form id="vista_validar">
                             <center>
-                                <p:inputText value="#{dias.horaInicial}" >
-                                    <p:ajax  listener="#{listaProfesoresBeansUpdate.pasar_horas(dias.dia,dias.horaInicial,1)}" update=":vista_validar:messages" ></p:ajax>
-                                </p:inputText>
+
+                                <p:growl id="messages" showDetail="true" />
+                                <h3> <h:outputLabel   value="PROFESOR: #{listaProfesoresBeansUpdate.nombreProfesor}" /></h3>
+                                <table>
+                                    <tr>
+                                        <td> <h:outputLabel for="fechaI" value="Fecha inicial :"  /></td>
+                                        <td><p:calendar id="fechaI" value="#{listaProfesoresBeansUpdate.fecha_inicial}"  /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><h:outputLabel for="fecha2" value="Fecha Final :"  /></td>
+                                        <td> <p:calendar id="fecha2" value="#{listaProfesoresBeansUpdate.fecha_final}"  /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><h:outputLabel for="ho" value="Cantidad de Horas :" /></td>
+                                        <td> <h:inputText id="ho" value="#{listaProfesoresBeansUpdate.cantidad_horas}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td> <h:outputLabel for="Ra" value="Rango de Asesoria :"  /></td>
+                                        <td> <h:inputText id="Ra" value="#{listaProfesoresBeansUpdate.ramgoHora}" /></td>
+                                    </tr>
+                                </table>
+                                <br/>
+
+                                <h:dataTable var="dias" value="#{listaProfesoresBeansUpdate.dias}" 
+                                             border="1">
+
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Dia"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{dias.dia}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Hora Inicial"></h:outputText>
+                                        </f:facet>
+                                        <center>
+                                            <b:inputText value="#{dias.horaInicial}" type="time">
+                                                <p:ajax  listener="#{listaProfesoresBeansUpdate.pasar_horas(dias.dia,dias.horaInicial,1)}" update=":vista_validar:messages" ></p:ajax>
+                                            </b:inputText>
+                                        </center>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Hora Final"></h:outputText>
+                                        </f:facet>
+                                        <center>
+                                            <b:inputText value="#{dias.horaFinal}" type="time" >
+                                                <p:ajax  listener="#{listaProfesoresBeansUpdate.pasar_horas(dias.dia,dias.horaFinal,2)}" update=":vista_validar:messages" ></p:ajax>
+                                            </b:inputText>
+                                        </center>
+
+                                    </h:column>
+                                </h:dataTable>
+
+
+                                <br/>
+                                <h:commandButton value="update" actionListener="#{listaProfesoresBeansUpdate.update()}"></h:commandButton>
                             </center>
-                        </p:column>
-                        <p:column headerText="Hora Final">
-                            <center>
-                                <p:inputText value="#{dias.horaFinal}"  >
-                                    <p:ajax  listener="#{listaProfesoresBeansUpdate.pasar_horas(dias.dia,dias.horaFinal,2)}" update=":vista_validar:messages" ></p:ajax>
-                                </p:inputText>
-                            </center>
-                        </p:column>
-                    </p:dataTable>
-                    <br/>
-                    <h:commandButton value="update" actionListener="#{listaProfesoresBeansUpdate.update()}"></h:commandButton>
-                </center>
-            </h:form>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <p class="text-muted text-center"> ApSi <br></br>UNIAJC</p>
+                </div>
+                <br></br>
+                <p class="text-center text-muted">©2015</p>
+            </div>
+        </footer>
+
+        <div class="scroll-up">
+            <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>
+
+
+        <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="../js/scripts.js"></script>
+        <!--scripts para panel menu-->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/scripts1.js"></script>
+
+
     </h:body>
 </html>
 

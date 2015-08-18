@@ -5,23 +5,32 @@
  */
 package Beans;
 
+import dao.Sequence;
+import dao.UsuarioDao;
+import dao.UsuarioImple;
 import Entity.Dia;
 import Entity.DispoUsuario;
 import Entity.Disponibilidad;
+import Entity.Persona;
 import Entity.Rol;
 import Entity.UsuRol;
 import Entity.Usuario;
 import Modelo.MDias;
 import Modelo.Profesor;
 import Modelo.Secuencia;
+import dao.DisponibilidadDao;
+import dao.DisponibilidadImple;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -39,6 +48,7 @@ public class ajusteProfesorInfo {
     private Date fecha_final;
     private String RamgoHora;
     private String Cantidad_horas;
+    private int periodo;
     ArrayList<MDias> Dias = new ArrayList();
 
     public ajusteProfesorInfo() {
@@ -57,6 +67,7 @@ public class ajusteProfesorInfo {
         fecha_final = ajuste.getFecha_final();
         RamgoHora = ajuste.getRamgoHora();
         Cantidad_horas = ajuste.getCantidad_horas();
+        periodo = ajuste.getPeriodo();
     }
 
     public void insertar_ajuste() throws ClassNotFoundException, IOException {
@@ -64,20 +75,17 @@ public class ajusteProfesorInfo {
         System.out.println("Entro al ajuste");
         Usuario temp = Crearusuario();
         Date fecha = new Date();
-        int perido = validarPeriodo(fecha);
-//            try {
         int Codigo_Dispo = 0, codigo_dispoUsu = 0;
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         Codigo_Dispo = Modelo.Secuencia.seque("select max(cod_dis) from disponibilidad");
         Disponibilidad dispo = new Disponibilidad();
         dispo.setCodDis(new BigDecimal(Codigo_Dispo));
-
         dispo.setFechaInicial(fecha);
         dispo.setFechaFinal(fecha);
         dispo.setNumHoras(new BigDecimal(Integer.parseInt(Cantidad_horas)));
         dispo.setRango(new BigDecimal(Integer.parseInt(RamgoHora)));
-        dispo.setPeriodo(new BigDecimal(perido));
+        dispo.setPeriodo(new BigDecimal(periodo));
         dispo.setEstado("A");
         dispo.setHorasCumplidas(new Long(0));
         System.out.println("----");
@@ -181,21 +189,6 @@ public class ajusteProfesorInfo {
         return r;
     }
 
-    public int validarPeriodo(Date x) {
-//        valida la fecha que se ingreso que sea la correcta 
-//        correcta en año y fechas no menores a la de hoy
-        System.out.println("Fecha es " + x);
-        int periodo = 0;
-        if (x.getMonth() >= 1 && x.getMonth() <= 6) {
-            periodo = 1;
-        } else {
-            periodo = 2;
-        }
-        System.out.println("perido " + periodo);
-        return periodo;
-    }
-//
-
     public Usuario Crearusuario() {
         Usuario temp = new Usuario();
         Usuario u = new Usuario();
@@ -217,8 +210,15 @@ public class ajusteProfesorInfo {
                 temp.setPegeId(new BigDecimal(profe.getPege_id()));
                 temp.setUsuario(profe.getNombre());
                 temp.setContrasea("123456");
-                session.save(temp);
+                session.save("Usuario", temp);
+                Persona p = new Persona();
+                p.setIdpersona(new BigDecimal(profe.getCedula()));
+                p.setNombres(profe.getNombre());
+                p.setApellidos(profe.getApellido());
+                p.setUsuario(temp);
+//                session.save("Persona", p);
                 t.commit();
+                crearPersona(p);
                 System.out.println("usuario----- " + temp.toString());
 
                 crearUsuRol(temp);
@@ -231,6 +231,18 @@ public class ajusteProfesorInfo {
 //            temp = temp2;
         }
         return temp;
+    }
+
+    public void crearPersona(Persona p) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        try {
+            session.save("Persona", p);
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error crearPersona " + ex.toString());
+        }
+
     }
 
     public void crearUsuRol(Usuario u) {
@@ -302,6 +314,14 @@ public class ajusteProfesorInfo {
 
     public void setCantidad_horas(String Cantidad_horas) {
         this.Cantidad_horas = Cantidad_horas;
+    }
+
+    public int getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(int periodo) {
+        this.periodo = periodo;
     }
 
 }

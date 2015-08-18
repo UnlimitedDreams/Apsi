@@ -32,6 +32,8 @@ public final class ajusteProfesorBean implements Serializable {
     private String Cantidad_horas;
     private String hora_inicial;
     private String hora_Final;
+    private int periodo;
+    ArrayList<Integer> Peri = new ArrayList();
     ArrayList<MDias> Dias = new ArrayList();
     ArrayList<MDias> Dias_Recuerdo = new ArrayList();
 
@@ -39,12 +41,21 @@ public final class ajusteProfesorBean implements Serializable {
 
     }
 
-    public ajusteProfesorBean(String nombreProfesor, Date fecha_inicial, Date fecha_final, String RamgoHora, String Cantidad_horas) {
+    public ajusteProfesorBean(String nombreProfesor, Date fecha_inicial, Date fecha_final, String RamgoHora, String Cantidad_horas, int periodo) {
         this.nombreProfesor = nombreProfesor;
         this.fecha_inicial = fecha_inicial;
         this.fecha_final = fecha_final;
         this.RamgoHora = RamgoHora;
         this.Cantidad_horas = Cantidad_horas;
+        this.periodo = periodo;
+    }
+
+    public void cargar_Periodo() {
+        System.out.println("entro a cargar");
+        Peri.clear();
+        for (int i = 1; i <= 2; i++) {
+            Peri.add(i);
+        }
     }
 
     public void Recuerpar_informacion() {
@@ -68,7 +79,7 @@ public final class ajusteProfesorBean implements Serializable {
     }
 
     public void validarHora(String x) {
-        boolean r=false;
+        boolean r = false;
         String hora;
         if (x.length() == 5) {
 
@@ -86,6 +97,7 @@ public final class ajusteProfesorBean implements Serializable {
         System.out.println("--- " + temp.toString());
         cargarDias();
         Recuerpar_informacion();
+        cargar_Periodo();
     }
 
     public void cargarDias() {
@@ -158,7 +170,7 @@ public final class ajusteProfesorBean implements Serializable {
         System.out.println("tamaño de d " + d.size());
         if (d.size() > 0) {
             System.out.println("entro");
-            ajusteProfesorBean ajuste = new ajusteProfesorBean(nombreProfesor, fecha_inicial, fecha_final, RamgoHora, Cantidad_horas);
+            ajusteProfesorBean ajuste = new ajusteProfesorBean(nombreProfesor, fecha_inicial, fecha_final, RamgoHora, Cantidad_horas, periodo);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Dias_ajuste", d);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Datos_ajuste", ajuste);
             FacesContext.getCurrentInstance().getExternalContext().redirect("AjusteProfesor2.xhtml");
@@ -166,6 +178,9 @@ public final class ajusteProfesorBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No ha seleccionado ningun dia", ""));
             System.out.println("No ha seleccionado ningun dia");
         }
+    }
+
+    public void RevisarHoras() {
 
     }
 
@@ -256,6 +271,22 @@ public final class ajusteProfesorBean implements Serializable {
 
     public void setDias_Recuerdo(ArrayList<MDias> Dias_Recuerdo) {
         this.Dias_Recuerdo = Dias_Recuerdo;
+    }
+
+    public int getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(int periodo) {
+        this.periodo = periodo;
+    }
+
+    public ArrayList<Integer> getPeri() {
+        return Peri;
+    }
+
+    public void setPeri(ArrayList<Integer> Peri) {
+        this.Peri = Peri;
     }
 
 }

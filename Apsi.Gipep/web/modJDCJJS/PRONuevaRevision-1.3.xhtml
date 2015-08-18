@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+    </h:head>
+    <h:body > 
+        <div id="header" class="head">
+            <div id="menu" style="position: fixed;top:0%">
+                <img id="btn-menu" src="../img/men.png" />
+            </div>
+            <div  style="text-align: center;">
+                <b> Validar Profesor</b>    
+            </div>
+        </div>
+        <br/><br/>
+        <div id="layoutAjuste">
+            <h:form id="vista_validar">
+                <center>
+                    <br/>
+                    <p:growl id="messages" showDetail="true" />
+
+                    <h:inputTextarea id="comentario" value="#{nuevaRevision.nueva}">
+                    </h:inputTextarea>
+                    <br/>
+                    <h:commandButton value="Atras" action="PROVistaRevision-1.2.xhtml"></h:commandButton>
+                    <h:commandButton value="Nueva Revision" actionListener="#{nuevaRevision.revi()}"></h:commandButton>
+                </center>
+            </h:form>
+        </div>
+    </h:body>
+</html>

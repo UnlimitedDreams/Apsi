@@ -118,8 +118,23 @@
         <header class="container-fluid" id="top">
             <div class="container-fluid">
                 <div class="row">                   
-                    <img src="../img/LogoMin.png"/>
+                    <h2> <i class="fa fa-tag"></i>
+                        <%
+                            try {
+                                TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
+//        
+                                for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
+                                    Map.Entry me = (Map.Entry) it.next();
+                                    BigDecimal key = (BigDecimal) me.getKey();
+                                    Rol value = (Rol) roles.get(key);
+                                    out.println(value.getNombre());
+                                }
+                            } catch (Exception e) {
+                                out.println("<label class='text-warning'>Sin matr&iacute;cula-Actividades disponible</label>");
+                            }
 
+                        %>
+                    </h2>
                     <hr>
                 </div>
             </div>
@@ -133,24 +148,8 @@
 
                             <thead>
                                 <tr>
-                            <h1><b><label> Informaci&oacute;n de usuario</label></b></h1>
-                            <h2>
-                                <%
-                                    try {
-                                        TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
-//        
-                                        for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
-                                            Map.Entry me = (Map.Entry) it.next();
-                                            BigDecimal key = (BigDecimal) me.getKey();
-                                            Rol value = (Rol) roles.get(key);
-                                            out.println("Rol: " + value.getNombre() + "<br>");
-                                        }
-                                    } catch (Exception e) {
-                                        out.println("Rol: SIN ROL<br>");
-                                    }
+                            <label class="text-capitalize text-info info"> <h1>Informaci&oacute;n personal</h1></label>
 
-                                %>
-                            </h2>
                             </tr>
                             </thead>
                             <tbody>
@@ -179,50 +178,38 @@
                                     </td>
                                 </tr>
                                 <%
-                                    List<Telefonos> telefonos = new UsuarioImple().cargarTelefonos(p.getUsuario().getPegeId() + "");
-                                    List<Correospersona> correos = new UsuarioImple().cargarCorreos(p.getUsuario().getPegeId() + "");
+                                    List<Telefonos> telefonos = new UsuarioImple().cargarTelefonos(p.getIdpersona() + "");
+                                    List<Correospersona> correos = new UsuarioImple().cargarCorreos(p.getIdpersona() + "");
                                     for (int i = 0; i < telefonos.size(); i++) {
                                         out.println("<tr>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <b><label class=\"form-control-static\"> T&eacute;lefono " + (i + 1) + ": </label></b>\n"
-                                                + "                                    </td>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <input type=\"text\" class=\"form-control\" value=\"" + telefonos.get(i).getTelefono() + "\"/>\n"
-                                                + "                                    </td>\n"
-                                                + "                                </tr> ");
+                                                + "<td>"
+                                                + "<b><label class=\"form-control-static\"> T&eacute;lefono " + (i + 1) + ": </label></b>"
+                                                + "</td>"
+                                                + "<td>"
+                                                + "<input type=\"text\" class=\"form-control\" value=\"" + telefonos.get(i).getTelefono() + "\"/>"
+                                                + "</td>"
+                                                + "</tr> ");
                                     }
                                     for (int i = 0; i < correos.size(); i++) {
                                         out.println("<tr>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <b><label class=\"form-control-static\"> Correo " + (i + 1) + ": </label></b>\n"
-                                                + "                                    </td>\n"
-                                                + "                                    <td>\n"
-                                                + "                                        <input type=\"text\" class=\"form-control\" value=\"" + correos.get(i).getCorreo() + "\"/>\n"
-                                                + "                                    </td>\n"
-                                                + "                                </tr>");
+                                                + "<td>"
+                                                + "<b><label class=\"form-control-static\"> Correo " + (i + 1) + ": </label></b>"
+                                                + "</td>"
+                                                + "<td>"
+                                                + "<input type=\"text\" class=\"form-control\" value=\"" + correos.get(i).getCorreo() + "\"/>"
+                                                + "</td>"
+                                                + "</tr>");
                                     }
                                 %>
-                                <tr>
-                                    <td>
-                                        <input type="submit" class="btn btn-dark btn-lg" value="Actualizar"/>
-                                    </td>
-                                    <td>
-                                        <input type="reset" class="btn btn-danger btn-lg" value="Cancelar"/>
-                                    </td>
-                                </tr>
-
                             </tbody>
-
                         </table>
-
-
                     </form>
                     <hr>
                     <form action="srvltOA" method="post" onsubmit="return validaIgualdad()">
                         <table class="table-condensed">
                             <thead>
                                 <tr>
-                            <b><label> Cambiar contrase&ntilde;a</label></b>
+                            <b><label class="text-capitalize text-info info"> <h2>Cambiar contrase&ntilde;a</h2></label></b>
                             </tr>
                             </thead>
                             <tbody>
@@ -257,7 +244,7 @@
 
                     </form>
                     <br>
-                    <a href="http://www.uniajc.edu.co/index.php/component/content/article/14-sample-data-articles/197-politica-de-privacidad">
+                    <a class="text-muted text-left" href="http://www.uniajc.edu.co/index.php/component/content/article/14-sample-data-articles/197-politica-de-privacidad">
                         Pol&iacute;ticas de Privacidad
                     </a>
                 </div>

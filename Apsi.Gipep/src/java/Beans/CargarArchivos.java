@@ -39,6 +39,7 @@ public class CargarArchivos implements Serializable {
 
     private Part file1;
     private String nombre;
+    private String ruta;
     private long Tipo_proyc;
     ArrayList<TipoProyecto> tipo = new ArrayList();
 
@@ -46,9 +47,10 @@ public class CargarArchivos implements Serializable {
 
     }
 
-    public CargarArchivos(Part file1, String nombre, Long Tipo_proyc) {
+    public CargarArchivos(Part file1, String nombre, String ruta, long Tipo_proyc) {
         this.file1 = file1;
         this.nombre = nombre;
+        this.ruta = ruta;
         this.Tipo_proyc = Tipo_proyc;
     }
 
@@ -75,28 +77,45 @@ public class CargarArchivos implements Serializable {
         return null;
     }
 
-    public void mandarAVista() throws IOException {
-        System.out.println("Nombre " + nombre + " file " + file1 + " Tipo " + Tipo_proyc);
-        String ruta=creardirectorios();
-        System.out.println("ruta " + ruta);
-        file1.write(ruta +"\\"+ getFilename(file1));
-        CargarArchivos CA = new CargarArchivos(file1, nombre, Tipo_proyc);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Documentos", CA);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("AgregarObjetivos.xhtml");
+    public void mandarAVista() {
+        String ruta = "";
+        String r = creardirectorios();
+        String v1 = getFilename(file1).substring(0, getFilename(file1).length() - 5);
+        String f = v1 + "-V1" + getFilename(file1).substring(getFilename(file1).length() - 5, getFilename(file1).length());
+        System.out.println("rut " + f);
+        try {
+            file1.write(r + "\\" + f);
+            ruta = r + "\\" + f;
+            CargarArchivos ca = new CargarArchivos(file1, nombre, ruta, Tipo_proyc);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Documentos", ca);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("AgregarObjetivos.xhtml");
+        } catch (Exception ex) {
 
+        }
     }
 
     public String creardirectorios() {
-        Date fecha=new Date();
-        String ruta="";
-        File directorio = new File("C:\\Documentos\\"+fecha.toString().substring(fecha.toString().length()-4, fecha.toString().length()));
+        Date fecha = new Date();
+        String ruta = "";
+        System.out.println("C:\\Documentos\\" + fecha.toString().substring(fecha.toString().length() - 4, fecha.toString().length()));
+        File directorio = new File("C:\\Documentos\\" + fecha.toString().substring(fecha.toString().length() - 4, fecha.toString().length()));
         if (directorio.mkdir()) {
-            System.out.println("Se ha creado directorio");
+            File directorio2 = new File("C:\\Documentos\\" + fecha.toString().substring(fecha.toString().length() - 4, fecha.toString().length()) + "\\" + nombre);
+            if (directorio2.mkdir()) {
+                System.out.println("Se ha creado directorio");
+
+            }
         } else {
+            File directorio2 = new File("C:\\Documentos\\" + fecha.toString().substring(fecha.toString().length() - 4, fecha.toString().length()) + "\\" + nombre);
+            if (directorio2.mkdir()) {
+                System.out.println("Se ha creado directorio");
+
+            }
             System.out.println("Ya existe");
         }
-        return ruta="C:\\Documentos\\"+fecha.toString().substring(fecha.toString().length()-4, fecha.toString().length());
+        return ruta = "C:\\Documentos\\" + fecha.toString().substring(fecha.toString().length() - 4, fecha.toString().length()) + "\\" + nombre;
     }
+
     public Part getFile1() {
         return file1;
     }
@@ -127,6 +146,14 @@ public class CargarArchivos implements Serializable {
 
     public void setTipo_proyc(long Tipo_proyc) {
         this.Tipo_proyc = Tipo_proyc;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
     }
 
 }

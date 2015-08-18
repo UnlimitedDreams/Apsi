@@ -5,12 +5,16 @@
  */
 package Beans;
 
+import Entity.EstadoProyecto;
+import Entity.Estados;
 import Entity.Proyectos;
 import Entity.Usuario;
 import Entity.UsuarioProyecto;
 import Modelo.Conecion_postgres1;
 import Modelo.Profesor;
 import Modelo.ProyectosModelo;
+import Modelo.Secuencia;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -47,6 +51,7 @@ public class AsiganarDirector {
             Proyectos temp2 = null;
             for (int i = 0; i < pro.size(); i++) {
                 temp2 = (Proyectos) pro.get(i);
+                System.out.println("codigoooooo " + temp2.getCodigoProyecto());
                 pro2.add(new ProyectosModelo(temp2.getCodigoProyecto().intValue(), temp2.getNombre(), false));
             }
             System.out.println("---- " + pro2.size());
@@ -54,25 +59,30 @@ public class AsiganarDirector {
             System.out.println("Error " + ex.toString());
         }
     }
+    
+
 
     public void pasar_Proyectos(int x) {
         ProyectosModelo temp = null;
+        System.out.println("codigooo " + x);
         for (int i = 0; i < pro2.size(); i++) {
             temp = (ProyectosModelo) pro2.get(i);
+            System.out.println("cod " + temp.getCod_pro());
             if (temp.getCod() == x) {
+                System.out.println("entro");
                 if (temp.isEstado() == false) {
+                    System.out.println("quedo true");
                     temp.setEstado(true);
                 } else {
                     temp.setEstado(false);
+                    System.out.println("quedo false");
                 }
             }
         }
-
         for (int i = 0; i < pro2.size(); i++) {
 
             System.out.println("- " + pro2.get(i) + "\n");
         }
-
     }
 
     public void TraerCodUsuPro() {
@@ -87,7 +97,6 @@ public class AsiganarDirector {
         } catch (Exception ex) {
 
         }
-
     }
 
     public void guardar() {
@@ -99,16 +108,22 @@ public class AsiganarDirector {
             Profesor p = null;
             p = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
             boolean r = false;
+            Proyectos proyec = null;
             for (int i = 0; i < pro2.size(); i++) {
                 temp2 = (ProyectosModelo) pro2.get(i);
-                Conecion_postgres1.conectar();
-                r = Conecion_postgres1.ejecuteUpdate("update usuario_proyecto set "
-                        + "director=" + p.getPege_id() + " where codigo_proyecto=" + temp2.getCod_pro());
-                Conecion_postgres1.cerrarConexion();
+                if (temp2.isEstado() == true) {
+                    Conecion_postgres1.conectar();
+                    r = Conecion_postgres1.ejecuteUpdate("update usuario_proyecto set "
+                            + "director=" + p.getPege_id() + " where codigo_proyecto=" + temp2.getCod_pro());
+                    Conecion_postgres1.cerrarConexion();
+                    buscarProyecto(temp2.getCod_pro());
+                }
+
             }
             t.commit();
+
             if (r) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("Menu_Admon.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarDirector.xhtml");
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", ""));
 
@@ -117,9 +132,47 @@ public class AsiganarDirector {
         } catch (Exception ex) {
 
         }
-
     }
 
+    public void buscarProyecto(int cod) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        EstadoProyecto ep = new EstadoProyecto();
+        Estados e = new Estados();
+        e.setCodigoEstados(new BigDecimal(1));
+        e.setDescripcion("Activo");
+        System.out.println("codigo Proyecto " + cod);
+        try {
+            ep = (EstadoProyecto) session.createQuery("select e from Proyectos p INNER JOIN p.estadoProyectos e where p.codigoProyecto=" + cod).uniqueResult();
+            ep.setEstados(e);
+            session.update("EstadoProyecto", ep);
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error Actualizando estado " + ex.toString());
+        }
+    }
+
+//    public void establecerEstado(int codi) throws ClassNotFoundException {
+//        Session session = HibernateUtil.getSessionFactory().openSession();
+//        Transaction t = session.beginTransaction();
+//        Proyectos p = new Proyectos();
+//        p = buscarProyecto(codi);
+//        Estados e = new Estados();
+//        e.setCodigoEstados(new BigDecimal(1));
+//        e.setDescripcion("Activo");
+//        EstadoProyecto ep = new EstadoProyecto();
+//        int cod = Secuencia.seque("select max(cod_estadoproyec) from estado_proyecto");
+//        ep.setCodEstadoproyec(new BigDecimal(cod));
+//        ep.setEstados(e);
+//        ep.setProyectos(p);
+//        session.save(ep);
+//        t.commit();
+//        try {
+//
+//        } catch (Exception ex) {
+//            System.out.println("Error estado " + ex.toString());
+//        }
+//    }
     public void adicionarDiretor() {
         Profesor p = new Profesor();
         p = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
@@ -151,6 +204,7 @@ public class AsiganarDirector {
         }
 
     }
+    
 
     public ArrayList<ProyectosModelo> getPro2() {
         return pro2;
@@ -158,6 +212,10 @@ public class AsiganarDirector {
 
     public void setPro2(ArrayList<ProyectosModelo> pro2) {
         this.pro2 = pro2;
+    }
+
+    public void mns() {
+        System.out.println("entro");
     }
 
 }

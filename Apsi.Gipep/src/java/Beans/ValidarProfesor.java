@@ -6,6 +6,7 @@
 package Beans;
 
 import Entity.DispoUsuario;
+import Entity.Proyectos;
 import Entity.Usuario;
 import Modelo.Conecion_Oracle;
 import Modelo.Conecion_postgres;
@@ -55,15 +56,16 @@ public class ValidarProfesor implements Serializable {
     public DispoUsuario comprarProfesor(String pege) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
+        System.out.println("entro a comprobar pege " + pege);
         DispoUsuario temp = new DispoUsuario();
         try {
             temp = (DispoUsuario) session.createQuery("select Dis from Disponibilidad"
                     + "  D INNER JOIN D.dispoUsuarios Dis "
                     + " INNER JOIN Dis.usuarioByProfesor U where "
                     + "  U.pegeId=" + pege + " and D.estado='A'").uniqueResult();
-            System.out.println("temp " + temp.toString());
+//            System.out.println("temp " + temp.toString());
         } catch (Exception ex) {
-            System.out.println("Error " + ex.toString());
+            System.out.println("Error comprobar profe" + ex.toString());
         }
         return temp;
     }
@@ -106,7 +108,7 @@ public class ValidarProfesor implements Serializable {
         admon2.setPegeId(new BigDecimal(1));
         ArrayList<DispoUsuario> users = new ArrayList();
         users = (ArrayList) session.createQuery("select Du from DispoUsuario Du INNER JOIN Du.usuarioByAdmon UA "
-                + " where UA=1").list();
+                + "INNER JOIN Du.disponibilidad D where UA=1 and D.estado='A'").list();
         System.out.println("------------------ " + users.size());
         TraerInfoProfe2(users);
 
@@ -203,7 +205,7 @@ public class ValidarProfesor implements Serializable {
                         temp2 = temp;
                         break;
                     }
-                } else {
+                } else if (condi == 2) {
                     temp2 = temp;
                     break;
                 }
@@ -215,13 +217,28 @@ public class ValidarProfesor implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("profesor", temp2);
             if (condi == 1) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("AjusteProfesor.xhtml");
-            } else {
+            } else if (condi == 2) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarDirectorProyectos.xhtml");
             }
-
         } else {
             System.out.println("+++++");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ya se encuentra Registrado", ""));
+        }
+    }
+
+    public void validarProyecto(Proyectos p, int condi) throws IOException {
+        System.out.println("Entro " + p.getCodigoProyecto());
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Poryecto_Revi", p);
+            if (condi == 1) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("PROVistaRevision-1.2.xhtml");
+
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("PROVistaVersiones.xhtml");
+
+            }
+        } catch (Exception ex) {
+            System.out.println("Error ValidarProyecto " + ex.toString());
         }
 
     }

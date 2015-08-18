@@ -46,7 +46,7 @@ public class Proyecto_Compañeros {
         System.out.println("entro");
         if (lista_estu.size() == 0) {
             Estudiante estu = new Estudiante(false,
-                    "11144177507111", "juan", "castrillon", "3");
+                    "234343", "Samuel", "Valencia", "6543");
             lista_estu.add(estu);
         }
 //        System.out.println("+++ " + lista_estu.size());
@@ -142,7 +142,7 @@ public class Proyecto_Compañeros {
     public void eliminarTodo() throws IOException {
         CargarArchivos CA = new CargarArchivos();
         CA = (CargarArchivos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Documentos");
-        File fil = new File("C:\\Documentos\\" + getFilename(CA.getFile1()));
+        File fil = new File(CA.getRuta());
         if (fil.delete()) {
             System.out.println("El fichero ha sido borrado satisfactoriamente");
         } else {

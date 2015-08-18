@@ -10,6 +10,6 @@ package Modelo;
  *
  * @author Microinformatica
  */
-public class C_profe {
-    
+public class C_profe { 
+   
 }

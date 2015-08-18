@@ -1,7 +1,5 @@
 package Modelo;
 
-
-
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +22,7 @@ public class Conecion_postgres1 {
             con = DriverManager.getConnection(connectString, user, password);
             stat = con.createStatement();
             r = true;
+            System.out.println("conecto");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -151,6 +150,6 @@ public class Conecion_postgres1 {
     }
 
     public static void main(String[] args) throws ClassNotFoundException {
-       
+        conectar();
     }
 }

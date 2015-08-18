@@ -6,11 +6,14 @@
 package Beans;
 
 import dao.Sequence;
+import Entity.EstadoProyecto;
+import Entity.Estados;
 import Entity.Objetivos;
 import Entity.Proyectos;
 import Entity.TipoProyecto;
 import Entity.Usuario;
 import Entity.UsuarioProyecto;
+import Entity.Versiones;
 import Modelo.Objetivo;
 import Modelo.Secuencia;
 import java.io.File;
@@ -91,40 +94,42 @@ public class ObjetivosDocumento {
 
     public void upload() throws IOException, ClassNotFoundException {
         if (obj.size() != 0) {
-
             System.out.println("Crear nuevo");
             int Codigo_Proyecto = Secuencia.seque("select max(codigo_proyecto) from proyectos");
             System.out.println("cod " + Codigo_Proyecto);
             Date fecha = new Date();
             CargarArchivos CA = new CargarArchivos();
             CA = (CargarArchivos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Documentos");
+            System.out.println("1");
             Proyectos proyecto = new Proyectos();
             proyecto.setCodigoProyecto(new BigDecimal(Codigo_Proyecto));
             proyecto.setNombre(Nombre);
             proyecto.setCalificacion(new Long(0));
-            proyecto.setPorcentaje("0");
+            proyecto.setPorcentaje("1");
             proyecto.setFechaInicio(fecha);
             proyecto.setFechaFinal(fecha);
             TipoProyecto t = new TipoProyecto();
             t.setCodTipo(CA.getTipo_proyc());
             proyecto.setTipoProyecto(t);
             String ruta = "";
-            ruta = "C:\\Documentos\\" + getFilename(CA.getFile1());
-            proyecto.setRuta(ruta);
+            System.out.println("2");
             System.out.println("proyecto " + proyecto.getNombre());
             boolean r = insertProyect(proyecto);
             System.out.println("r " + r);
-//        boolean r2 = insertProyectUsu(proyecto);
-//        System.out.println("r2 " + r);
+            boolean r2 = RegistroEstados(proyecto);
+            System.out.println("r2 " + r);
             boolean r3 = insertObjetivos(proyecto);
             System.out.println(" r3 " + r3);
+            boolean r4 = crearVersion(proyecto, CA.getRuta());
+            System.out.println(" r4 " + r4);
+
             try {
-                if (r3) {
+                if (r4) {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Upload_proyecto", proyecto);
                     obj.clear();
                     FacesContext.getCurrentInstance().getExternalContext().redirect("Seleccionar_Companeros.xhtml");
                 } else {
-                    File fil = new File("C:\\Documentos\\" + getFilename(file1));
+                    File fil = new File(CA.getRuta());
                     if (fil.delete()) {
                         System.out.println("El fichero ha sido borrado satisfactoriamente");
                     } else {
@@ -143,10 +148,55 @@ public class ObjetivosDocumento {
 
     }
 
+    public boolean crearVersion(Proyectos p, String ruta) throws ClassNotFoundException {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Versiones v = new Versiones();
+
+        boolean r = false;
+        try {
+            int cod = Secuencia.seque("select max(cod_version) from versiones");
+            v.setFecha(p.getFechaInicio());
+            v.setNombre(p.getNombre()+" - v1");
+            v.setProyectos(p);
+            v.setCodVersion(new Long(cod));
+            v.setRutaArchivo(ruta);
+            session.save("Versiones", v);
+            t.commit();
+            r = true;
+        } catch (Exception ex) {
+            r = false;
+            System.out.println("Error crearVersion " + ex.toString());
+        }
+        return r;
+    }
+
+    public boolean RegistroEstados(Proyectos p) throws ClassNotFoundException {
+        boolean r = false;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Estados e = new Estados();
+        e.setCodigoEstados(new BigDecimal(5));
+        EstadoProyecto EP = new EstadoProyecto();
+        int codigo = Secuencia.seque("select max(cod_estadoproyec) from estado_proyecto");
+        EP.setCodEstadoproyec(new BigDecimal(codigo));
+        EP.setEstados(e);
+        EP.setProyectos(p);
+        try {
+            session.save("EstadoProyecto", EP);
+            t.commit();
+            r = true;
+        } catch (Exception ex) {
+            r = false;
+            System.out.println("Error Estados" + ex.toString());
+        }
+        return r;
+    }
+
     public void atras() throws IOException {
         CargarArchivos CA = new CargarArchivos();
         CA = (CargarArchivos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Documentos");
-        File fil = new File("C:\\Documentos\\" + getFilename(CA.getFile1()));
+        File fil = new File(CA.getRuta());
         if (fil.delete()) {
             System.out.println("El fichero ha sido borrado satisfactoriamente");
         } else {
@@ -161,7 +211,7 @@ public class ObjetivosDocumento {
     public void cancelar() throws IOException {
         CargarArchivos CA = new CargarArchivos();
         CA = (CargarArchivos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Documentos");
-        File fil = new File("C:\\Documentos\\" + getFilename(CA.getFile1()));
+        File fil = new File(CA.getRuta());
         if (fil.delete()) {
             System.out.println("El fichero ha sido borrado satisfactoriamente");
         } else {
@@ -196,7 +246,7 @@ public class ObjetivosDocumento {
             t.commit();
         } catch (Exception ex) {
             r = false;
-            System.out.println("Error - " + ex.getMessage());
+            System.out.println("Error - Objetivos " + ex.getMessage());
         }
         return r;
     }
@@ -205,13 +255,14 @@ public class ObjetivosDocumento {
         boolean r = false;
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
+        System.out.println(".++++ " + p.getTipoProyecto());
         try {
             session.save(p);
             r = true;
             t.commit();
         } catch (Exception ex) {
             r = false;
-            System.out.println("Error - " + ex.getMessage());
+            System.out.println("Error -Proyecto " + ex.getMessage());
         }
         return r;
     }
@@ -226,7 +277,6 @@ public class ObjetivosDocumento {
         return null;
     }
 
-  
     public Part getFile1() {
         return file1;
     }

@@ -7,7 +7,9 @@ import Entity.Asesoria;
 import Entity.Asistente;
 import Entity.Calendario;
 import Entity.Usuario;
+import Modelo.Conecion_postgres1;
 import Modelo.MDias;
+import Modelo.Secuencia;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,7 +28,10 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import static net.bootsfaces.render.RPanel.styleClass;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -35,6 +40,7 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
+import util.HibernateUtil;
 
 @ManagedBean
 @SessionScoped
@@ -56,7 +62,22 @@ public class Calendario_profesor implements Serializable {
 
     @PostConstruct
     public void init() {
-//        añadir_eventos();
+        borrarTodo();
+        añadir_eventos();
+    }
+
+    public void borrarTodo() {
+        try {
+            event = null;
+            hora1 = null;
+            hora2 = null;
+            titulo = "";
+            fecha_final = null;
+            fecha_inicio = null;
+            System.out.println("borrado todo");
+        } catch (Exception ex) {
+            System.out.println("Error borrarTodo " + ex.toString());
+        }
     }
 
     public void añadir_eventos() {
@@ -66,12 +87,15 @@ public class Calendario_profesor implements Serializable {
         try {
             a = traer_dias();
             b = traer_citas();
+            System.out.println("1");
             MDias temp = null;
             MDias temp2 = null;
             String fecha = "";
+            System.out.println("2");
             int h1 = 0, h2 = 0;
+            System.out.println("3");
             int min1 = 0, min2 = 0;
-            System.out.println("comenzamos " + a.size() + "---" + b.size());
+            System.out.println("comenzamos ---" + b.size());
             for (int i = 0; i < a.size(); i++) {
                 System.out.println(".l.");
                 temp = (MDias) a.get(i);
@@ -91,7 +115,9 @@ public class Calendario_profesor implements Serializable {
                 eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + temp.getCod(), date1, date2));
             }
 
+//ajustar session para el calendario
             for (int k = 0; k < b.size(); k++) {
+                System.out.println("--/");
                 temp2 = (MDias) b.get(k);
                 System.err.println(temp2.toString());
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -106,10 +132,12 @@ public class Calendario_profesor implements Serializable {
                 min2 = Integer.parseInt((String) temp2.getHora_final().subSequence(3, 5));
                 date1.setHours(h1);
                 date1.setMinutes(min1);
+
                 date.setHours(h2);
                 date.setMinutes(min2);
                 System.out.println("" + temp2.getCod() + date1 + "-" + date);
-                eventModel.addEvent(new DefaultScheduleEvent(temp2.getRazon() + "#" + temp2.getCod(), date1, date));
+                eventModel.addEvent(new DefaultScheduleEvent(temp2.getRazon() + "#" + temp2.getCod(), date1, date,"emp1"));
+                
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error " + ex.toString());
@@ -134,11 +162,11 @@ public class Calendario_profesor implements Serializable {
             for (int i = 0; i < usu.size(); i++) {
                 temp = (Asesoria) usu.get(i);
                 cod = temp.getCodAsesoria().intValue();
-                MDias d = new MDias(cod, "" + temp.getFechaAsesoria(), "", temp.getHoraAsesoria(), temp.getHoraAsesoria(), "");
+                MDias d = new MDias(cod, "" + temp.getFechaAsesoria(), "", "" + temp.getHoraIni(), "" + temp.getHoraFin(), "");
                 dias.add(d);
             }
         } catch (Exception ex) {
-
+            System.out.println("Error TraerDias " + ex.toString());
         }
         return dias;
     }
@@ -160,50 +188,97 @@ public class Calendario_profesor implements Serializable {
             for (int i = 0; i < c.size(); i++) {
                 temp = (Calendario) c.get(i);
                 dias.add(new MDias((int) temp.getCodCalendario(), "" + temp.getFechaInicial(), "" + temp.getFechaFinal(),
-                        "" + temp.getHoraInicial(), "" + temp.getHoraFinal(), temp.getDescripcion()));
+                        "" + temp.getHoraIni(), "" + temp.getHoraFin(), temp.getDescripcion()));
 
             }
         } catch (Exception ex) {
-
+            System.out.println("Error traercitas " + ex.toString());
         }
+        System.out.println("devolvio " + dias.size() + " dias");
         return dias;
     }
 
+//    public Calendario buscarFechas(Date h1, Date h2) {
+//        Session session = HibernateUtil.getSessionFactory().openSession();
+//        Transaction t = session.beginTransaction();
+//        Calendario calen = new Calendario();
+//        System.out.println("hora 1 = " +h1+" h2: " +h2);
+//        try {
+//            calen = (Calendario) session.createQuery("select c from Calendario c where "
+//                    + " c.horaIni='" + h1 + "' and c.horaFin='" + h2 + "' "
+//                    + " and c.fechaInicial='" + fecha_inicio + "'").uniqueResult();
+////            System.out.println("calendario " + calen.toString());
+//            t.commit();
+//        } catch (Exception ex) {
+//            System.out.println("error buscar " + ex.toString());
+//        }
+//        return calen;
+//    }
+
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
-        System.err.println("------------------");
-        CalendarioP calen = new CalendarioImple();
-        Query query = Sequence.GetUltimoRegistro("FROM Calendario order by codCalendario DESC");
-        String cod_salvador = "" + query.uniqueResult();
-        int Codigo_calendario = Integer.parseInt(cod_salvador);
-        Usuario usu = new Usuario();
-        usu.setPegeId(new BigDecimal(1));
-        Calendario c = new Calendario();
-        c.setCodCalendario(Codigo_calendario + 1);
-        c.setFechaInicial(fecha_inicio);
-        c.setFechaFinal(fecha_final);
-        c.setUsuario(usu);
-        c.setHoraInicial(hora1);
-        c.setHoraFinal(hora2);
-        c.setDescripcion(titulo);
-        boolean r = calen.CrearCalendario(c);
-        if (r) {
-            String f1 = "", f2 = "";
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-            f1 = format.format(fecha_final);
-            f2 = format.format(fecha_inicio);
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-            Date date1 = fmt.parse(f1);
-            Date date2 = fmt.parse(f2);
-            event.setId("" + Codigo_calendario);
-            eventModel.addEvent(new DefaultScheduleEvent(titulo, date2, date1));
-            event = new DefaultScheduleEvent();
-            hora1 = "";
-            hora2 = "";
-            añadir_eventos();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Executed", ""));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Executed", ""));
-        }
+        System.out.println("------------------ " + hora1);
+        Date h1 = new Date();
+        Date h2 = new Date();
+        String v[] = hora1.split(":");
+        h1.setHours(Integer.parseInt(v[0]));
+        h1.setMinutes(Integer.parseInt(v[1]));
+        h1.setSeconds(00);
+        System.out.println("h1: " + h1);
+        String v2[] = hora1.split(":");
+        h2.setHours(Integer.parseInt(v2[0]));
+        h2.setMinutes(Integer.parseInt(v2[1]));
+        h2.setSeconds(00);
+//        if (buscarFechas(h1, h2) == null) {
+            System.out.println("timeee " + h2.getTime());
+            System.out.println("h2: " + h2);
+            CalendarioP calen = new CalendarioImple();
+            int Codigo_calendario = Secuencia.seque("select max(cod_calendario) from calendario");
+            Usuario usu = new Usuario();
+            usu.setPegeId(new BigDecimal(1));
+            Calendario c = new Calendario();
+            c.setCodCalendario(Codigo_calendario);
+            c.setFechaInicial(fecha_inicio);
+            c.setFechaFinal(fecha_final);
+            c.setUsuario(usu);
+            System.out.println("2");
+
+            System.out.println("3");
+
+            c.setHoraIni(h1);
+            c.setHoraFin(h2);
+            c.setDescripcion(titulo);
+            System.out.println("1");
+            boolean r = calen.CrearCalendario(c);
+            System.out.println("2 " + r);
+            if (r) {
+                String f1 = "", f2 = "";
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                f1 = format.format(fecha_final);
+                f2 = format.format(fecha_inicio);
+                System.out.println("4");
+                SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+                Date date1 = fmt.parse(f1);
+//            date1.setTime(Long.parseLong(hora1));
+                Date date2 = fmt.parse(f2);
+//            date2.setTime(Long.parseLong(hora2));
+                System.out.println("5");
+////            event.setId("" + Codigo_calendario);
+                eventModel.addEvent(new DefaultScheduleEvent(titulo, date2, date1));
+                event = new DefaultScheduleEvent();
+                hora1 = null;
+                hora2 = null;
+                System.out.println("6");
+                añadir_eventos();
+                System.out.println("7");
+                borrarTodo();
+                System.out.println("8");
+
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Executed", ""));
+            }
+//        } else {
+//            System.out.println("ya esta el calendario");
+//        }
 
     }
 
@@ -221,6 +296,7 @@ public class Calendario_profesor implements Serializable {
         d = event.getEndDate();
         d.setDate(d.getDate() - 1);
         System.err.println("fechaaa " + d);
+        titulo = "aaa";
         traer_datos();
     }
 
@@ -259,19 +335,20 @@ public class Calendario_profesor implements Serializable {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
             calendario = calen.BuscarCalendario(cod);
-            String hora1 = "", hora2 = "", titul = "";
+//            String titul = "";
+            Date hora1 = null, hora2 = null;
             Date fecha1 = null, fecha2 = null;
             try {
                 System.out.println("-");
                 fecha_inicio = calendario.getFechaInicial();
+//                titulo=calendario.getDescripcion();
                 fecha2 = calendario.getFechaFinal();
-                hora1 = calendario.getHoraInicial();
-                hora2 = calendario.getHoraFinal();
-                titul = calendario.getDescripcion();
-                cal.add(new CalendarioProfe_update(titul, fecha_inicio, fecha2, hora1, hora2));
+                hora1 = calendario.getHoraIni();
+                hora2 = calendario.getHoraFin();
+//                cal.add(new CalendarioProfe_update(titul, fecha_inicio, fecha2, hora1, hora2));
 //                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("DetalleCalen", cal);
 //                FacesContext.getCurrentInstance().getExternalContext().responseReset();
-                System.out.println("tra  " + titul + "size " + cal.size());
+                System.out.println("tra  " + titulo + "size " + cal.size());
             } catch (Exception ex) {
 
             }
@@ -280,12 +357,15 @@ public class Calendario_profesor implements Serializable {
     }
 
     public void onDateSelect(SelectEvent selectEvent) {
-        System.err.println("----" + (Date) selectEvent.getObject() + "-" + (Date) selectEvent.getObject());
-        esta = (Date) selectEvent.getObject();
-        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), null);
-        hora1 = "";
-        hora2 = "";
+        fecha_inicio = null;
         fecha_final = null;
+        System.err.println("----" + (Date) selectEvent.getObject() + "-" + (Date) selectEvent.getObject());
+//        esta = (Date) selectEvent.getObject();
+//        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), null);
+        hora1 = null;
+        hora2 = null;
+        fecha_inicio = (Date) selectEvent.getObject();
+        fecha_final = (Date) selectEvent.getObject();
     }
 
     @Override
@@ -323,10 +403,8 @@ public class Calendario_profesor implements Serializable {
         } else {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
-            Calendario ca = new Calendario();
-            ca.setCodCalendario(Integer.parseInt(cod));
-            System.err.println("codigo es " + cod);
-            boolean p = calen.BorrarCalendario(ca);
+
+            boolean p = buscarYborrar(cod);
             if (p) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
                 añadir_eventos();
@@ -334,6 +412,24 @@ public class Calendario_profesor implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "NO Cancelado", ""));
             }
         }
+    }
+
+    public boolean buscarYborrar(String cod) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        boolean r = false;
+        try {
+            Calendario temp = new Calendario();
+            temp = (Calendario) session.createQuery("FROM Calendario c WHERE c.codCalendario=" + cod).uniqueResult();
+            if (temp != null) {
+                session.delete("Calendario", temp);
+                r = true;
+            }
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error buscarYborrar " + ex.toString());
+        }
+        return r;
     }
 
     public void actual() throws IOException {

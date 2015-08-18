@@ -19,7 +19,7 @@
     </servlet>
     <servlet>
         <servlet-name>crearUsuario</servlet-name>
-        <servlet-class>org.ApSi.crearUsuario</servlet-class>
+        <servlet-class>apsi.CRUD.crearUsuario</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -39,7 +39,6 @@
         <servlet-name>crearUsuario</servlet-name>
         <url-pattern>/crearUsuario</url-pattern>
         <url-pattern>/logIn/crearUsuario</url-pattern>
-
     </servlet-mapping>
     <session-config>
         <session-timeout>

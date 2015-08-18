@@ -25,6 +25,10 @@ public class Estudiante {
         this.pege_id = pege_id;
     }
 
+    public Estudiante(String nombre) {
+        this.nombre = nombre;
+    }
+
     public boolean isActivo() {
         return activo;
     }
@@ -63,6 +67,11 @@ public class Estudiante {
 
     public void setPege_id(String pege_id) {
         this.pege_id = pege_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Estudiante{" + "nombre=" + nombre + '}';
     }
     
     

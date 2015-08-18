@@ -14,8 +14,29 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{asiganarDirector.cargar_Proyectos()}">
- 
+    <h:body onload="#{asiganarDirector.cargar_Proyectos()}"> 
+        <nav class="navbar navbar-trans " role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar-collapsible">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
+                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
+                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
+                        <li>&nbsp;</li>
+                    </ul>                   
+                </div>
+            </div>
+        </nav>
+
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
@@ -87,6 +108,11 @@
                                     </ul>
                                 </li>
 
+
+
+
+
+
                             </ul>
                         </div>
                     </aside>
@@ -95,14 +121,14 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>PROYECTOS DISPONIBLES</h4></div>
+                            <h4>TITLE PANEL</h4></div>
                         <h:form id="vista_validar">
                             <center>
                                 <br/>
                                 <p:growl id="messages" showDetail="true" />
 
                                 <h:dataTable id="tabla" var="Proyectos" value="#{asiganarDirector.pro2}"
-                                             class="table">
+                                             border="1">
                                     <h:column>
                                         <f:facet name="header">
                                             <h:outputText value="Selecionar"></h:outputText>
@@ -115,14 +141,13 @@
                                         <f:facet name="header">
                                             <h:outputText value="Nombre"></h:outputText>
                                         </f:facet>
-                                        <h:outputText value="#{Proyectos.nombre}" />
+                                          <h:outputText value="#{Proyectos.nombre}" />
                                     </h:column>
-
+                                    
                                 </h:dataTable>
 
-                                <div class="form-group">
-                                <h:commandButton value="Guardar" class="btn-primary btn-lg btn-block" actionListener="#{asiganarDirector.guardar()}"></h:commandButton>
-                            </div>
+                                <br/>
+                                <h:commandButton value="Guardar" actionListener="#{asiganarDirector.guardar()}"></h:commandButton>
                             </center>
                         </h:form>
 
@@ -176,17 +201,6 @@
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
-
-
-        <!--scripts loaded here-->
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-
-        <!--scripts para panel menu-->
-        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
-        <script src="../js/custom/scripts1.js"></script>
 
 
     </h:body>
