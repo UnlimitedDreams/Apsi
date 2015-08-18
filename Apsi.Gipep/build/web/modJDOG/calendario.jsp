@@ -27,6 +27,18 @@
         }
     %>
     <%Persona p = (Persona) session.getAttribute("persona");%>
+    <%
+        String rol = "";
+        String idRol = "";
+        TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
+        for (Iterator it = roles.entrySet().iterator(); it.hasNext();) {
+            Map.Entry me = (Map.Entry) it.next();
+            BigDecimal key = (BigDecimal) me.getKey();
+            Rol value = (Rol) roles.get(key);
+            rol = value.getNombre();
+            idRol = value.getCodRol().toString();
+        }
+    %>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -112,7 +124,7 @@
             <section class="container-fluid">
                 <div class="container-fluid">
                     <div class="row">                   
-                        <h3><i class="fa fa-user"> </i><%= p.getNombres()%></h3> 
+                        <h3><i class="fa fa-user"> </i><%=rol%></h3> 
                     </div>
                 </div>
             </section>
@@ -376,6 +388,7 @@
                                                                     center: 'title',
                                                                     right: 'month,agendaWeek,agendaDay'
                                                                 },
+                                                                lang: 'es',
                                                                 dayClick: function (date) {
                                                                     if (date < new Date()) {
                                                                         alert('No puedes seleccionar fechas menores a la actual');
@@ -390,6 +403,10 @@
                                                                 events: [
                                                                     {
                                                                         title: 'Rumba',
+                                                                        start: new Date('2015-08-01T22:00:00'),
+                                                                    },
+                                                                    {
+                                                                        title: 'Fiesta',
                                                                         start: new Date('2015-08-01T22:00:00'),
                                                                     },
                                                                     {
