@@ -1,5 +1,5 @@
 package Entity;
-// Generated 13-ago-2015 17:28:37 by Hibernate Tools 4.3.1
+// Generated 18-ago-2015 14:13:44 by Hibernate Tools 4.3.1
 
 
 import java.math.BigDecimal;
@@ -16,7 +16,6 @@ public class Proyectos  implements java.io.Serializable {
      private BigDecimal codigoProyecto;
      private TipoProyecto tipoProyecto;
      private String nombre;
-     private String ruta;
      private Long calificacion;
      private String porcentaje;
      private Date fechaInicio;
@@ -25,22 +24,21 @@ public class Proyectos  implements java.io.Serializable {
      private Set revisionProyectos = new HashSet(0);
      private Set usuarioProyectos = new HashSet(0);
      private Set estadoProyectos = new HashSet(0);
+     private Set versioneses = new HashSet(0);
      private Set objetivoses = new HashSet(0);
 
     public Proyectos() {
     }
 
 	
-    public Proyectos(BigDecimal codigoProyecto, String nombre, String ruta) {
+    public Proyectos(BigDecimal codigoProyecto, String nombre) {
         this.codigoProyecto = codigoProyecto;
         this.nombre = nombre;
-        this.ruta = ruta;
     }
-    public Proyectos(BigDecimal codigoProyecto, TipoProyecto tipoProyecto, String nombre, String ruta, Long calificacion, String porcentaje, Date fechaInicio, Date fechaFinal, Set calificacions, Set revisionProyectos, Set usuarioProyectos, Set estadoProyectos, Set objetivoses) {
+    public Proyectos(BigDecimal codigoProyecto, TipoProyecto tipoProyecto, String nombre, Long calificacion, String porcentaje, Date fechaInicio, Date fechaFinal, Set calificacions, Set revisionProyectos, Set usuarioProyectos, Set estadoProyectos, Set versioneses, Set objetivoses) {
        this.codigoProyecto = codigoProyecto;
        this.tipoProyecto = tipoProyecto;
        this.nombre = nombre;
-       this.ruta = ruta;
        this.calificacion = calificacion;
        this.porcentaje = porcentaje;
        this.fechaInicio = fechaInicio;
@@ -49,6 +47,7 @@ public class Proyectos  implements java.io.Serializable {
        this.revisionProyectos = revisionProyectos;
        this.usuarioProyectos = usuarioProyectos;
        this.estadoProyectos = estadoProyectos;
+       this.versioneses = versioneses;
        this.objetivoses = objetivoses;
     }
    
@@ -72,13 +71,6 @@ public class Proyectos  implements java.io.Serializable {
     
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-    public String getRuta() {
-        return this.ruta;
-    }
-    
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
     }
     public Long getCalificacion() {
         return this.calificacion;
@@ -135,6 +127,13 @@ public class Proyectos  implements java.io.Serializable {
     
     public void setEstadoProyectos(Set estadoProyectos) {
         this.estadoProyectos = estadoProyectos;
+    }
+    public Set getVersioneses() {
+        return this.versioneses;
+    }
+    
+    public void setVersioneses(Set versioneses) {
+        this.versioneses = versioneses;
     }
     public Set getObjetivoses() {
         return this.objetivoses;

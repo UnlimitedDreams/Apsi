@@ -46,5 +46,6 @@
     <mapping resource="Entity/Disponibilidad.hbm.xml"/>
     <mapping resource="Entity/Asistente.hbm.xml"/>
     <mapping resource="Entity/RolActividad.hbm.xml"/>
+    <mapping resource="Entity/Versiones.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

@@ -1,5 +1,5 @@
 package Entity;
-// Generated 13-ago-2015 17:28:37 by Hibernate Tools 4.3.1
+// Generated 18-ago-2015 14:13:44 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -15,8 +15,8 @@ public class Calendario  implements java.io.Serializable {
      private String descripcion;
      private Date fechaInicial;
      private Date fechaFinal;
-     private String horaInicial;
-     private String horaFinal;
+     private Date horaIni;
+     private Date horaFin;
 
     public Calendario() {
     }
@@ -28,14 +28,14 @@ public class Calendario  implements java.io.Serializable {
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
     }
-    public Calendario(long codCalendario, Usuario usuario, String descripcion, Date fechaInicial, Date fechaFinal, String horaInicial, String horaFinal) {
+    public Calendario(long codCalendario, Usuario usuario, String descripcion, Date fechaInicial, Date fechaFinal, Date horaIni, Date horaFin) {
        this.codCalendario = codCalendario;
        this.usuario = usuario;
        this.descripcion = descripcion;
        this.fechaInicial = fechaInicial;
        this.fechaFinal = fechaFinal;
-       this.horaInicial = horaInicial;
-       this.horaFinal = horaFinal;
+       this.horaIni = horaIni;
+       this.horaFin = horaFin;
     }
    
     public long getCodCalendario() {
@@ -73,19 +73,19 @@ public class Calendario  implements java.io.Serializable {
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
-    public String getHoraInicial() {
-        return this.horaInicial;
+    public Date getHoraIni() {
+        return this.horaIni;
     }
     
-    public void setHoraInicial(String horaInicial) {
-        this.horaInicial = horaInicial;
+    public void setHoraIni(Date horaIni) {
+        this.horaIni = horaIni;
     }
-    public String getHoraFinal() {
-        return this.horaFinal;
+    public Date getHoraFin() {
+        return this.horaFin;
     }
     
-    public void setHoraFinal(String horaFinal) {
-        this.horaFinal = horaFinal;
+    public void setHoraFin(Date horaFin) {
+        this.horaFin = horaFin;
     }
 
 

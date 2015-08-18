@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-ago-2015 14:13:45 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Entity.Versiones" table="versiones" schema="public" optimistic-lock="version">
+        <id name="codVersion" type="long">
+            <column name="cod_version" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="proyectos" class="Entity.Proyectos" fetch="select">
+            <column name="cod_proyecto" precision="131089" scale="0" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="rutaArchivo" type="string">
+            <column name="ruta_archivo" length="100" not-null="true" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

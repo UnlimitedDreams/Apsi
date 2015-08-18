@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 13-ago-2015 17:28:38 by Hibernate Tools 4.3.1 -->
+<!-- Generated 18-ago-2015 14:13:45 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="Entity.Asesoria" table="asesoria" schema="public" optimistic-lock="version">
         <id name="codAsesoria" type="big_decimal">
@@ -14,23 +14,23 @@
         <many-to-one name="ubicacion" class="Entity.Ubicacion" fetch="select">
             <column name="ubicacion" precision="131089" scale="0" not-null="true" />
         </many-to-one>
-        <property name="fechaAsesoria" type="timestamp">
-            <column name="fecha_asesoria" length="29" not-null="true" />
+        <property name="fechaAsesoria" type="date">
+            <column name="fecha_asesoria" length="13" not-null="true" />
         </property>
         <property name="codigoProyecto" type="big_decimal">
             <column name="codigo_proyecto" precision="131089" scale="0" not-null="true" />
-        </property>
-        <property name="horaAsesoria" type="string">
-            <column name="hora_asesoria" not-null="true" />
-        </property>
-        <property name="horaFinal" type="string">
-            <column name="hora_final" not-null="true" />
         </property>
         <property name="description" type="string">
             <column name="description" not-null="true" />
         </property>
         <property name="tipoAsesoria" type="string">
             <column name="tipo_asesoria" not-null="true" />
+        </property>
+        <property name="horaIni" type="time">
+            <column name="hora_ini" length="15" />
+        </property>
+        <property name="horaFin" type="time">
+            <column name="hora_fin" length="15" />
         </property>
         <set name="estadosAsesorias" table="estados_asesoria" inverse="true" lazy="true" fetch="select">
             <key>

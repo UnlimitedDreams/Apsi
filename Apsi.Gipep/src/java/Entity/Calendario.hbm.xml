@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 13-ago-2015 17:28:38 by Hibernate Tools 4.3.1 -->
+<!-- Generated 18-ago-2015 14:13:45 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="Entity.Calendario" table="calendario" schema="public" optimistic-lock="version">
         <id name="codCalendario" type="long">
@@ -20,11 +20,11 @@
         <property name="fechaFinal" type="date">
             <column name="fecha_final" length="13" not-null="true" />
         </property>
-        <property name="horaInicial" type="string">
-            <column name="hora_inicial" length="6" />
+        <property name="horaIni" type="time">
+            <column name="hora_ini" length="15" />
         </property>
-        <property name="horaFinal" type="string">
-            <column name="hora_final" length="6" />
+        <property name="horaFin" type="time">
+            <column name="hora_fin" length="15" />
         </property>
     </class>
 </hibernate-mapping>

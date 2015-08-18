@@ -1,5 +1,5 @@
 package Entity;
-// Generated 13-ago-2015 17:28:37 by Hibernate Tools 4.3.1
+// Generated 18-ago-2015 14:13:44 by Hibernate Tools 4.3.1
 
 
 import java.math.BigDecimal;
@@ -12,19 +12,25 @@ public class Dia  implements java.io.Serializable {
 
      private BigDecimal codigoDia;
      private Disponibilidad disponibilidad;
-     private String horaInicial;
-     private String horaFinal;
      private String dia;
+     private String horaFinal;
+     private String horaInicial;
 
     public Dia() {
     }
 
-    public Dia(BigDecimal codigoDia, Disponibilidad disponibilidad, String horaInicial, String horaFinal, String dia) {
+	
+    public Dia(BigDecimal codigoDia, Disponibilidad disponibilidad, String dia) {
+        this.codigoDia = codigoDia;
+        this.disponibilidad = disponibilidad;
+        this.dia = dia;
+    }
+    public Dia(BigDecimal codigoDia, Disponibilidad disponibilidad, String dia, String horaFinal, String horaInicial) {
        this.codigoDia = codigoDia;
        this.disponibilidad = disponibilidad;
-       this.horaInicial = horaInicial;
-       this.horaFinal = horaFinal;
        this.dia = dia;
+       this.horaFinal = horaFinal;
+       this.horaInicial = horaInicial;
     }
    
     public BigDecimal getCodigoDia() {
@@ -41,12 +47,12 @@ public class Dia  implements java.io.Serializable {
     public void setDisponibilidad(Disponibilidad disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
-    public String getHoraInicial() {
-        return this.horaInicial;
+    public String getDia() {
+        return this.dia;
     }
     
-    public void setHoraInicial(String horaInicial) {
-        this.horaInicial = horaInicial;
+    public void setDia(String dia) {
+        this.dia = dia;
     }
     public String getHoraFinal() {
         return this.horaFinal;
@@ -55,12 +61,12 @@ public class Dia  implements java.io.Serializable {
     public void setHoraFinal(String horaFinal) {
         this.horaFinal = horaFinal;
     }
-    public String getDia() {
-        return this.dia;
+    public String getHoraInicial() {
+        return this.horaInicial;
     }
     
-    public void setDia(String dia) {
-        this.dia = dia;
+    public void setHoraInicial(String horaInicial) {
+        this.horaInicial = horaInicial;
     }
 
 

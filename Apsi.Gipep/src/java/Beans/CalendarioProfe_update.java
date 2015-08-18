@@ -50,8 +50,8 @@ public class CalendarioProfe_update {
         try {
             fecha_inicio = calendario.getFechaInicial();
             fecha_final = calendario.getFechaFinal();
-            hora1 = "" + calendario.getHoraInicial();
-            hora2 = "" + calendario.getHoraFinal();
+            hora1 = "" + calendario.getHoraIni();
+            hora2 = "" + calendario.getHoraFin();
             Actividad = calendario.getDescripcion();
             
             System.out.println("tra");
@@ -85,7 +85,7 @@ public class CalendarioProfe_update {
             h2.setMinutes(Integer.parseInt(v2[1]));
             h2.setSeconds(00);
             calendario.setFechaInicial(h1);
-            calendario.setHoraFinal(h2);
+            calendario.setHoraFin(h2);
             calendario.setDescripcion(Actividad);
             calendario.setUsuario(usu);
             boolean r = calen.ActualizarCalendario(calendario);
