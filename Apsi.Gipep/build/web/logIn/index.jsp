@@ -39,14 +39,14 @@
     </head>
 
     <body>
-<%session = request.getSession();
-        try {
-            if (!session.isNew() | !session.getAttribute("user").equals(null)) {
-                response.sendRedirect("../logIn/mainMenu.jsp");
+        <%session = request.getSession();
+            try {
+                if (!session.isNew() | !session.getAttribute("user").equals(null)) {
+                    response.sendRedirect("../logIn/mainMenu.jsp");
+                }
+            } catch (java.lang.NullPointerException e) {
             }
-        } catch (java.lang.NullPointerException e) {
-        }
-    %>
+        %>
         <!-- Navigation -->
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
         <nav id="sidebar-wrapper">
@@ -130,14 +130,20 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h2>Un nuevo concepto, la misma realidad</h2>
-                        <p>Sencillo y r&aacute;pido, sin complicaciones.</p>
+                        <p class="text-muted">Sencillo y r&aacute;pido, sin complicaciones.</p>
                         <p class="lead">&quot;Las m&aacute;quinas no son nada 
                             sin una mente humana que las opere, los cuerpos 
                             humanos no pueden hacer lograr la perfecci&oacute;n 
                             sin una m&aacute;quina que ayude en las labores 
                             m&aacute;s arduas e imposibles para la humanidad&quot;.
                             <br>
-                            <label>- Unlimited Dreams</label></p>
+                            <label class="text-muted">- Unlimited Dreams</label>
+                        </p>
+                        <p class="lead"> Para conocer m&aacute;s a cerca de esta aplicaci&oacute;n
+                            y hacer mejoras, dirigite al 
+                            <a class="text-info" href="https://github.com/UnlimitedDreams/Apsi">Repositorio Apsi&REG;</a> en GitHub. 
+                            <br>Tus aporte son importantes.
+                        </p>
                     </div>
                 </div>
                 <!-- /.row -->
