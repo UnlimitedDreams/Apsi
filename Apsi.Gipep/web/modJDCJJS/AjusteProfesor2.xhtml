@@ -115,35 +115,37 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>TITLE PANEL</h4></div>
+                            <h4>Ajuste Profesor</h4></div>
                         <h:form>
                             <p:growl id="messages" showDetail="true" />
-                            <table>
-                                <tr>
-                                    <td> <h:outputLabel for="fechaI" value="Fecha inicial :"  /></td>
-                                    <td><p:calendar id="fechaI" value="#{ajusteProfesorInfo.fecha_inicial}" disabled="true" /></td>
-                                </tr>
-                                <tr>
-                                    <td><h:outputLabel for="fecha2" value="Fecha Final :"  /></td>
-                                    <td> <p:calendar id="fecha2" value="#{ajusteProfesorInfo.fecha_final}"  disabled="true"/></td>
-                                </tr>
-                                <tr>
-                                    <td><h:outputLabel for="ho" value="Cantidad de Horas :" /></td>
-                                    <td> <p:inputText id="ho" value="#{ajusteProfesorInfo.cantidad_horas}" disabled="true"/></td>
-                                </tr>
-                                <tr>
-                                    <td> <h:outputLabel for="Ra" value="Rango de Asesoria :"  /></td>
-                                    <td> <p:inputText id="Ra" value="#{ajusteProfesorInfo.ramgoHora}" disabled="true"/></td>
-                                </tr>
-                                <tr>
-                                    <td> <h:outputLabel for="Pe" value="Periodo :"  /></td>
-                                    <td> <p:inputText id="Pe" value="#{ajusteProfesorInfo.periodo}" disabled="true"/></td>
-                                </tr>
-                            </table>
+                            <div class="form-group">
+                                <h:outputLabel for="fechaI" value="Fecha inicial :"  /><br></br>
+                                <p:calendar id="fechaI" value="#{ajusteProfesorInfo.fecha_inicial}" disabled="true" />
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="fecha2" value="Fecha Final :"  /><br></br>
+                                <p:calendar  id="fecha2" value="#{ajusteProfesorInfo.fecha_final}"  disabled="true"/>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="ho" value="Cantidad de Horas :" />
+                                <h:inputText id="ho" class="form-control input-lg" value="#{ajusteProfesorInfo.cantidad_horas}" disabled="true"/>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="Ra" value="Rango de Asesoria :"  />
+                                <h:inputText id="Ra" class="form-control input-lg" value="#{ajusteProfesorInfo.ramgoHora}" disabled="true"/>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="Pe" value="Periodo :"  />
+                                <h:inputText id="Pe" class="form-control input-lg" value="#{ajusteProfesorInfo.periodo}" disabled="true"/>
+                            </div>
                             <br/>
 
                             <h:dataTable var="dias" value="#{ajusteProfesorInfo.dias}" 
-                                         border="1">
+                                        class="table">
 
                                 <h:column>
                                     <f:facet name="header">
@@ -173,13 +175,12 @@
                             </h:dataTable>
 
 
-                            <br/>
-                            <table>
-                                <tr>
-                                    <td><h:commandButton value="atras" action="AjusteProfesor.xhtml"></h:commandButton></td>
-                                    <td><h:commandButton value="Guardar" actionListener="#{ajusteProfesorInfo.insertar_ajuste()}"></h:commandButton></td>
-                                </tr>
-                            </table>
+                       
+                            <center>
+                                    <h:commandButton value="atras" class="btn btn-primary btn-lg" action="AjusteProfesor.xhtml"></h:commandButton>
+                                    <label></label>
+                                    <h:commandButton value="Guardar" class="btn btn-primary btn-lg" actionListener="#{ajusteProfesorInfo.insertar_ajuste()}"></h:commandButton>
+                               </center>
                         </h:form>
 
                     </div>
@@ -231,6 +232,17 @@
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
+
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+        <!--scripts para panel menu-->
+        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/custom/scripts1.js"></script>
+
 
 
     </h:body>

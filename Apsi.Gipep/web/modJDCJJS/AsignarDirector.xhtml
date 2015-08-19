@@ -121,12 +121,12 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>TITLE PANEL</h4></div>
+                                <h4>Asignacion de Director</h4></div>
                         <h:form id="vista_validar">
                                 <br/>
                                 <p:growl id="messages" showDetail="true" />
                                 <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
-                                             border="1">
+                                             class="table">
                                     <h:column>
                                         <f:facet name="header">
                                             <h:outputText value="Selecionar"></h:outputText>
@@ -208,7 +208,17 @@
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
 
+ <!--scripts loaded here-->
 
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        
+        <!--scripts para panel menu-->
+        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/custom/scripts1.js"></script>
+
+        
     </h:body>
 </html>
 

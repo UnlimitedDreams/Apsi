@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 public class Conecion_postgres1 {
 
     public static String driver = "org.postgresql.Driver";
-    public static String connectString = "jdbc:postgresql://localhost:5432/Tesis_M";
+    public static String connectString = "jdbc:postgresql://localhost:5432/Tesis";
     public static String user = "postgres";
-    public static String password = "juan";//ya esta listo
+    public static String password = "Juan";//ya esta listo
     public static String query;
     public static Statement stat;
     public static ResultSet rs;

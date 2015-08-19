@@ -1,45 +1,207 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>TODO supply a title</title>
+        <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="../css/ingreso.css"/>
-        <link rel="stylesheet" href="../css/Tablas.css"/>
-        <link rel="stylesheet" href="../css/formas.css"/>
-        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <!-- Link para panel menu-->
+        <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
+
     <h:body onload="#{calendarioProfe_update.traer_informacion()}"> 
-        <div id="header" class="head">
-            <div id="menu" style="position: fixed;top:0%">
-                <img id="btn-menu" src="../img/men.png" />
+
+        <section class="container-fluid" id="section6">
+            <div class="container-fluid">
+                <div class="row">                   
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                </div>
             </div>
-            <div  style="text-align: center;">
-                <b> Calendario</b>    
+        </section>
+
+        <section class="container-fluid" id="section2">
+            <div class="row">
+                <div class="col-sm-3">
+                    <aside>
+                        <div id="sidebar"  class="nav-collapse  ">
+                            <!-- sidebar menu start-->
+                            <ul class="sidebar-menu">                
+                                <li class="active">
+                                    <a class="" href="#">
+                                        <i class="icon_house_alt"></i>
+                                        <span>USER OPTIONS</span>
+                                    </a>
+                                </li>
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-male"></i>
+                                        <span>Profesores</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
+                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
+                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
+
+                                    </ul>
+                                </li>       
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-users"></i>
+                                        <span>Mi Calendario</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
+                                    </ul>
+                                </li>
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-users"></i>
+                                        <span>Reportes</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
+                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
+                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
+
+                                    </ul>
+                                </li>
+
+                                <li class="sub-menu">
+                                    <a href="javascript:;" class="">
+                                        <i class="fa fa-users"></i>
+                                        <span>Proyectos</span>
+                                        <span class="menu-arrow arrow_carrot-right"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
+                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
+
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-sm-9">
+
+                    <div class="panel panel-default slideInUp animate">
+                        <div class="panel-heading">
+                            <h4>Calendario</h4></div>
+
+
+                        <h:form> 
+
+
+                            <div class="form-group">
+                                <h:outputLabel for="at" value="Actividad :" style="font-weight:bold" />
+                                <h:inputText id="at" class="form-control" value="#{calendarioProfe_update.actividad}" />
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="f1" value="Fecha inicio:"  /><br></br>
+                                <p:calendar id="f1"  value="#{calendarioProfe_update.fecha_inicio}" showOn="button" />
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="f2" value="Fecha Final:"  /><br></br>
+                                <p:calendar id="f2"  value="#{calendarioProfe_update.fecha_final}" showOn="button" />
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="h1" value="Hora inicial :"  />
+                                <h:inputText id="h1" class="form-control input-lg" value="#{calendarioProfe_update.hora1}" />
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
+                                <h:inputText id="h2" class="form-control input-lg" value="#{calendarioProfe_update.hora2}" />
+                            </div>
+                            <br></br>
+                            <center>
+                                <p:commandButton value="Atras" class="btn btn-primary btn-lg" actionListener="#{calendarioProfe_update.redirecionar()}"></p:commandButton>
+                                <label></label>
+                                <p:commandButton value="Actualizar" class="btn btn-primary btn-lg" actionListener="#{calendarioProfe_update.update()}"></p:commandButton>
+                            </center>
+
+
+                        </h:form>
+
+
+
+                    </div>
+                </div>
             </div>
+
+        </section>
+
+
+        <footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>ApSi&REG;</strong>
+                        </h4>
+                        <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br></br>Santiago de Cali, Colombia</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
+                            </li>
+                        </ul>
+                        <br></br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small"></hr>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div class="scroll-up">
+            <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>
-        <br/><br/>
-        <div id="layoutAjuste">
-            <center>
-                <h:form>
-                    <h:panelGrid id="eventDetails" columns="2">
-                        <h:outputLabel for="at" value="Actividad :" style="font-weight:bold" />
-                        <p:inputText id="at" value="#{calendarioProfe_update.actividad}" />
-                        <h:outputLabel for="f1" value="Fecha inicio:" style="font-weight:bold" />
-                        <p:calendar id="f1" value="#{calendarioProfe_update.fecha_inicio}" showOn="button" />
-                        <h:outputLabel for="f2" value="Fecha Final:" style="font-weight:bold" />
-                        <p:calendar id="f2" value="#{calendarioProfe_update.fecha_final}" showOn="button" />
-                        <h:outputLabel for="h1" value="Hora inicial :" style="font-weight:bold" />
-                        <p:inputText id="h1" value="#{calendarioProfe_update.hora1}" />
-                        <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
-                        <p:inputText id="h2" value="#{calendarioProfe_update.hora2}" />
-                    </h:panelGrid>
-                    <p:commandButton value="Atras" actionListener="#{calendarioProfe_update.redirecionar()}"></p:commandButton>
-                    <p:commandButton value="Actualizar" actionListener="#{calendarioProfe_update.update()}"></p:commandButton>
-                </h:form>
-            </center>
-        </div>
+
+
+        <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="../js/scripts.js"></script>
+        <!--scripts para panel menu-->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/scripts1.js"></script>
+
+
+        <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+        <!--scripts para panel menu-->
+        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/custom/scripts1.js"></script>
+
+
+
     </h:body>
 </html>
+

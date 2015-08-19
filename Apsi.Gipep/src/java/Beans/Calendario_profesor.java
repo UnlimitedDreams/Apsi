@@ -28,7 +28,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import static net.bootsfaces.render.RPanel.styleClass;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

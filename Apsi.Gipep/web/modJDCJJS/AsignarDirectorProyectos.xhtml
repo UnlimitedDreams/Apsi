@@ -121,17 +121,17 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>TITLE PANEL</h4></div>
+                            <h4>Asignacion de Director</h4></div>
                         <h:form id="vista_validar">
                             <center>
                                 <br/>
                                 <p:growl id="messages" showDetail="true" />
 
                                 <h:dataTable id="tabla" var="Proyectos" value="#{asiganarDirector.pro2}"
-                                             border="1">
+                                             class="table">
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Selecionar"></h:outputText>
+                                            <h:outputText value="SELECCIONAR"></h:outputText>
                                         </f:facet>
                                         <p:selectBooleanCheckbox >
                                             <p:ajax  listener="#{asiganarDirector.pasar_Proyectos(Proyectos.cod)}" />
@@ -139,7 +139,7 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Nombre"></h:outputText>
+                                            <h:outputText value="NOMBRE"></h:outputText>
                                         </f:facet>
                                           <h:outputText value="#{Proyectos.nombre}" />
                                     </h:column>
@@ -147,7 +147,7 @@
                                 </h:dataTable>
 
                                 <br/>
-                                <h:commandButton value="Guardar" actionListener="#{asiganarDirector.guardar()}"></h:commandButton>
+                                <h:commandButton value="Guardar" class="btn btn-primary btn-lg" actionListener="#{asiganarDirector.guardar()}"></h:commandButton>
                             </center>
                         </h:form>
 
@@ -201,6 +201,15 @@
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
+ <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        
+        <!--scripts para panel menu-->
+        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/custom/scripts1.js"></script>
 
 
     </h:body>
