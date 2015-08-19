@@ -190,6 +190,7 @@ section {
 #section4 {
 	background-color: #f6f6f6;
 	color:#444;
+        min-height:50px;
 }
   
 #section2 {
