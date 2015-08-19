@@ -118,7 +118,7 @@
         <header class="container-fluid" id="top">
             <div class="container-fluid">
                 <div class="row">                   
-                    <h2> <i class="fa fa-tag"></i>
+                    <h3> <i class="fa fa-tag"></i>
                         <%
                             try {
                                 TreeMap roles = new UsuarioImple().cargarRoles(p.getUsuario().getPegeId().toString());
@@ -134,7 +134,7 @@
                             }
 
                         %>
-                    </h2>
+                    </h3>
                     <hr>
                 </div>
             </div>
