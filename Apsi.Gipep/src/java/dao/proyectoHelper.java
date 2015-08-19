@@ -7,6 +7,7 @@ package dao;
 
 import Entity.Persona;
 import Entity.Proyectos;
+import Entity.Revisiones;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -57,4 +58,55 @@ public class proyectoHelper implements helper {
         return lista;
     }
 
+    @Override
+    public Object leer(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        Proyectos x = new Proyectos();
+        try {
+            x = (Proyectos) session.createQuery(""
+                    + "Select   proyectos.proyectos,"
+                    + "from     UsuarioProyecto as proyectos "
+                    + "inner    join proyectos.codUsuproyecto as usuarios "
+                    + "where    usuarios.usuarioByEstudiante.pegeId = '" + id + "'").uniqueResult();
+            t.commit();
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            throw e;
+        } finally {
+            session.close();
+        }
+        return x;
+    }
+
+    /**
+     * Metodo para cargar todas las revisiones relacionadas a un proyecto
+     * mediante su codigo identificador, obtendra una lista y deberá ser
+     * dibujada en donde se desee implementar dicha lista.
+     *
+     * @param id Identificador de un proyecto
+     * @return retorna una lista con todas las revisiones
+     */
+    public List<Revisiones> cargarRevisiones(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        List<Revisiones> lista;
+        try {
+            lista = session.createQuery("Select Revisiones.revisiones "
+                    + "	from RevisionProyecto as Revisiones "
+                    + "	inner join  Revisiones.codRevisionproyecto as Proyecto "
+                    + "	where Proyecto.proyectos.codigoProyecto = '" + id + "'").list();
+            t.commit();
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+            }
+            throw e;
+        } finally {
+            session.close();
+        }
+        return lista;
+    }
 }

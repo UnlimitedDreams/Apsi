@@ -4,6 +4,7 @@
     Author     : Miguel Angel Lemos
 --%>
 
+<%@page import="Entity.Revisiones"%>
 <%@page import="Entity.Proyectos"%>
 <%@page import="dao.proyectoHelper"%>
 <%@page import="java.util.List"%>
@@ -201,49 +202,88 @@
                             List listaProyectos = new proyectoHelper().listarTodo();
                         %>
 
-                        <h2 class="text-info">Numero de Proyectos Activos: <%=listaProyectos.size()%></h2>
-                        <table class="table-condensed">
-
+                        <h2 class="text-info">N&uacute;mero de Proyectos Activos en la facultad: <%=listaProyectos.size()%></h2>
+                        <table class="table table-striped">
                             <%
                                 double PromedioDeCumplimiento = 0.0;
-                                for (Object proyectoTemp : listaProyectos) {
-                                    Proyectos ww = (Proyectos) proyectoTemp;
-                                    PromedioDeCumplimiento = PromedioDeCumplimiento + Double.parseDouble(ww.getPorcentaje());
-                                    out.println("<tr>"
-                                            + "<td><b>Nombre de Proyecto:</b> <a class=\"text-primary\" href='#'>" + ww.getNombre()
-                                            + "</a></td><td><b> Fecha de Inicio:</b> " + ww.getFechaInicio() + "<br></td>"
-                                            + "</td><td><b> Fecha de Finalizaci&oacute;n:</b> " + ww.getFechaFinal() + "<br></td>"
-                                            + "</tr>"
-                                            + "<tr><td>"
-                                            + "<div class=\"panel-body\">\n"
-                                            + "<b>Progreso del proyecto: </b><br>"
-                                            + "<div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" "
-                                            + "style=\"width: " + ww.getPorcentaje() + "%;\">\n"
-                                            + ww.getPorcentaje() + "%</div>\n"
-                                            + "</div>"
-                                            + "</td>");
-                                    if (ww.getCalificacion() < 3.5) {
-                                        out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-danger\">" + ww.getCalificacion() + "</label></td>"
-                                                + "</tr>");
-                                    } else if (ww.getCalificacion() >= 3.5 && ww.getCalificacion() < 4.5) {
-                                        out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-primary\">" + ww.getCalificacion() + "</label></td>"
-                                                + "</tr>");
-                                    } else if (ww.getCalificacion() >= 4.5) {
-                                        out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-success\">" + ww.getCalificacion() + "</label></td>"
-                                                + "</tr>");
+                                String idProyecto = "";
+                                if (!rol.equals("SuperUsuario")) {
+                                    try {
+                                        Proyectos miProyecto = (Proyectos) new proyectoHelper().leer(p.getUsuario().getPegeId().toString());
+                                        idProyecto = miProyecto.getCodigoProyecto().toString();
+                                        PromedioDeCumplimiento = Double.parseDouble(miProyecto.getPorcentaje());
+                                        out.println("<tr>"
+                                                + "<td><b>Nombre de mi Proyecto:</b> <a class=\"text-primary\" href='#'>" + miProyecto.getNombre()
+                                                + "</a></td><td><b> Fecha de Inicio:</b> " + miProyecto.getFechaInicio() + "<br></td>"
+                                                + "</td><td><b> Fecha de Finalizaci&oacute;n:</b> " + miProyecto.getFechaFinal() + "<br></td>"
+                                                + "</tr>"
+                                                + "<tr><td>"
+                                                + "<div class=\"panel-body\">\n"
+                                                + "<b>Progreso del proyecto: </b><br>"
+                                                + "<div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" "
+                                                + "style=\"width: " + miProyecto.getPorcentaje() + "%;\">\n"
+                                                + miProyecto.getPorcentaje() + "%</div>\n"
+                                                + "</div>"
+                                                + "</td>");
+                                        if (miProyecto.getCalificacion() < 3.5) {
+                                            out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-danger\">" + miProyecto.getCalificacion() + "</label></td>"
+                                                    + "</tr>");
+                                        } else if (miProyecto.getCalificacion() >= 3.5 && miProyecto.getCalificacion() < 4.5) {
+                                            out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-primary\">" + miProyecto.getCalificacion() + "</label></td>"
+                                                    + "</tr>");
+                                        } else if (miProyecto.getCalificacion() >= 4.5) {
+                                            out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-success\">" + miProyecto.getCalificacion() + "</label></td>"
+                                                    + "</tr>");
+                                        }
+                                    } catch (NullPointerException e) {
+                                        out.print("<tr>"
+                                                + "<td>No tienes proyectos registrados con tu usuario"
+                                                + "</td></tr>");
+                                    }
+
+                                } else {
+                                    for (Object proyectoTemp : listaProyectos) {
+                                        Proyectos miProyecto = (Proyectos) proyectoTemp;
+                                        PromedioDeCumplimiento = PromedioDeCumplimiento + Double.parseDouble(miProyecto.getPorcentaje());
+                                        out.println("<tr>"
+                                                + "<td><b>Nombre de Proyecto:</b> <a class=\"text-primary\" href='#'>" + miProyecto.getNombre()
+                                                + "</a></td><td><b> Fecha de Inicio:</b> " + miProyecto.getFechaInicio() + "<br></td>"
+                                                + "</td><td><b> Fecha de Finalizaci&oacute;n:</b> " + miProyecto.getFechaFinal() + "<br></td>"
+                                                + "</tr>"
+                                                + "<tr><td>"
+                                                + "<div class=\"panel-body\">\n"
+                                                + "<b>Progreso del proyecto: </b><br>"
+                                                + "<div class=\"progress-bar \" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" "
+                                                + "style=\"width: " + miProyecto.getPorcentaje() + "%;\">\n"
+                                                + miProyecto.getPorcentaje() + "%</div>\n"
+                                                + "</div>"
+                                                + "</td>");
+                                        if (miProyecto.getCalificacion() < 3.5) {
+                                            out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-danger\">" + miProyecto.getCalificacion() + "</label></td>"
+                                                    + "</tr>");
+                                        } else if (miProyecto.getCalificacion() >= 3.5 && miProyecto.getCalificacion() < 4.5) {
+                                            out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-primary\">" + miProyecto.getCalificacion() + "</label></td>"
+                                                    + "</tr>");
+                                        } else if (miProyecto.getCalificacion() >= 4.5) {
+                                            out.print("<td><b>Calificaci&oacute;n: <b><label class=\"text-success\">" + miProyecto.getCalificacion() + "</label></td>"
+                                                    + "</tr>");
+                                        }
                                     }
                                 }
+
                             %>
                         </table>
-
+                        <hr class="small">
                         <table class="table table-responsive">
                             <thead>
                                 <tr>
                             <h2 class="text-info">Promedio de Cumplimiento hasta el momento:</h2> 
                             </tr>
                             <tr>
-                                <%
-                                    PromedioDeCumplimiento = PromedioDeCumplimiento / listaProyectos.size();
+                                <%                                    if (rol.equals("SuperUsuario")) {
+                                        PromedioDeCumplimiento = PromedioDeCumplimiento / listaProyectos.size();
+                                    }
+                                    PromedioDeCumplimiento = Math.rint(PromedioDeCumplimiento * 100) / 100;
                                     if (PromedioDeCumplimiento < 50.0) {
                                         out.print("<h2 class=\"text-danger\">" + PromedioDeCumplimiento + "%</h2>"
                                                 + "<div class=\"panel-body\">\n"
@@ -281,51 +321,43 @@
                         <p></p>
                         <div class="panel-heading"><center><b>Detalle de las revisiones</b></center></div>
                         <h1>Mi Proyecto: </h1>
-                        <h2>Detalle de las revisiones:</h2>
-                        <h3 class="text-primary">Las revisiones Aqui<-</h3>
-                        
-                        <!--<h2 class="text-success">Text color Green</h2>
-                        <h3 class="text-danger">Text color Red</h3>
 
-                        <h1>Links</h1>
-                        <a class="btn-success">Hello</a> - <a class="text-success">Facelets</a>
-                        <a class="btn-danger">Hello</a> - <a class="text-danger">Facelets</a>
-                        <a class="btn-primary">Hello</a> - <a class="text-primary">Facelets</a>
+                        <table class="table table-bordered">
+                            <thead>
+                            <th>
+                            <h2>Detalle de las revisiones</h2>
+                            </th>
 
-                        <h1>Buttons</h1>
-                        <button type="submit" class="btn btn-success">Submit</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                        <button type="submit" class="btn btn-primary">Options</button>
-
-                        <h1>Progres Var</h1>
-                        <div class="panel-body">
-                            <div class="progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
-                                20%
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-                                50%
-                            </div>
-                        </div>
-
-                        <h1>Panel examples</h1>
-
-                        <div class="panel panel-primary slideInUp animate">
-                            <div class="panel-heading">
-                                <h4>Title Panel</h4></div><h3>Center content</h3></div>
-
-                        <div class="panel panel-danger slideInUp animate">
-                            <div class="panel-heading">
-                                <h4>Title Panel</h4></div><h3>Center content</h3></div>
-
-                        <div class="panel panel-success slideInUp animate">
-                            <div class="panel-heading">
-                                <h4>Title Panel</h4></div><h3>Center content</h3></div>
-
-                    </div>-->
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h2 class="text-info">Descripci&oacute;n de la revisi&oacute;n:</h2>
+                                    </td>
+                                    <td>
+                                        <h2 class="text-info">Fecha:</h2>
+                                    </td>    
+                                </tr>
+                                <%
+                                    if (rol.equals("SuperUsuario")) {
+                                        out.print("no disponible");
+                                    } else {
+                                        List revisioList = new proyectoHelper().cargarRevisiones(idProyecto);
+                                        for (int i = 0; i < revisioList.size(); i++) {
+                                            Revisiones get = (Revisiones) revisioList.get(i);
+                                            out.println("<tr>"
+                                                    + "<td>"
+                                                    + "<h4 class=\"text-primary\">" + get.getDescripcion() + "</h3>"
+                                                    + "</td>"
+                                                    + "<td><h4 class=\"text-primary\">" + get.getFecha() + "</h3></td>"
+                                                    + "</tr>");
+                                        }
+                                    }
+                                %>
+                            </tbody>    
+                        </table>
+                    </div>
                 </div>
-            </div>
 
         </section>
 
