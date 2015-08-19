@@ -42,6 +42,17 @@ public interface helper {
     public boolean buscar(String id);
 
     /**
+     * Buscar un objeto Hibernate mediante las consultas HQL, para asi lograr 
+     * la obtencion de los resultados.
+     * Obtendra un Object el cual deberá realizar el debido casteo deacuerdo 
+     * a su clase.
+     * 
+     * @param id Llave primaria del objeto
+     * @return retorna un objeto unico con los valores de la busqueda
+     */
+    public Object leer(String id);
+
+    /**
      * Borrar un registro
      *
      * @param Id Llave primaria del registro que se va a borrar
