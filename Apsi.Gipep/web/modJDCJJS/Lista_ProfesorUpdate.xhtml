@@ -128,21 +128,24 @@
                             <p:growl id="messages" showDetail="true" />
                             <h3> <h:outputLabel class="text-primary"  value="PROFESOR: #{listaProfesoresBeansUpdate.nombreProfesor}" /></h3>
 
-
-                            <h:outputLabel for="fechaI" value="Fecha inicial :"  />
-                            <p:calendar id="fechaI" value="#{listaProfesoresBeansUpdate.fecha_inicial}"  />
-
-                            <h:outputLabel for="fecha2" value="Fecha Final :"  />
-                            <p:calendar id="fecha2" value="#{listaProfesoresBeansUpdate.fecha_final}"  />
-
-                            <h:outputLabel for="ho" value="Cantidad de Horas :" />
-                            <h:inputText id="ho" value="#{listaProfesoresBeansUpdate.cantidad_horas}" />
-
-                            <h:outputLabel for="Ra" value="Rango de Asesoria :"  />
-                            <h:inputText id="Ra" value="#{listaProfesoresBeansUpdate.ramgoHora}" />
-
+                            <div class="form-group">
+                                <h:outputLabel for="fechaI" value="Fecha inicial :"  /><br></br>
+                                <p:calendar id="fechaI" value="#{listaProfesoresBeansUpdate.fecha_inicial}"  />
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel for="fecha2" value="Fecha Final :"  /><br></br>
+                                <p:calendar id="fecha2" value="#{listaProfesoresBeansUpdate.fecha_final}"  />
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel for="ho" value="Cantidad de Horas :" />
+                                <h:inputText id="ho" class="form-control" value="#{listaProfesoresBeansUpdate.cantidad_horas}" />
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel for="Ra" value="Rango de Asesoria :"  />
+                                <h:inputText id="Ra" class="form-control" value="#{listaProfesoresBeansUpdate.ramgoHora}" />
+                            </div>
                             <br></br>
-                             <br></br>
+                            <br></br>
 
                             <h:dataTable var="dias" value="#{listaProfesoresBeansUpdate.dias}" 
                                          class="table">
