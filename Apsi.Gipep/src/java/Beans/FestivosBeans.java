@@ -4,6 +4,7 @@ import dao.FestivosDao;
 import dao.FestivosImple;
 import Entity.Aofestivo;
 import Entity.Festivos;
+import Entity.Persona;
 import Modelo.Conecion_postgres1;
 import Modelo.FEsti;
 import Modelo.Secuencia;
@@ -20,6 +21,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -36,7 +38,9 @@ public class FestivosBeans implements Serializable {
     private ScheduleModel eventModel;
     private Calendar fecha_hoy;
     private Date fecha_Borrar;
-
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
     private ScheduleModel lazyEventModel;
 
     private ScheduleEvent event = new DefaultScheduleEvent();
@@ -45,7 +49,18 @@ public class FestivosBeans implements Serializable {
     public void init() {
         System.out.println("entro a contru");
         try {
-            traer_fechas();
+            faceContext = FacesContext.getCurrentInstance();
+            httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+            if (httpServletRequest.getSession().getAttribute("user") != null) {
+                System.out.println("Existe");
+                Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+                NombreUsuario = p.getNombres() + " " + p.getApellidos();
+                traer_fechas();
+
+            } else {
+                System.out.println("No existe");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+            }
 
         } catch (Exception ex) {
             System.out.println("Error " + ex.getMessage());
@@ -270,5 +285,30 @@ public class FestivosBeans implements Serializable {
         fecha_hoy.add(Calendar.DAY_OF_YEAR, 1);
 
     }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
+    }
+    
 
 }

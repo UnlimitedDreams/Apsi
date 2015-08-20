@@ -9,6 +9,7 @@ import Entity.Estados;
 import Entity.Proyectos;
 import Entity.TipoProyecto;
 import Entity.Usuario;
+import Entity.Versiones;
 import Modelo.Carreras;
 import Modelo.Conecion_postgres;
 import Modelo.Conecion_postgres1;
@@ -16,13 +17,17 @@ import Modelo.Estudiante;
 import Modelo.ProyectosModelo;
 import Modelo.R_profesor;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +46,7 @@ import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.primefaces.model.DefaultStreamedContent;
 import util.HibernateUtil;
 
 /**
@@ -66,21 +72,29 @@ public class Reporte_Proyectos {
     private int cod_carrera;
     private int cod_estado;
     private int tipo;
+    private DefaultStreamedContent download;
 
     public Reporte_Proyectos() {
 
     }
 
-    public void cargar_años() throws ClassNotFoundException {
+    public void cargar_años(int condi) throws ClassNotFoundException {
         System.out.println("entro a cargar");
         b_año.clear();
         for (int i = 2015; i < 2030; i++) {
             b_año.add("" + i);
         }
-        cargar_Periodo();
-        cargarCarreras();
-        cargarEstados();
-        cargarTipos();
+        if (condi == 1) {
+            cargar_Periodo();
+            cargarCarreras();
+            cargarEstados();
+            cargarTipos();
+        } else if (condi == 2) {
+            cargar_Periodo();
+            cargarCarreras();
+            cargarTipos();
+        }
+
     }
 
     public void cargar_Periodo() {
@@ -130,7 +144,7 @@ public class Reporte_Proyectos {
         }
     }
 
-    public void buscar() throws ClassNotFoundException {
+    public void buscar(int condi) throws ClassNotFoundException {
         String query = "";
         System.out.println("año " + año);
         System.out.println("perido " + periodo);
@@ -149,7 +163,7 @@ public class Reporte_Proyectos {
         boolean r = false;
         for (int i = 0; i < temp.size(); i++) {
             estu = (Estudiante) temp.get(i);
-            proyec = Traer_proyectos(estu.getPege_id());
+            proyec = Traer_proyectos(estu.getPege_id(), condi);
             for (int k = 0; k < proyec.size(); k++) {
                 p = (Proyectos) proyec.get(k);
                 for (int j = 0; j < Lista_Proyectos.size(); j++) {
@@ -167,7 +181,7 @@ public class Reporte_Proyectos {
             }
             r = false;
         }
-        Proyectos = pasarDatos(Lista_Proyectos);
+        Proyectos = pasarDatos(Lista_Proyectos, condi);
         ProyectosModelo pro = null;
         ArrayList y = null;
         Estudiante estu2 = null;
@@ -205,12 +219,9 @@ public class Reporte_Proyectos {
             Lista_Usuarios = (ArrayList) session.createQuery("select distinct U from Proyectos P INNER JOIN "
                     + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
                     + "where P.codigoProyecto=" + cod_pro).list();
-
             System.out.println("lista -- " + Lista_Usuarios.size());
             t.commit();
-
             x = RecuperarNombres(Lista_Usuarios);
-
         } catch (Exception ex) {
             System.out.println("Error recuperarDatos " + ex.toString());
         }
@@ -245,30 +256,60 @@ public class Reporte_Proyectos {
         return Nombres;
     }
 
-    public ArrayList pasarDatos(ArrayList x) {
+    public ArrayList pasarDatos(ArrayList x, int condi) {
         ArrayList<ProyectosModelo> proyec = new ArrayList();
         Proyectos p = null;
         for (int i = 0; i < x.size(); i++) {
             p = (Proyectos) x.get(i);
             System.out.println("porcentajeeeee " + p.getPorcentaje());
-            proyec.add(new ProyectosModelo(p.getCodigoProyecto().intValue(),
-                    p.getNombre(), "", p.getFechaInicio().toString(), p.getFechaFinal().toString(), Integer.parseInt(p.getPorcentaje())));
+            ProyectosModelo pr = new ProyectosModelo(p.getCodigoProyecto().intValue(),
+                    p.getNombre(), "", p.getFechaInicio().toString(), p.getFechaFinal().toString(), Integer.parseInt(p.getPorcentaje()));
+            if (condi == 2) {
+                String ruta = TraerRutaDescarga(p.getCodigoProyecto().intValue());
+                pr.setRuta(ruta);
+            }
+
+            proyec.add(pr);
 
         }
         return proyec;
     }
 
-    public ArrayList Traer_proyectos(String x) {
+    public String TraerRutaDescarga(int cod) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        ArrayList<Versiones> v = new ArrayList();
+        try {
+            v = (ArrayList) session.createQuery("select V from Versiones V INNER JOIN "
+                    + " V.proyectos P where P.codigoProyecto=" + cod
+                    + "").list();
+            System.out.println("size " + v.size());
+            System.out.println("-- " + v.get(v.size() - 1));
+        } catch (Exception ex) {
+            System.out.println("Error " + ex.toString());
+        }
+        return v.get(v.size() - 1).getRutaArchivo();
+    }
+
+    public ArrayList Traer_proyectos(String x, int condi) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         ArrayList<Proyectos> Lista_Proyectos = new ArrayList();
         try {
             System.out.println("pegeId " + x);
-            Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
-                    + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
-                    + "INNER JOIN P.estadoProyectos EP INNER JOIN EP.estados E INNER JOIN P.tipoProyecto T "
-                    + "where U.pegeId=" + x + " and E.codigoEstados=" + cod_estado
-                    + " and T.codTipo=" + tipo).list();
+            if (condi == 1) {
+                Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
+                        + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
+                        + "INNER JOIN P.estadoProyectos EP INNER JOIN EP.estados E INNER JOIN P.tipoProyecto T "
+                        + "where U.pegeId=" + x + " and E.codigoEstados=" + cod_estado
+                        + " and T.codTipo=" + tipo).list();
+            } else if (condi == 2) {
+                Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
+                        + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
+                        + "INNER JOIN P.estadoProyectos EP INNER JOIN EP.estados E INNER JOIN P.tipoProyecto T "
+                        + "where U.pegeId=" + x + " and E.codigoEstados=" + 6
+                        + " and T.codTipo=" + tipo).list();
+            }
 
             System.out.println("lista -- " + Lista_Proyectos.size());
             t.commit();
@@ -277,6 +318,14 @@ public class Reporte_Proyectos {
 
         }
         return Lista_Proyectos;
+    }
+
+    public void prepDownload(String date) throws Exception {
+        System.out.println("file " + date);
+        File file = new File(date);
+        InputStream input = new FileInputStream(file);
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        setDownload(new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName()));
     }
 
     public ArrayList TraerPege_idCArrera() throws ClassNotFoundException {
@@ -341,7 +390,7 @@ public class Reporte_Proyectos {
             System.out.println("-");
             datasource.addObjecto(temp);
         }
-        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\ApsiJuan.git\\trunk\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
         JRExporter exporter = new JRPdfExporter();
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         String user = System.getProperty("user.name");
@@ -350,8 +399,10 @@ public class Reporte_Proyectos {
         exporter.exportReport();
     }
 //
+    
+
     public void reporteHorasProfeXml() throws JRException {
-          System.out.println("--------- size " + Proyectos.size());
+        System.out.println("--------- size " + Proyectos.size());
         Report_Proyecto datasource = new Report_Proyecto();
         ProyectosModelo temp = null;
         for (int i = 0; i < Proyectos.size(); i++) {
@@ -359,7 +410,7 @@ public class Reporte_Proyectos {
             System.out.println("-");
             datasource.addObjecto(temp);
         }
-        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\ApsiJuan.git\\trunk\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
         JRExporter exporter = new JRXlsxExporter();
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         String user = System.getProperty("user.name");
@@ -405,7 +456,6 @@ public class Reporte_Proyectos {
 //        }
 //
 //    }
-
     public void mns() {
         System.out.println("entro");
     }
@@ -505,6 +555,14 @@ public class Reporte_Proyectos {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public DefaultStreamedContent getDownload() {
+        return download;
+    }
+
+    public void setDownload(DefaultStreamedContent download) {
+        this.download = download;
     }
 
 }

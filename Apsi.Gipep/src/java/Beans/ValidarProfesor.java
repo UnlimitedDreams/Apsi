@@ -6,6 +6,7 @@
 package Beans;
 
 import Entity.DispoUsuario;
+import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Usuario;
 import Modelo.Conecion_Oracle;
@@ -20,6 +21,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -35,23 +37,45 @@ public class ValidarProfesor implements Serializable {
     ArrayList<Profesor> profe = new ArrayList();
     private String facultad;
     ArrayList<String> facul = new ArrayList();
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
 
     public ValidarProfesor() {
+
     }
 
-    public void cargar_facultad() throws ClassNotFoundException {
-        facul.clear();
-        Conecion_postgres.conectar();
-        Conecion_postgres.ejecuteQuery("select distinct facultad from profesor");
-        try {
-            while (Conecion_postgres.rs.next()) {
-                facul.add(Conecion_postgres.rs.getString(1));
+    public void cargar_facultad() throws ClassNotFoundException, IOException {
+
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+            facul.clear();
+            Conecion_postgres.conectar();
+            Conecion_postgres.ejecuteQuery("select distinct facultad from profesor");
+            try {
+                while (Conecion_postgres.rs.next()) {
+                    facul.add(Conecion_postgres.rs.getString(1));
+                }
+                Conecion_postgres.cerrarConexion();
+
+            } catch (Exception ex) {
+                System.out.println("Error " + ex.toString());
             }
-            Conecion_postgres.cerrarConexion();
-        } catch (Exception ex) {
+////            httpServletRequest.getAttribute("user");
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
 
         }
     }
+
+   
 
     public DispoUsuario comprarProfesor(String pege) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -214,6 +238,7 @@ public class ValidarProfesor implements Serializable {
         }
 //        System.out.println("- " + temp2.toString());
         if (temp2 != null) {
+
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("profesor", temp2);
             if (condi == 1) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("AjusteProfesor.xhtml");
@@ -225,6 +250,7 @@ public class ValidarProfesor implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ya se encuentra Registrado", ""));
         }
     }
+   
 
     public void validarProyecto(Proyectos p, int condi) throws IOException {
         System.out.println("Entro " + p.getCodigoProyecto());
@@ -265,6 +291,30 @@ public class ValidarProfesor implements Serializable {
 
     public void setFacul(ArrayList<String> facul) {
         this.facul = facul;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
     }
 
 }

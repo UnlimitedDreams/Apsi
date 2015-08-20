@@ -97,7 +97,7 @@ public class Reporte_Profesor {
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("Query", o);
             System.out.println("query " + o);
-            JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
+            JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\ApsiJuan.git\\trunk\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
             System.out.println("1");
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
@@ -137,7 +137,7 @@ public class Reporte_Profesor {
             Map<String, Object> parametros = new HashMap<String, Object>();
             System.out.println("query " + o);
             parametros.put("Query", o);
-            JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
+            JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\ApsiJuan.git\\trunk\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
             System.out.println("1");
             JRExporter exporter = new JRXlsxExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);

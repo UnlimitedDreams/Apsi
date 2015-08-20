@@ -111,7 +111,7 @@ public class Calendario_profesor implements Serializable {
                 date2.setMinutes(min2);
                 date2.setDate(date2.getDate() - 1);
                 System.out.println("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + date1 + "+" + date2);
-                eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + temp.getCod(), date1, date2));
+                eventModel.addEvent(new DefaultScheduleEvent("Asesoria #" + temp.getCod(), date1, date2));
             }
 
 //ajustar session para el calendario
@@ -151,7 +151,7 @@ public class Calendario_profesor implements Serializable {
         ArrayList<MDias> dias = new ArrayList();
         CalendarioP calen = new CalendarioImple();
         ArrayList<Asesoria> usu = new ArrayList();
-        usu = calen.TraerAsesorias(1);
+        usu = calen.TraerAsesorias(6);
         String dia = "";
         String hora1 = "", hora2 = "", hfinal = "";
         int cod = 0;

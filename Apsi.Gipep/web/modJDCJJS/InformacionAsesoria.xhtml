@@ -14,7 +14,7 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{reporte_Proyectos.cargar_años(1)}"> 
+    <h:body onload="#{validarProfesor.cargar_facultad()}"> 
         <nav class="navbar navbar-trans " role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -90,7 +90,7 @@
                                     </a>
                                     <ul class="sub">
                                         <li><a href="R_ProfesorHoras.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
+                                        <li><a href="R_ListaProyectos.xhtml" ><i class="fa fa-cogs"> </i>Proyectos</a></li>
                                         <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
 
                                     </ul>
@@ -108,6 +108,12 @@
 
                                     </ul>
                                 </li>
+
+
+
+
+
+
                             </ul>
                         </div>
                     </aside>
@@ -117,93 +123,7 @@
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>TITLE PANEL</h4></div>
-                        <h:form>
-                            <table>
-                                <tr>
-                                    <td><h:outputLabel  value="Año :" /></td>
-                                    <td> <h:selectOneMenu id="car" value="#{reporte_Proyectos.año}" >
-                                            <f:selectItems value="#{reporte_Proyectos.b_año}"/>   
-                                        </h:selectOneMenu>
-                                    </td>
-                                    <td><h:outputLabel  value="Carrera :" /></td>
-                                    <td> <h:selectOneMenu id="car3" value="#{reporte_Proyectos.cod_carrera}" >
-                                            <f:selectItems value="#{reporte_Proyectos.lista_Carrera}"
-                                                           var="carrera"
-                                                           itemLabel="#{carrera.carrera}" itemValue="#{carrera.cod}"/>   
-                                        </h:selectOneMenu>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><h:outputLabel value="Estado :" /></td>
-                                    <td> <h:selectOneMenu id="car4" value="#{reporte_Proyectos.cod_estado}" >
-                                            <f:selectItems value="#{reporte_Proyectos.lista_estados}"
-                                                           var="estado"
-                                                           itemLabel="#{estado.descripcion}" itemValue="#{estado.codigoEstados}"/>   
-                                        </h:selectOneMenu>
-                                    </td>
-                                    <td><h:outputLabel  value="Tipo :" /></td>
-                                    <td> <h:selectOneMenu id="car6" value="#{reporte_Proyectos.tipo}" >
-                                            <f:selectItems value="#{reporte_Proyectos.lista_Tipo}"
-                                                           var="tipo"
-                                                           itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codTipo}"/>   
-                                        </h:selectOneMenu>
-                                    </td>
-                                </tr>
-                                <tr>
 
-                                    <td>
-                                        <h:commandButton value="Buscar" actionListener="#{reporte_Proyectos.buscar(1)}" ></h:commandButton>
-                                    </td>
-                                </tr>
-                            </table>
-                            <br/><br/>
-                            <h:dataTable id="tabla" var="Proyecto" value="#{reporte_Proyectos.proyectos}"
-                                         border="1">
-
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Codigo"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.codigo}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Titulo"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.nombre}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Fecha Inicial"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.fecha_I}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Fecha Final"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.fecha_F}" />
-
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Porcentaje"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.procentaje}" />
-
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Integrantes"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.integrantes}" />
-
-                                </h:column>
-                            </h:dataTable>
-                            <h:commandButton value="PDF" actionListener="#{reporte_Proyectos.reporteHorasProfePDf()}"></h:commandButton>
-                            <h:commandButton value="Excel" actionListener="#{reporte_Proyectos.reporteHorasProfeXml()}"></h:commandButton>
-
-                        </h:form>
 
                     </div>
                 </div>

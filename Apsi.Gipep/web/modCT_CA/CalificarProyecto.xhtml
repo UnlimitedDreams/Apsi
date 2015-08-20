@@ -2,11 +2,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>ApSi</title> 
+        <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -15,33 +15,11 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{ajusteProfesorBean.inicionombreProfe()}">
-        <nav class="navbar navbar-trans " role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar-collapsible">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
-                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
-                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
-                        <li>&nbsp;</li>
-                    </ul>                   
-                </div>
-            </div>
-        </nav>
-
+    <h:body onload="#{revision.cargar_años()}"> 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="#{ajusteProfesorBean.nombreUsuario}"></h:outputLabel></h3> 
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
                 </div>
             </div>
         </section>
@@ -116,83 +94,51 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>Ajustar el profesor</h4></div>
-                        <h:form id="formul">
+                            <h4>CALIFICAR PROYECTOS</h4></div>
+
+                        <br></br>
+                        <h:form id="vista_validar">
+
 
                             <p:growl id="messages" showDetail="true" />
-                            <h3> <h:outputLabel  class="text-primary" value="PROFESOR: #{ajusteProfesorBean.nombreProfesor}" /></h3>
 
-                            <br/><br/>
                             <div class="form-group">
-                                <h:outputLabel for="fechaI" value="Fecha inicial :"  />
-                                <br></br>
-                                <p:calendar   value="#{ajusteProfesorBean.fecha_inicial}" showOn="button"></p:calendar>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel for="fecha2" value="Fecha Final :"  />
-                                <br></br>
-                                <p:calendar  value="#{ajusteProfesorBean.fecha_final}" showOn="button" ></p:calendar>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel for="ho" value="Cantidad de Horas :" />
-                                <h:inputText id="ho" class="form-control input-lg" value="#{ajusteProfesorBean.cantidad_horas}" required="true" requiredMessage="Ingresar Cantidad de horas De trabajo"/>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel for="Ra" value="Rango de Asesoria (Min):"  />
-                                <h:inputText class="form-control input-lg" id="Ra" value="#{ajusteProfesorBean.ramgoHora}" required="true" requiredMessage="Ingresar Rango de las Asesorias"/>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel  for="Raer" value="Periodo:"  />
-                                <h:selectOneMenu class="form-control input-lg" id="car2" value="#{ajusteProfesorBean.periodo}" >
-                                    <f:selectItems value="#{ajusteProfesorBean.peri}"/>   
+                                <h:outputLabel  value="Año :" />
+                                <h:selectOneMenu class="form-control" value="#{revision.año}" >
+                                    <f:selectItems value="#{revision.b_año}"/>   
                                 </h:selectOneMenu>
                             </div>
-                            <br/>
-                            <div class="form-group">
-                                <h:dataTable id="tabla" var="dias" value="#{ajusteProfesorBean.dias}"
-                                             class="table" >
-                                    <h:column>
+
+                            <br></br>
+                            <h:commandButton value="Cargar" class="btn btn-primary btn-lg btn-block" actionListener="#{revision.listaProfeProyect()}"></h:commandButton>
+                            <br></br>
+                            <h:dataTable id="tabla" var="Proyecto" value="#{revision.p}" class="table">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{Proyecto.nombre}" />
+                                </h:column>
+                                <h:column>
+                                    <center>
                                         <f:facet name="header">
-                                            <h:outputText value="SELECCIONAR"></h:outputText>
+                                            <h:outputText value="Porcentaje"></h:outputText>
                                         </f:facet>
-                                        <p:selectBooleanCheckbox >
-                                            <p:ajax  listener="#{ajusteProfesorBean.activarDias(dias.dia)}"></p:ajax>
-                                        </p:selectBooleanCheckbox>
-                                    </h:column>
-                                    <h:column>
+                                        <h:outputText value="#{Proyecto.porcentaje} %" />
+                                    </center>
+                                </h:column>
+                                <h:column>
+                                    <center>
                                         <f:facet name="header">
-                                            <h:outputText value="DIA"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{dias.dia}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="HORA INICIAL"></h:outputText>
+                                            <h:outputText value="Opciones"></h:outputText>
                                         </f:facet>
                                         <center>
-                                            <p:inputText value="#{ajusteProfesorBean.hora_inicial}" type="time">
-                                                <p:ajax  listener="#{ajusteProfesorBean.ponerhorasinicial(dias.dia)}" update=":formul:messages"></p:ajax>
-                                            </p:inputText>
+                                            <h:commandButton value="Calificar" class="btn btn-primary btn-lg" actionListener="#{listaProyectos.calificarProyecto(Proyecto)}"></h:commandButton>
+
                                         </center>
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="HORA FINAL"></h:outputText>
-                                        </f:facet>
-                                        <center>
-                                            <p:inputText  value="#{ajusteProfesorBean.hora_Final}" type="time" >
-                                                <p:ajax  listener="#{ajusteProfesorBean.ponerhorasFinal(dias.dia)}" update=":formul:messages"></p:ajax>
-                                            </p:inputText>
-                                        </center>
-
-                                    </h:column>
-                                </h:dataTable>
-                            </div>
-                            <br/>
-                            <h:commandButton value="Next" class="btn btn-primary btn-lg btn-block" actionListener="#{ajusteProfesorBean.cargarTodo()}" >
-
-                            </h:commandButton>
-
+                                    </center>
+                                </h:column>
+                            </h:dataTable>
                         </h:form>
 
                     </div>
@@ -200,15 +146,13 @@
             </div>
 
         </section>
-
-
         <footer id="footer">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h4><strong>ApSi;</strong>
+                        <h4><strong>ApSi&REG;</strong>
                         </h4>
-                        <p>Institucin Universitaria Antonio Jos; Camacho<br></br>Santiago de Cali, Colombia</p>
+                        <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br></br>Santiago de Cali, Colombia</p>
                         <ul class="list-unstyled">
                             <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
                             <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
@@ -224,11 +168,12 @@
                             </li>
                         </ul>
                         <hr class="small"></hr>
-                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright  Unlimited Dreams, Todos los derechos reservados.</p>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
                     </div>
                 </div>
             </div>
         </footer>
+
         <div class="scroll-up">
             <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>
@@ -236,16 +181,26 @@
 
         <!--scripts loaded here-->
 
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="../js/scripts.js"></script>
+        <!--scripts para panel menu-->
+        <script src="../js/jquery.js"></script>
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
+
+
         <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 
         <!--scripts para panel menu-->
         <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/custom/scripts1.js"></script>
+
 
 
     </h:body>

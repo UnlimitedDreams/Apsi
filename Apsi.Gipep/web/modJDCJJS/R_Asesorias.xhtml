@@ -14,7 +14,7 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{reporte_Proyectos.cargar_años(1)}"> 
+    <h:body  > 
         <nav class="navbar navbar-trans " role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -89,7 +89,7 @@
                                         <span class="menu-arrow arrow_carrot-right"></span>
                                     </a>
                                     <ul class="sub">
-                                        <li><a href="R_ProfesorHoras.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
+                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
                                         <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
                                         <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
 
@@ -117,94 +117,54 @@
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>TITLE PANEL</h4></div>
+
                         <h:form>
                             <table>
                                 <tr>
-                                    <td><h:outputLabel  value="Año :" /></td>
-                                    <td> <h:selectOneMenu id="car" value="#{reporte_Proyectos.año}" >
-                                            <f:selectItems value="#{reporte_Proyectos.b_año}"/>   
-                                        </h:selectOneMenu>
-                                    </td>
-                                    <td><h:outputLabel  value="Carrera :" /></td>
-                                    <td> <h:selectOneMenu id="car3" value="#{reporte_Proyectos.cod_carrera}" >
-                                            <f:selectItems value="#{reporte_Proyectos.lista_Carrera}"
-                                                           var="carrera"
-                                                           itemLabel="#{carrera.carrera}" itemValue="#{carrera.cod}"/>   
-                                        </h:selectOneMenu>
+                                    <td><h:outputLabel  value="Fecha :" /></td>
+                                    <td><p:calendar value="#{reporte_Asesoria.fecha}" ></p:calendar>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><h:outputLabel value="Estado :" /></td>
-                                    <td> <h:selectOneMenu id="car4" value="#{reporte_Proyectos.cod_estado}" >
-                                            <f:selectItems value="#{reporte_Proyectos.lista_estados}"
-                                                           var="estado"
-                                                           itemLabel="#{estado.descripcion}" itemValue="#{estado.codigoEstados}"/>   
-                                        </h:selectOneMenu>
-                                    </td>
-                                    <td><h:outputLabel  value="Tipo :" /></td>
-                                    <td> <h:selectOneMenu id="car6" value="#{reporte_Proyectos.tipo}" >
-                                            <f:selectItems value="#{reporte_Proyectos.lista_Tipo}"
-                                                           var="tipo"
-                                                           itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codTipo}"/>   
+                                    <td><h:outputLabel  value="Estado :" /></td>
+                                    <td><h:selectOneMenu value="#{reporte_Asesoria.estado_ase}">
+                                            <f:selectItem itemValue="Asistio" itemLabel="Asistieron" />
+                                            <f:selectItem itemValue="No Asistio" itemLabel="No Asistieron" />
+                                            <f:selectItem itemValue="Pendiente" itemLabel="Pendiente" />
                                         </h:selectOneMenu>
                                     </td>
                                 </tr>
-                                <tr>
 
-                                    <td>
-                                        <h:commandButton value="Buscar" actionListener="#{reporte_Proyectos.buscar(1)}" ></h:commandButton>
-                                    </td>
-                                </tr>
                             </table>
-                            <br/><br/>
-                            <h:dataTable id="tabla" var="Proyecto" value="#{reporte_Proyectos.proyectos}"
-                                         border="1">
-
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Codigo"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.codigo}" />
-                                </h:column>
+                            <h:commandButton value="Cargar" actionListener="#{reporte_Asesoria.buscar()}"></h:commandButton>
+                            <br/>
+                            <h:dataTable var="Profesor" value="#{reporte_Asesoria.list_aseso}" border="1">
                                 <h:column>
                                     <f:facet name="header">
                                         <h:outputText value="Titulo"></h:outputText>
                                     </f:facet>
-                                    <h:outputText value="#{Proyecto.nombre}" />
+                                    <h:outputText value="#{Profesor.nombre_proyecto}" />
                                 </h:column>
-                                <h:column>
+                                 <h:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Fecha Inicial"></h:outputText>
+                                        <h:outputText value="Cantidad asesorias"></h:outputText>
                                     </f:facet>
-                                    <h:outputText value="#{Proyecto.fecha_I}" />
+                                     <h:outputText value="#{Profesor.cantidad}" />
                                 </h:column>
-                                <h:column>
+                                 <h:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Fecha Final"></h:outputText>
+                                        <h:outputText value="Progreso"></h:outputText>
                                     </f:facet>
-                                    <h:outputText value="#{Proyecto.fecha_F}" />
-
+                                     <h:outputText value="#{Profesor.porcentaje}" />
                                 </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Porcentaje"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.procentaje}" />
-
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Integrantes"></h:outputText>
-                                    </f:facet>
-                                    <h:outputText value="#{Proyecto.integrantes}" />
-
-                                </h:column>
+                               
                             </h:dataTable>
-                            <h:commandButton value="PDF" actionListener="#{reporte_Proyectos.reporteHorasProfePDf()}"></h:commandButton>
-                            <h:commandButton value="Excel" actionListener="#{reporte_Proyectos.reporteHorasProfeXml()}"></h:commandButton>
+                            <br/>
+
+                            <h:commandButton value="PDF" actionListener="#{reporte_Profesor.reportPDF()}"></h:commandButton>
+                            <h:commandButton value="Excel" actionListener="#{reporte_Profesor.reportExcel()}"></h:commandButton>
 
                         </h:form>
-
                     </div>
                 </div>
             </div>
@@ -229,14 +189,16 @@
 
         <!--scripts loaded here-->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="../js/scripts.js"></script>
-        <!--scripts para panel menu-->
-        <script src="../js/jquery.js"></script>
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
+        <!--scripts loaded here-->
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <!--scripts para panel menu-->
+        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/custom/scripts1.js"></script>
 
 
     </h:body>

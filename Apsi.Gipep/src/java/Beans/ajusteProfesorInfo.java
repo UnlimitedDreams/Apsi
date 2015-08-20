@@ -30,6 +30,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -50,13 +51,22 @@ public class ajusteProfesorInfo {
     private String Cantidad_horas;
     private int periodo;
     ArrayList<MDias> Dias = new ArrayList();
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
 
     public ajusteProfesorInfo() {
 
     }
 
-    public void recuperarInfo() {
-        System.out.println("recupero");
+    public void recuperarInfo() throws IOException {
+         faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+             System.out.println("recupero");
         ajusteProfesorBean ajuste;
         ajuste = new ajusteProfesorBean();
         ajuste = (ajusteProfesorBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste");
@@ -68,6 +78,11 @@ public class ajusteProfesorInfo {
         RamgoHora = ajuste.getRamgoHora();
         Cantidad_horas = ajuste.getCantidad_horas();
         periodo = ajuste.getPeriodo();
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+        }
+       
     }
 
     public void insertar_ajuste() throws ClassNotFoundException, IOException {
@@ -251,7 +266,7 @@ public class ajusteProfesorInfo {
         try {
             System.out.println("entro");
             Rol r = new Rol();
-            r.setCodRol(new BigDecimal(4));
+            r.setCodRol(new BigDecimal(2));
             r.setEstado("esta");
             r.setNombre("nombre");
             UsuRol usuR = new UsuRol();
@@ -323,5 +338,30 @@ public class ajusteProfesorInfo {
     public void setPeriodo(int periodo) {
         this.periodo = periodo;
     }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
+    }
+    
 
 }

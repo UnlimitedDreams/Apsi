@@ -24,6 +24,7 @@ public class ProyectosModelo {
     private String fecha_F;
     private int procentaje;
     private String Estados;
+    private String ruta;
     
 
     public ProyectosModelo(int cod_pro, String nombre, boolean estado) {
@@ -150,6 +151,14 @@ public class ProyectosModelo {
 
     public void setFecha_F(String fecha_F) {
         this.fecha_F = fecha_F;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
     }
 
     @Override

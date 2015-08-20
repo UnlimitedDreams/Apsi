@@ -9,8 +9,10 @@ import Entity.Proyectos;
 import Entity.TipoProyecto;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -71,12 +73,24 @@ public class ListaProyectos {
     public DefaultStreamedContent getDownload() throws Exception {
         return download;
     }
+
     public void prepDownload(String date) throws Exception {
         System.out.println("file " + date);
         File file = new File(date);
         InputStream input = new FileInputStream(file);
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         setDownload(new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName()));
+    }
+
+    public void calificarProyecto(Proyectos p) throws IOException {
+        if (p.getPorcentaje().equalsIgnoreCase("100")) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("calificar", p);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("DatosCalificar.xhtml");
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Proyecto debe estar al 100% para ser calificado", ""));
+
+        }
+
     }
 
     public ArrayList<TipoProyecto> getTipo() {

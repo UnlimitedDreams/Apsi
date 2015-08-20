@@ -5,6 +5,7 @@
  */
 package Beans;
 
+import Entity.Persona;
 import Modelo.MDias;
 import Modelo.Profesor;
 import java.io.IOException;
@@ -36,6 +37,9 @@ public final class ajusteProfesorBean implements Serializable {
     ArrayList<Integer> Peri = new ArrayList();
     ArrayList<MDias> Dias = new ArrayList();
     ArrayList<MDias> Dias_Recuerdo = new ArrayList();
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
 
     public ajusteProfesorBean() {
 
@@ -90,14 +94,27 @@ public final class ajusteProfesorBean implements Serializable {
 
     }
 
-    public void inicionombreProfe() {
-        Profesor temp = null;
-        temp = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
-        this.nombreProfesor = temp.getNombre() + " " + temp.getApellido();
-        System.out.println("--- " + temp.toString());
-        cargarDias();
-        Recuerpar_informacion();
-        cargar_Periodo();
+    
+
+    public void inicionombreProfe() throws IOException {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+            Profesor temp = null;
+            temp = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
+            this.nombreProfesor = temp.getNombre() + " " + temp.getApellido();
+            System.out.println("--- " + temp.toString());
+            cargarDias();
+            Recuerpar_informacion();
+            cargar_Periodo();
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+        }
+
     }
 
     public void cargarDias() {
@@ -287,6 +304,30 @@ public final class ajusteProfesorBean implements Serializable {
 
     public void setPeri(ArrayList<Integer> Peri) {
         this.Peri = Peri;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
     }
 
 }

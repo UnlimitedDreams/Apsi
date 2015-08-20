@@ -88,6 +88,12 @@ public class Revision {
         }
     }
 
+    public void calificar(Proyectos p) {
+        System.out.println("Proyecto " + p.getCodigoProyecto());
+//        Session session = HibernateUtil.getSessionFactory().openSession();
+//        Transaction t = session.beginTransaction();
+    }
+
     public void listaReviciones() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
@@ -106,7 +112,7 @@ public class Revision {
 
     public void atrasVista1() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Poryecto_Revi");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("PROrRevisiones-1.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("DireccionProyecto.xhtml");
 
     }
 
