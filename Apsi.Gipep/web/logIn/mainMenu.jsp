@@ -342,15 +342,17 @@
                                     if (rol.equals("SuperUsuario")) {
                                         out.print("no disponible");
                                     } else {
-                                        List revisioList = new proyectoHelper().cargarRevisiones(idProyecto);
-                                        for (int i = 0; i < revisioList.size(); i++) {
-                                            Revisiones get = (Revisiones) revisioList.get(i);
-                                            out.println("<tr>"
-                                                    + "<td>"
-                                                    + "<h4 class=\"text-primary\">" + get.getDescripcion() + "</h3>"
-                                                    + "</td>"
-                                                    + "<td><h4 class=\"text-primary\">" + get.getFecha() + "</h3></td>"
-                                                    + "</tr>");
+                                        if (!idProyecto.isEmpty()) {
+                                            List revisioList = new proyectoHelper().cargarRevisiones(idProyecto);
+                                            for (int i = 0; i < revisioList.size(); i++) {
+                                                Revisiones get = (Revisiones) revisioList.get(i);
+                                                out.println("<tr>"
+                                                        + "<td>"
+                                                        + "<h4 class=\"text-primary\">" + get.getDescripcion() + "</h3>"
+                                                        + "</td>"
+                                                        + "<td><h4 class=\"text-primary\">" + get.getFecha() + "</h3></td>"
+                                                        + "</tr>");
+                                            }
                                         }
                                     }
                                 %>

@@ -218,7 +218,7 @@
                     <div class="modal-header">
                         <center>
                             <h1>Empecemos</h1>
-                            <h2>Digita tu n&uacute;mero de tu carnet estudiantil:</h2>
+                            <h2>Digita tu n&uacute;mero de Identificac&oacute;:</h2>
                             <hr> 
                             <form id="recuperar" name="recuperar" action="srvltOA" method="post">
                                 <input type="hidden" name="action" id="action" value="restore">

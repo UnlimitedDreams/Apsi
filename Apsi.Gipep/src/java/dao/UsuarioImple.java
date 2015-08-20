@@ -162,9 +162,7 @@ public class UsuarioImple implements UsuarioDao {
                 t.rollback();
             }
             throw e;
-        } finally {
-            session.close();
-        }
+        } 
     }
 
     /**
@@ -268,7 +266,7 @@ public class UsuarioImple implements UsuarioDao {
             return null;
         }
     }
-    
+
     public TreeMap cargarActividades(String id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();

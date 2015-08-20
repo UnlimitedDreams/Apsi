@@ -5,8 +5,10 @@
  */
 package apsi.Security;
 
+import Entity.Persona;
 import dao.UsuarioImple;
 import Entity.Usuario;
+import dao.PersonaHelper;
 import java.io.IOException;
 import java.math.BigDecimal;
 import javax.servlet.RequestDispatcher;
@@ -80,33 +82,37 @@ public class srvltOA extends HttpServlet {
                 RequestDispatcher a = request.getRequestDispatcher("profile.jsp?msg=Contraseña Actualizada&msgAlt=info");
                 a.forward(request, response);
             } else if (request.getParameter("action").equals("restore")) {
-                if (!new UsuarioImple().BuscarUsuario(new Usuario(BigDecimal.valueOf(Integer.parseInt(request.getParameter("pegeId"))), null, null))) {
-                    RequestDispatcher a = request.getRequestDispatcher("opcionesDeAcceso.jsp?msg=Su usuario no existe&msgAlt=danger");
-                    a.forward(request, response);
-                } else {
-                    HttpSession s = request.getSession();
-                    Usuario U = new UsuarioImple().cargarUsu(request.getParameter("pegeId"));
-                    String x = "";
-                    x = (int) (Math.random() * 10000) + "";
-                    s.setAttribute("nPass", x);
-                    new UsuarioImple().CambiarContraseña(request.getParameter("pegeId"), x);
-                    s.setAttribute("tempUser", U.getUsuario());
-                    response.sendRedirect("recuperaAcceso.jsp");
+                if (!new PersonaHelper().buscar(request.getParameter("pegeId"))) {
+                    //if (!new UsuarioImple().BuscarUsuario(new Usuario(BigDecimal.valueOf(Integer.parseInt(request.getParameter("pegeId"))), null, null))) {
+                        RequestDispatcher a = request.getRequestDispatcher("opcionesDeAcceso.jsp?msg=Su usuario no existe&msgAlt=danger");
+                        a.forward(request, response);
+                    } else {
+                        HttpSession s = request.getSession();
+                        Persona persona = (Persona) new PersonaHelper().leer(request.getParameter("pegeId"));
+                        Usuario U = new UsuarioImple().cargarUsu(persona.getUsuario().getPegeId().toString());
+                        String x = "";
+                        x = (int) (Math.random() * 10000) + "";
+                        s.setAttribute("nPass", x);
+                        new UsuarioImple().CambiarContraseña(U.getPegeId().toString(), x);
+                        s.setAttribute("tempUser", U.getUsuario());
+                        response.sendRedirect("recuperaAcceso.jsp");
+                    }
                 }
-            }
-        } catch (java.lang.NullPointerException e) {
+            }catch (java.lang.NullPointerException e) {
             RequestDispatcher a = request.getRequestDispatcher("opcionesDeAcceso.jsp?msg=No se permirten campos vacios&msgAlt=danger");
             a.forward(request, response);
         }
-    }
+        }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
-}
+        }// </editor-fold>
+    }
