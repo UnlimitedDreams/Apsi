@@ -16,19 +16,14 @@ import util.HibernateUtil;
  *
  * @author usuario
  */
-public class PersonaHelper {
+public class PersonaHelper implements helper {
 
-    public PersonaHelper() {
+    public void limpiarSessiones() {
+        s.clear();
+        s.getSessionFactory().close();
     }
 
-    Session s = HibernateUtil.getSessionFactory().openSession();
-//    Session s = null;
-public void limpiarSessiones(){
-    s.clear();
-    s.getSessionFactory().close();
-}
-    
-    
+    @Override
     public boolean buscar(String id) {
         s.getSessionFactory().openSession();
         try {
@@ -43,6 +38,7 @@ public void limpiarSessiones(){
         }
     }
 
+    @Override
     public boolean agregar(Object x) {
         Persona u = (Persona) x;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -65,6 +61,7 @@ public void limpiarSessiones(){
         }
     }
 
+    @Override
     public boolean actualizar(Object y) {
         s.getSessionFactory().openSession();
         Transaction t = s.beginTransaction();
@@ -84,6 +81,7 @@ public void limpiarSessiones(){
         }
     }
 
+    @Override
     public boolean borrar(String Id) {
         s.getSessionFactory().openSession();
         Transaction t = s.beginTransaction();
@@ -102,6 +100,7 @@ public void limpiarSessiones(){
         }
     }
 
+    @Override
     public List listarTodo() {
         s.getSessionFactory().openSession();
         Transaction t = s.beginTransaction();
@@ -115,6 +114,21 @@ public void limpiarSessiones(){
             throw e;
         } finally {
             s.close();
+        }
+    }
+
+    @Override
+    public Object leer(String id) {
+        s.getSessionFactory().openSession();
+        try {
+            Persona u = (Persona) s.createQuery("from Persona where idPersona='" + id + "'").uniqueResult();
+            if (u != null) {
+                return  u;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 }

@@ -26,8 +26,8 @@ public class sender {
      */
     public static class EnviadorMail {
 
-        final String miCorreo = "miglem0101@gmail.com";
-        final String miContraseña = "Monica94050706120";
+        final String miCorreo = "info.apsi.noreply@gmail.com";
+        final String miContraseña = "UnlimitedDreams";
         final String servidorSMTP = "smtp.gmail.com";
         final String puertoEnvio = "465";
         String mailReceptor = null;

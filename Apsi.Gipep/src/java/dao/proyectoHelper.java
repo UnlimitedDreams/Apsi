@@ -5,9 +5,9 @@
  */
 package dao;
 
-import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Revisiones;
+import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -36,7 +36,22 @@ public class proyectoHelper implements helper {
 
     @Override
     public boolean actualizar(Object x) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        s.getSessionFactory().openSession();
+        Transaction t = s.beginTransaction();
+        Proyectos proyectoNew = (Proyectos) x, proyectOld;
+        try {
+            proyectOld = (Proyectos) s.get(Proyectos.class, BigDecimal.valueOf(Integer.parseInt(proyectoNew.getCodigoProyecto().toString())));
+            proyectOld = proyectoNew;
+            s.update(proyectOld);
+            t.commit();
+            return true;
+        } catch (Exception e) {
+            if (t != null) {
+                t.rollback();
+                return false;
+            }
+            throw e;
+        }
     }
 
     @Override
@@ -97,7 +112,7 @@ public class proyectoHelper implements helper {
             lista = session.createQuery("Select Revisiones.revisiones "
                     + "	from RevisionProyecto as Revisiones "
                     + "	inner join  Revisiones.codRevisionproyecto as Proyecto "
-                    + "	where Proyecto.proyectos.codigoProyecto = '" + id + "'").list();
+                    + "	where Proyecto.proyectos.codigoProyecto = " + id + "").list();
             t.commit();
         } catch (Exception e) {
             if (t != null) {
