@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ApSi.GiPep - Menú Principal</title>
+        <link rel="icon" type="image/png" href="../img/apsi.ico"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="../css/ingreso.css"/>
+        <link rel="stylesheet" href="../css/Tablas.css"/>
+        <link rel="stylesheet" href="../css/formas.css"/>
+        <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <!-- Link para panel menu-->
+        <link href="../css/style.css" rel="stylesheet"/> 
+    </h:head>
+    <h:body > 
+
+        <section class="container-fluid" id="section6">
+            <div class="container-fluid">
+                <div class="row">                   
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                </div>
+            </div>
+        </section>
+
+        <h:form>
+            <center>
+                <div id="calendar" >
+                    <p:growl id="messages" showDetail="true" />
+                    <b:container>
+                        <h:panelGrid columnClasses="value">
+                            <h3 style="margin-top: 0">Calendario Profesor</h3>
+                            <p:schedule  id="schedule" value="#{calendarioAsesoria.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false" showWeekends="true" resizable="false"  > 
+                                <p:ajax event="dateSelect" listener="#{calendarioAsesoria.onDateSelect}"  oncomplete="PF('eventDialog2').show();" />
+                                <p:ajax event="eventSelect" listener="#{calendarioAsesoria.onEventSelect}"  oncomplete="PF('eventDialog').show();" />
+                            </p:schedule>
+                        </h:panelGrid>
+                        <br/><br/>
+                         
+                    </b:container>
+
+                </div>
+            </center>
+        </h:form>
+        <br/>
+
+        <footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>ApSi;</strong>
+                        </h4>
+                        <p>Institucion Universitaria Antonio Jose Camacho<br></br>Santiago de Cali, Colombia</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
+                            </li>
+                        </ul>
+                        <br></br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small"></hr>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright Unlimited Dreams, Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div class="scroll-up">
+            <a href="#"><i class="fa fa-angle-up"></i></a>
+        </div>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="../js/scripts.js"></script>
+        <!--scripts para panel menu-->
+        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/scripts1.js"></script>
+
+    </h:body>
+
+</html>
