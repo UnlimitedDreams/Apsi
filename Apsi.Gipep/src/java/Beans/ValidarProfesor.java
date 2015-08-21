@@ -46,8 +46,11 @@ public class ValidarProfesor implements Serializable {
     }
 
     public void cargar_facultad() throws ClassNotFoundException, IOException {
-
-        faceContext = FacesContext.getCurrentInstance();
+//*************************************************************
+         faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+             faceContext = FacesContext.getCurrentInstance();
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
         if (httpServletRequest.getSession().getAttribute("user") != null) {
             System.out.println("Existe");
@@ -73,9 +76,21 @@ public class ValidarProfesor implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
 
         }
-    }
+            System.out.println("Existe");
 
-   
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+          
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
+        }
+        
+        
+       
+    }
 
     public DispoUsuario comprarProfesor(String pege) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -123,18 +138,31 @@ public class ValidarProfesor implements Serializable {
         }
     }
 
-    public void cargarProfeII() throws ClassNotFoundException, SQLException {
-        profe.clear();
-        System.out.println("Entro a inicio");
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-        Usuario admon2 = new Usuario();
-        admon2.setPegeId(new BigDecimal(1));
-        ArrayList<DispoUsuario> users = new ArrayList();
-        users = (ArrayList) session.createQuery("select Du from DispoUsuario Du INNER JOIN Du.usuarioByAdmon UA "
-                + "INNER JOIN Du.disponibilidad D where UA=1 and D.estado='A'").list();
-        System.out.println("------------------ " + users.size());
-        TraerInfoProfe2(users);
+    public void cargarProfeII() throws ClassNotFoundException, SQLException, IOException {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+            profe.clear();
+            System.out.println("Entro a inicio");
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Transaction t = session.beginTransaction();
+            Usuario admon2 = new Usuario();
+            admon2.setPegeId(new BigDecimal(1));
+            ArrayList<DispoUsuario> users = new ArrayList();
+            users = (ArrayList) session.createQuery("select Du from DispoUsuario Du INNER JOIN Du.usuarioByAdmon UA "
+                    + "INNER JOIN Du.disponibilidad D where UA=1 and D.estado='A'").list();
+            System.out.println("------------------ " + users.size());
+            TraerInfoProfe2(users);
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
+        }
 
     }
 
@@ -250,7 +278,6 @@ public class ValidarProfesor implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ya se encuentra Registrado", ""));
         }
     }
-   
 
     public void validarProyecto(Proyectos p, int condi) throws IOException {
         System.out.println("Entro " + p.getCodigoProyecto());

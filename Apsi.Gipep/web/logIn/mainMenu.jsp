@@ -106,7 +106,7 @@
                     }
                 %>
                 <li>
-                    <a href="../modCT_CA/SubirDoc.xhtml"><i class="fa fa-folder-o fa-stack-1x text-primary"></i>Archivo</a>
+                    <a href="../faces/modCT_CA/SubirDoc.xhtml"><i class="fa fa-folder-o fa-stack-1x text-primary"></i>Archivo</a>
                 </li>
                 <li>
                     <a href="profile.jsp"><i class="fa fa-cog fa-stack-1x text-primary"></i>Opciones</a>

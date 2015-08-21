@@ -7,6 +7,7 @@ package Beans;
 
 import Entity.Asesoria;
 import Entity.Disponibilidad;
+import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Usuario;
 import Modelo.Conecion_postgres;
@@ -19,6 +20,7 @@ import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -33,6 +35,9 @@ public class Asistencia {
 
     ArrayList<ModeloAsesoria> lista_ase = new ArrayList();
     ArrayList<Estudiante> lista_estu = new ArrayList();
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
 
     public Asistencia() {
     }
@@ -53,8 +58,16 @@ public class Asistencia {
 
     }
 
-    public void cargarDatos() {
-        int cod_dis = TraerDispo();
+    public void cargarDatos() throws IOException {
+         faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+             int cod_dis = TraerDispo();
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         ArrayList<Asesoria> ase = new ArrayList();
@@ -81,6 +94,13 @@ public class Asistencia {
         } catch (Exception ex) {
             System.out.println("Error " + ex.toString());
         }
+          
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
+        }
+       
     }
 
     public String NombreProyecto(int cod) {
@@ -101,31 +121,47 @@ public class Asistencia {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ModeloASesoria", a);
         FacesContext.getCurrentInstance().getExternalContext().redirect("AsistenciaGRupoTrabajo.xhtml");
     }
-    public void mns(){
+
+    public void mns() {
         System.out.println("entroo");
     }
 
-    public void cargarDatosEstudiante() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-        ModeloAsesoria M = new ModeloAsesoria();
-        ArrayList<Usuario> p = new ArrayList();
+    public void cargarDatosEstudiante() throws IOException {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+             Persona per = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = per.getNombres() + " " + per.getApellidos();
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Transaction t = session.beginTransaction();
+            ModeloAsesoria M = new ModeloAsesoria();
+            ArrayList<Usuario> p = new ArrayList();
 
-        M = (ModeloAsesoria) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ModeloASesoria");
-        try {
-            p = (ArrayList) session.createQuery("select U from Usuario U INNER JOIN "
-                    + "U.asistentes A INNER JOIN A.asesoria AS"
-                    + " where AS.codAsesoria=" + M.getCodigo_ase()).list();
-            t.commit();
-            Usuario temp = null;
-            for (int i = 0; i < p.size(); i++) {
-                temp = (Usuario) p.get(i);
-                lista_estu.add(new Estudiante(false, "", "", "", "" + temp.getPegeId()));
+            M = (ModeloAsesoria) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ModeloASesoria");
+            try {
+                p = (ArrayList) session.createQuery("select U from Usuario U INNER JOIN "
+                        + "U.asistentes A INNER JOIN A.asesoria AS"
+                        + " where AS.codAsesoria=" + M.getCodigo_ase()).list();
+                t.commit();
+                Usuario temp = null;
+                for (int i = 0; i < p.size(); i++) {
+                    temp = (Usuario) p.get(i);
+                    lista_estu.add(new Estudiante(false, "", "", "", "" + temp.getPegeId()));
+                }
+                TraerDatosPersonales();
+            } catch (Exception ex) {
+                System.out.println("Error CargarDatoEstudiante " + ex.toString());
             }
-            TraerDatosPersonales();
-        } catch (Exception ex) {
-            System.out.println("Error CargarDatoEstudiante " + ex.toString());
+           
+//            System.out.println("--- " + p.toString());
+
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
         }
+
     }
 
     public void TraerDatosPersonales() throws ClassNotFoundException {
@@ -161,6 +197,30 @@ public class Asistencia {
 
     public void setLista_estu(ArrayList<Estudiante> lista_estu) {
         this.lista_estu = lista_estu;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
     }
 
 }

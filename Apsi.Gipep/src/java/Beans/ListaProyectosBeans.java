@@ -6,6 +6,7 @@
 package Beans;
 
 import Entity.DispoUsuario;
+import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Usuario;
 import Entity.UsuarioProyecto;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -36,6 +38,10 @@ public class ListaProyectosBeans {
     /**
      * Creates a new instance of ListaProyectosBeans
      */
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
+
     ArrayList<ProyectosModelo> pro2 = new ArrayList();
     ArrayList<Carreras> lista_Carrera = new ArrayList();
     private int cod_carrera;
@@ -106,18 +112,32 @@ public class ListaProyectosBeans {
         }
     }
 
-    public void cargarCarreras() throws ClassNotFoundException {
-        lista_Carrera.clear();
-        Conecion_postgres.conectar();
-        Conecion_postgres.ejecuteQuery("select * from carreras");
-        try {
-            while (Conecion_postgres.rs.next()) {
-                lista_Carrera.add(new Carreras(Conecion_postgres.rs.getInt(1),
-                        Conecion_postgres.rs.getString(2)));
+    public void cargarCarreras() throws ClassNotFoundException, IOException {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            lista_Carrera.clear();
+            Conecion_postgres.conectar();
+            Conecion_postgres.ejecuteQuery("select * from carreras");
+            try {
+                while (Conecion_postgres.rs.next()) {
+                    lista_Carrera.add(new Carreras(Conecion_postgres.rs.getInt(1),
+                            Conecion_postgres.rs.getString(2)));
+                }
+                Conecion_postgres.cerrarConexion();
+            } catch (Exception ex) {
+                System.out.println("Error carreras " + ex.toString());
             }
-            Conecion_postgres.cerrarConexion();
-        } catch (Exception ex) {
-            System.out.println("Error carreras " + ex.toString());
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
         }
 
     }

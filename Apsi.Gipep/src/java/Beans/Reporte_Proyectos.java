@@ -390,7 +390,7 @@ public class Reporte_Proyectos {
             System.out.println("-");
             datasource.addObjecto(temp);
         }
-        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\ApsiJuan.git\\trunk\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\usuario\\Documents\\GitHub\\Apsi\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
         JRExporter exporter = new JRPdfExporter();
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         String user = System.getProperty("user.name");
@@ -410,7 +410,7 @@ public class Reporte_Proyectos {
             System.out.println("-");
             datasource.addObjecto(temp);
         }
-        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\Britt\\Desktop\\ApsiJuan.git\\trunk\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\usuario\\Documents\\GitHub\\Apsi\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
         JRExporter exporter = new JRXlsxExporter();
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         String user = System.getProperty("user.name");

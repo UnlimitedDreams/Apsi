@@ -8,6 +8,7 @@ package Beans;
 import Entity.Calendario;
 import Entity.Dia;
 import Entity.Disponibilidad;
+import Entity.Persona;
 import Modelo.MDias;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -28,6 +30,9 @@ import util.HibernateUtil;
 @ManagedBean
 @SessionScoped
 public class ListaProfesoresBeansUpdate {
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
 
     private String nombreProfesor;
     private Date fecha_inicial;
@@ -39,8 +44,13 @@ public class ListaProfesoresBeansUpdate {
     public ListaProfesoresBeansUpdate() {
     }
 
-    public void recuperar_info() {
-        System.out.println("entro a recuperar");
+    public void recuperar_info() throws IOException {
+        
+        
+ faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+             System.out.println("entro a recuperar");
         String codigo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Pege_idProfe");
         String v[] = codigo.split("-");
         Disponibilidad d = new Disponibilidad();
@@ -53,6 +63,20 @@ public class ListaProfesoresBeansUpdate {
         fecha_final = d.getFechaFinal();
         RamgoHora = "" + d.getRango();
         Cantidad_horas = "" + d.getNumHoras();
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+          
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
+        }
+        
+        
+       
 
     }
 //

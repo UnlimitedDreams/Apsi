@@ -48,7 +48,30 @@ and open the template in the editor.
                             </p:schedule>
                         </h:panelGrid>
                         <br/><br/>
-                         
+                        <p:dialog widgetVar="eventDialog"  modal="true" header="Informacion" showEffect="clip" hideEffect="clip">
+                            <h:panelGrid id="eventDetails" columns="2">
+                                <b:commandButton id="addButton" value="Info" actionListener="#{calendario_profesor.actualizar()}" icon="ui-icon-check" update="messages" />
+                                <b:commandButton id="addButton23" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
+                            </h:panelGrid>
+                        </p:dialog> 
+                        <p:dialog  modal="true" widgetVar="eventDialog2" header="Actividad" showEffect="clip" hideEffect="clip">
+                            <h:panelGrid id="eventDetails2" columns="2">
+                                <h:outputLabel for="at" value="Actividad :" style="font-weight:bold" />
+                                <b:inputText id="at" value="#{calendario_profesor.titulo}" />
+                                <h:outputLabel for="f1" value="Fecha inicio:" style="font-weight:bold"  />
+                                <p:calendar id="f1" value="#{calendario_profesor.fecha_inicio}" showOn="button" size="30" /> 
+                                <h:outputLabel for="f2" value="Fecha Final:" style="font-weight:bold" />
+                                <p:calendar id="f2" value="#{calendario_profesor.fecha_final}" showOn="button" size="30" style="top: 3px;"/>
+                                <h:outputLabel for="h1" value="Hora inicial :" style="font-weight:bold" />
+                                <b:inputText id="h1" value="#{calendario_profesor.hora1}" type="time"/>
+                                <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
+                                <b:inputText id="h2" value="#{calendario_profesor.hora2}" type="time" >
+                                </b:inputText>
+                            </h:panelGrid>
+
+                            <b:commandButton id="Guardar" value="Guardar" tooltip="Guardar Actividad"  actionListener="#{calendario_profesor.addEvent(actionEvent)}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
+                            <b:commandButton id="Cancelar" value="Resest" type="reset" />
+                        </p:dialog>   
                     </b:container>
 
                 </div>

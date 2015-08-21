@@ -8,6 +8,7 @@ package Beans;
 import dao.CalendarioImple;
 import dao.CalendarioP;
 import Entity.Calendario;
+import Entity.Persona;
 import Entity.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -23,16 +25,19 @@ import javax.faces.context.FacesContext;
 @ManagedBean
 @SessionScoped
 public class CalendarioProfe_update {
-    
+
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
     private String Actividad;
     private Date fecha_final;
     private Date fecha_inicio;
     private String hora1;
     private String hora2;
-    
+
     public CalendarioProfe_update() {
     }
-    
+
     public CalendarioProfe_update(String Actividad, Date fecha_final, Date fecha_inicio, String hora1, String hora2) {
         this.Actividad = Actividad;
         this.fecha_final = fecha_final;
@@ -40,26 +45,41 @@ public class CalendarioProfe_update {
         this.hora1 = hora1;
         this.hora2 = hora2;
     }
-    
-    public void traer_informacion() throws ClassNotFoundException {
-        CalendarioP calen = new CalendarioImple();
-        String codigo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Codigo_asesoria");
-        Calendario calendario = new Calendario();
-        
-        calendario = calen.BuscarCalendario(codigo);
-        try {
-            fecha_inicio = calendario.getFechaInicial();
-            fecha_final = calendario.getFechaFinal();
-            hora1 = "" + calendario.getHoraIni();
-            hora2 = "" + calendario.getHoraFin();
-            Actividad = calendario.getDescripcion();
-            
-            System.out.println("tra");
-        } catch (Exception ex) {
-            
+
+    public void traer_informacion() throws ClassNotFoundException, IOException {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            CalendarioP calen = new CalendarioImple();//**+++++*********************************************************************
+            String codigo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Codigo_asesoria");
+            Calendario calendario = new Calendario();
+
+            calendario = calen.BuscarCalendario(codigo);
+            try {
+                fecha_inicio = calendario.getFechaInicial();
+                fecha_final = calendario.getFechaFinal();
+                hora1 = "" + calendario.getHoraIni();
+                hora2 = "" + calendario.getHoraFin();
+                Actividad = calendario.getDescripcion();
+
+                System.out.println("tra");
+            } catch (Exception ex) {
+
+            }
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
         }
+
     }
-    
+
     public void update() throws ClassNotFoundException, IOException {
         try {
             String codigo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Codigo_asesoria");
@@ -98,51 +118,51 @@ public class CalendarioProfe_update {
         } catch (Exception ex) {
             System.out.println("Error update " + ex.toString());
         }
-        
+
     }
-    
+
     public void redirecionar() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("Calendario_profesor.xhtml");
     }
-    
+
     public Date getFecha_final() {
         return fecha_final;
     }
-    
+
     public void setFecha_final(Date fecha_final) {
         this.fecha_final = fecha_final;
     }
-    
+
     public Date getFecha_inicio() {
         return fecha_inicio;
     }
-    
+
     public void setFecha_inicio(Date fecha_inicio) {
         this.fecha_inicio = fecha_inicio;
     }
-    
+
     public String getHora1() {
         return hora1;
     }
-    
+
     public void setHora1(String hora1) {
         this.hora1 = hora1;
     }
-    
+
     public String getHora2() {
         return hora2;
     }
-    
+
     public void setHora2(String hora2) {
         this.hora2 = hora2;
     }
-    
+
     public String getActividad() {
         return Actividad;
     }
-    
+
     public void setActividad(String Actividad) {
         this.Actividad = Actividad;
     }
-    
+
 }

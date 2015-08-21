@@ -9,6 +9,7 @@ import Entity.Asesoria;
 import Entity.Dia;
 import Entity.DispoUsuario;
 import Entity.Disponibilidad;
+import Entity.Persona;
 import Entity.Usuario;
 import Modelo.Conecion_Oracle;
 import Modelo.Conecion_postgres;
@@ -23,6 +24,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -35,6 +37,10 @@ import util.HibernateUtil;
 @SessionScoped
 public class ListaProfesoresBeans {
 
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
+
     private String año;
     private String periodo;
     ArrayList<String> b_año = new ArrayList();
@@ -45,13 +51,28 @@ public class ListaProfesoresBeans {
     public ListaProfesoresBeans() {
     }
 
-    public void cargar_años() {
-        System.out.println("entro a cargar");
-        b_año.clear();
-        for (int i = 2015; i < 2030; i++) {
-            b_año.add("" + i);
+    public void cargar_años() throws IOException {//*************************************************************
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("entro a cargar");
+            b_año.clear();
+            for (int i = 2015; i < 2030; i++) {
+                b_año.add("" + i);
+            }
+            cargar_Periodo();
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
         }
-        cargar_Periodo();
+
     }
 
     public void cargar_Periodo() {
@@ -186,7 +207,6 @@ public class ListaProfesoresBeans {
         FacesContext.getCurrentInstance().getExternalContext().responseReset();
 
     }
-
 
     public boolean borrarDias(Disponibilidad d) {
         boolean r = false;

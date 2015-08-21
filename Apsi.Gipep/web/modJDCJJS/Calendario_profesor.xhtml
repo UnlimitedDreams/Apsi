@@ -13,7 +13,7 @@ and open the template in the editor.
     <h:head>
         <title>TODO supply a title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="../css/ingreso.css"/>
+        
         <link rel="stylesheet" href="../css/Tablas.css"/>
         <link rel="stylesheet" href="../css/formas.css"/>
         <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
@@ -66,7 +66,6 @@ and open the template in the editor.
                                 <b:inputText id="h2" value="#{calendario_profesor.hora2}" type="time" >
                                 </b:inputText>
                             </h:panelGrid>
-
                             <b:commandButton id="Guardar" value="Guardar" tooltip="Guardar Actividad"  actionListener="#{calendario_profesor.addEvent(actionEvent)}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
                             <b:commandButton id="Cancelar" value="Resest" type="reset" />
                         </p:dialog>   
@@ -109,11 +108,12 @@ and open the template in the editor.
             <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="../js/scripts.js"></script>
+        
         <!--scripts para panel menu-->
-        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        
         <script src="../js/bootstrap.min.js"></script>
-        <script src="../js/scripts1.js"></script>
+        
     </h:body>
 
 </html>
+    

@@ -5,20 +5,22 @@ import dao.CalendarioP;
 import Entity.Asesoria;
 import Entity.Asistente;
 import Entity.Calendario;
-import Entity.Persona;
 import Entity.Usuario;
 import Modelo.Conecion_postgres1;
 import Modelo.MDias;
 import Modelo.Secuencia;
+import dao.Dias;
+import static dao.prueba.Numero_asesorias;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Array;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -80,11 +82,10 @@ public class CalendarioAsesoria implements Serializable {
 
     public void añadir_eventos() {
         eventModel = new DefaultScheduleModel();
-        ArrayList<Date> asesorias = null;
+        ArrayList<Dias> asesorias = null;
 
         try {
             asesorias = traer_dias();
-
             MDias temp = null;
             MDias temp2 = null;
             String fecha = "";
@@ -92,8 +93,8 @@ public class CalendarioAsesoria implements Serializable {
             int h1 = 0, h2 = 0;
             System.out.println("3");
             int min1 = 0, min2 = 0;
-            for (int i = 0; i < asesorias.size(); i++) {
-//                System.out.println(".l.");
+            for (Dias asesoria : asesorias) {
+                //                System.out.println(".l.");
 //                temp = (MDias) asesorias.get(i);
 //                SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 //                Date date1 = fmt.parse(temp.getFecha1());
@@ -108,81 +109,139 @@ public class CalendarioAsesoria implements Serializable {
 //                date2.setMinutes(min2);
 //                date2.setDate(date2.getDate() - 1);
 //                System.out.println("Asesoria " + temp.getHora_inicio() + "-" + temp.getHora_final() + " #" + date1 + "+" + date2);
-                eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + "", asesorias.get(i), asesorias.get(i)));
+                eventModel.addEvent(new DefaultScheduleEvent("Asesoria " + "", asesoria.getFechas(), asesoria.getFechas()));
             }
         } catch (IOException ex) {
+            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public ArrayList traer_dias() throws IOException {
+    public ArrayList traer_dias() throws IOException, ParseException {
         faceContext = FacesContext.getCurrentInstance();
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
 //        if (httpServletRequest.getSession().getAttribute("user") != null) {
         System.out.println("Existe");
+        ArrayList<Dias> di = new ArrayList();
+        ArrayList<Dias> dias = new ArrayList();
+        try {
+            //        Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            //        p.getUsuario().getPegeId();
+            Conecion_postgres1.conectar();
 
-//        Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
-//        p.getUsuario().getPegeId();
-//        try {
-//            Conecion_postgres1.conectar();
-//            Conecion_postgres1.ejecuteQuery("SELECT \n"
-//                    + "  dia.*\n"
-//                    + "FROM \n"
-//                    + "  public.usuario, \n"
-//                    + "  public.disponibilidad, \n"
-//                    + "  public.dispo_usuario, \n"
-//                    + "  public.dia\n"
-//                    + "WHERE \n"
-//                    + "  usuario.pege_id = dispo_usuario.profesor AND\n"
-//                    + "  disponibilidad.cod_dis = dispo_usuario.cod_dispousu AND\n"
-//                    + "  disponibilidad.cod_dis = dia.cod_dis AND \n"
-//                    + "  usuario.pege_id = (\n"
-//                    + "	SELECT \n"
-//                    + "	  usuario_proyecto.director\n"
-//                    + "	FROM \n"
-//                    + "	  public.usuario, \n"
-//                    + "	  public.usuario_proyecto\n"
-//                    + "	WHERE \n"
-//                    + "	  usuario.pege_id = usuario_proyecto.estudiante and\n"
-//                    + "	  usuario.pege_id = 3\n"
-//                    + "  )");
-//
-//            if (Conecion_postgres1.rs.next()) {
-//                
-//                while (Conecion_postgres1.rs.next()) {
-//                    String dia = Conecion_postgres1.rs.getString(1);
-//                    System.out.println("Dia disponible:" + dia);
-//                }
-//            }
-        Date Fecha = new Date();
-        Fecha.setDate(24);
+            Conecion_postgres1.ejecuteQuery("SELECT dia.*, disponibilidad.fecha_inicial,disponibilidad.fecha_final,disponibilidad.rango "
+                    + "FROM \n"
+                    + "  public.usuario, \n"
+                    + "  public.disponibilidad, \n"
+                    + "  public.dispo_usuario, \n"
+                    + "  public.dia\n"
+                    + "WHERE \n"
+                    + "  usuario.pege_id = dispo_usuario.profesor AND\n"
+                    + "  disponibilidad.cod_dis = dispo_usuario.cod_dispousu AND\n"
+                    + "  disponibilidad.cod_dis = dia.cod_dis AND \n"
+                    + "  usuario.pege_id = (\n"
+                    + "	SELECT \n"
+                    + "	  usuario_proyecto.director\n"
+                    + "	FROM \n"
+                    + "	  public.usuario, \n"
+                    + "	  public.usuario_proyecto\n"
+                    + "	WHERE \n"
+                    + "	  usuario.pege_id = usuario_proyecto.estudiante and\n"
+                    + "	  usuario.pege_id = 0\n"
+                    + "  );");
 
-        ArrayList<Date> dias = new ArrayList();
-        dias.add(Fecha);
-            
-//        dias.add(new Date("31-08-2015"));
-//        dias.add(new Date("07-09-2015"));
-//        dias.add(new Date("14-09-2015"));
-//        dias.add(new Date("21-09-2015"));
-//        dias.add(new Date("29-09-2015"));
+            if (Conecion_postgres1.rs.next()) {
+                di.add(new Dias(Integer.parseInt(Conecion_postgres1.rs.getString(1)), Conecion_postgres1.rs.getString(2)));
+            } else {
+                System.out.println("No hay");
+            }
+            dias = Numero_asesorias(Conecion_postgres1.rs.getDate(6).toString(), Conecion_postgres1.rs.getDate(7).toString(), di);
+        } catch (SQLException ex) {
+            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conecion_postgres1.cerrarConexion();
+        }
 
-        System.out.println("--------------------------------------------------------------------------------------Hola");
         return dias;
-//        } catch (SQLException | ClassNotFoundException ex) {
-//            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
-//            return null;
-//        } finally {
-//            Conecion_postgres1.cerrarConexion();
-//        }
 
-//        } else {
-//            System.out.println("No existe");
-//            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
-//            return null;
-//        }
     }
 
-    
+    public static ArrayList<Dias> Numero_asesorias(String fechaI, String fechaF, ArrayList x) throws ParseException {
+        String diaI = "", mesI = "", añoI = "";
+        diaI = fechaI.substring(9, 10);
+        mesI = fechaI.substring(6, 7);
+        añoI = fechaI.substring(0, 4);
+        // System.out.println("----------------------");
+        String diaF = "", mesF = "", añoF = "";
+        diaF = fechaF.substring(9, 10);
+        mesF = fechaF.substring(6, 7);
+        añoF = fechaF.substring(0, 4);
+        //System.err.println("----------------------");
+        String dias_semana = "";
+        String fecha_final = "";
+        ArrayList<Dias> n = new ArrayList();
+        int dia = 0;
+        String dio = "";
+        int num_id = 0, sum = 0, sum_mes = 0, count = 0;
+        boolean p = true;
+        int a = Integer.parseInt(diaI);
+        int m = Integer.parseInt(mesI);
+        int d = Integer.parseInt(añoI);
+        int a2 = Integer.parseInt(diaF);
+        int m2 = Integer.parseInt(mesF);
+        int d2 = Integer.parseInt(añoF);
+        m = m -1;
+        m2 = m2 -1;
+        int pasado = 0;
+        int s = 0;
+        int az = 0;
+        Dias temp = null;
+        int con = 0;
+        int conce = 1;
+        boolean con2 = true;
+        Calendar Diadehoy = new GregorianCalendar();
+        Diadehoy.set(d, m, a);
+        int diia = 0;
+        ArrayList<Dias> fechas_final = new ArrayList();
+        while (p) {
+            System.out.println("- " + Diadehoy.get(Calendar.DAY_OF_WEEK) + "fecha "
+                    + Diadehoy.get(Calendar.DAY_OF_MONTH) + " mes " + Diadehoy.get(Calendar.MONTH));
+            for (int i = 0; i < x.size(); i++) {
+                temp = (Dias) x.get(i);
+                if (temp.getDia().equals("Lunes")) {
+                    diia = 2;
+                } else if (temp.getDia().equals("Martes")) {
+                    diia = 3;
+                } else if (temp.getDia().equals("Miercoles")) {
+                    diia = 4;
+                } else if (temp.getDia().equals("Jueves")) {
+                    diia = 5;
+                } else if (temp.getDia().equals("Viernes")) {
+                    diia = 6;
+                } else if (temp.getDia().equals("Sabado")) {
+                    diia = 7;
+                }
+                if (Diadehoy.get(Calendar.DAY_OF_WEEK) == diia) {
+                    //          System.out.println("-----");
+                    fechas_final.add(new Dias(Diadehoy.getTime()));
+                }
+                diia = 0;
+            }
+            if ((Diadehoy.get(Calendar.YEAR) == d2) && (Diadehoy.get(Calendar.MONTH) == m2) && (Diadehoy.get(Calendar.DAY_OF_MONTH) == a2)) {
+                p = true;
+                //    System.out.println("Salio");
+                break;
+
+            }
+            Diadehoy.add(Calendar.DAY_OF_MONTH, 1);
+
+        }
+        return fechas_final;
+    }
+
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
         System.out.println("------------------ " + hora1);
         Date h1 = new Date();

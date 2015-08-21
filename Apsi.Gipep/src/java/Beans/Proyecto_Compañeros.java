@@ -217,7 +217,7 @@ public class Proyecto_Compañeros {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ok", ""));
             lista_estu.clear();
             t.commit();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("Menu_Usuario.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../mainMenu.jsp");
 
         } catch (Exception ex) {
             r = false;

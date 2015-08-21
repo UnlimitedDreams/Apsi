@@ -6,6 +6,7 @@ import dao.Sequence;
 import Entity.Asesoria;
 import Entity.Asistente;
 import Entity.Calendario;
+import Entity.Persona;
 import Entity.Usuario;
 import Modelo.Conecion_postgres1;
 import Modelo.MDias;
@@ -28,6 +29,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -61,9 +63,9 @@ public class Calendario_profesor implements Serializable {
 
     @PostConstruct
     public void init() {
-        borrarTodo();
-        añadir_eventos();
-    }
+            borrarTodo();
+            añadir_eventos();
+        }
 
     public void borrarTodo() {
         try {
@@ -135,8 +137,8 @@ public class Calendario_profesor implements Serializable {
                 date.setHours(h2);
                 date.setMinutes(min2);
                 System.out.println("" + temp2.getCod() + date1 + "-" + date);
-                eventModel.addEvent(new DefaultScheduleEvent(temp2.getRazon() + "#" + temp2.getCod(), date1, date,"emp1"));
-                
+                eventModel.addEvent(new DefaultScheduleEvent(temp2.getRazon() + "#" + temp2.getCod(), date1, date, "emp1"));
+
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error " + ex.toString());
@@ -213,7 +215,6 @@ public class Calendario_profesor implements Serializable {
 //        }
 //        return calen;
 //    }
-
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
         System.out.println("------------------ " + hora1);
         Date h1 = new Date();
@@ -228,53 +229,53 @@ public class Calendario_profesor implements Serializable {
         h2.setMinutes(Integer.parseInt(v2[1]));
         h2.setSeconds(00);
 //        if (buscarFechas(h1, h2) == null) {
-            System.out.println("timeee " + h2.getTime());
-            System.out.println("h2: " + h2);
-            CalendarioP calen = new CalendarioImple();
-            int Codigo_calendario = Secuencia.seque("select max(cod_calendario) from calendario");
-            Usuario usu = new Usuario();
-            usu.setPegeId(new BigDecimal(1));
-            Calendario c = new Calendario();
-            c.setCodCalendario(Codigo_calendario);
-            c.setFechaInicial(fecha_inicio);
-            c.setFechaFinal(fecha_final);
-            c.setUsuario(usu);
-            System.out.println("2");
+        System.out.println("timeee " + h2.getTime());
+        System.out.println("h2: " + h2);
+        CalendarioP calen = new CalendarioImple();
+        int Codigo_calendario = Secuencia.seque("select max(cod_calendario) from calendario");
+        Usuario usu = new Usuario();
+        usu.setPegeId(new BigDecimal(1));
+        Calendario c = new Calendario();
+        c.setCodCalendario(Codigo_calendario);
+        c.setFechaInicial(fecha_inicio);
+        c.setFechaFinal(fecha_final);
+        c.setUsuario(usu);
+        System.out.println("2");
 
-            System.out.println("3");
+        System.out.println("3");
 
-            c.setHoraIni(h1);
-            c.setHoraFin(h2);
-            c.setDescripcion(titulo);
-            System.out.println("1");
-            boolean r = calen.CrearCalendario(c);
-            System.out.println("2 " + r);
-            if (r) {
-                String f1 = "", f2 = "";
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                f1 = format.format(fecha_final);
-                f2 = format.format(fecha_inicio);
-                System.out.println("4");
-                SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-                Date date1 = fmt.parse(f1);
+        c.setHoraIni(h1);
+        c.setHoraFin(h2);
+        c.setDescripcion(titulo);
+        System.out.println("1");
+        boolean r = calen.CrearCalendario(c);
+        System.out.println("2 " + r);
+        if (r) {
+            String f1 = "", f2 = "";
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            f1 = format.format(fecha_final);
+            f2 = format.format(fecha_inicio);
+            System.out.println("4");
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+            Date date1 = fmt.parse(f1);
 //            date1.setTime(Long.parseLong(hora1));
-                Date date2 = fmt.parse(f2);
+            Date date2 = fmt.parse(f2);
 //            date2.setTime(Long.parseLong(hora2));
-                System.out.println("5");
+            System.out.println("5");
 ////            event.setId("" + Codigo_calendario);
-                eventModel.addEvent(new DefaultScheduleEvent(titulo, date2, date1));
-                event = new DefaultScheduleEvent();
-                hora1 = null;
-                hora2 = null;
-                System.out.println("6");
-                añadir_eventos();
-                System.out.println("7");
-                borrarTodo();
-                System.out.println("8");
+            eventModel.addEvent(new DefaultScheduleEvent(titulo, date2, date1));
+            event = new DefaultScheduleEvent();
+            hora1 = null;
+            hora2 = null;
+            System.out.println("6");
+            añadir_eventos();
+            System.out.println("7");
+            borrarTodo();
+            System.out.println("8");
 
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Executed", ""));
-            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Executed", ""));
+        }
 //        } else {
 //            System.out.println("ya esta el calendario");
 //        }
