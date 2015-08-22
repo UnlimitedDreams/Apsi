@@ -121,6 +121,42 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
+<<<<<<< HEAD
+                                <h4>Asignación de Director</h4></div>
+                        <h:form id="vista_validar">
+                                <br/>
+                                <p:growl id="messages" showDetail="true" />
+                                <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
+                                             class="table">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Selecionar"></h:outputText>
+                                        </f:facet>
+                                        <p:selectBooleanCheckbox >
+                                            <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,2)}" />
+                                        </p:selectBooleanCheckbox>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Cedula"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{Profesor.cedula}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{Profesor.nombre}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Apellido"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{Profesor.apellido}" />
+
+                                    </h:column>
+                                </h:dataTable>
+=======
                             <h4>Asignacion de Director</h4></div>
                         <h:form id="vista_validar">
                             <br/>
@@ -155,6 +191,7 @@
 
                                 </h:column>
                             </h:dataTable>
+>>>>>>> origin/master
                         </h:form>
 
                     </div>
