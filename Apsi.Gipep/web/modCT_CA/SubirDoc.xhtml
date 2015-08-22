@@ -97,24 +97,24 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>OPCIONES</h4></div>
+                            <h4>Subir Proyectos</h4></div>
 
 
                         <h:form id="uploadDoc" enctype="multipart/form-data" >
                             <p:growl id="grwol" showDetail="true"></p:growl>
 
                             <div class="form-group">
-                                <h:outputLabel for="f2" value="Archivo :" style="font-weight:bold" />
+                                <h:outputLabel for="f2" value="Ruta de Archivo :" style="font-weight:bold" />
                                 <h:inputFile  id="f2"  value="#{cargarArchivos.file1}" required="true" requiredMessage="Añadir Archivo" >
                                 </h:inputFile>
 
                             </div>
                             <div class="form-group">
-                                <h:outputLabel for="at" value="Titulo :" style="font-weight:bold" />
+                                <h:outputLabel for="at" value="Nombre del Proyecto :" style="font-weight:bold" />
                                 <h:inputText id="at" class="form-control" value="#{cargarArchivos.nombre}" required="true"  requiredMessage="Añadir Titulo" />
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Tipo Proyecto :" style="font-weight:bold" />
+                                <h:outputLabel value="Tipo de Proyecto :" style="font-weight:bold" />
                                 <h:selectOneMenu value="#{cargarArchivos.tipo_proyc}" class="form-control"  required="true" requiredMessage="Selecionar Tipo" >
                                     <f:selectItem itemLabel="Seleccione " itemValue="" class="form-control input-lg" />
                                     <f:selectItems value="#{cargarArchivos.tipo}" var="gru" itemLabel="#{gru.descripcion}" itemValue="#{gru.codTipo}" class="form-control input-lg" />

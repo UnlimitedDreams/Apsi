@@ -115,10 +115,15 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>TITLE PANEL</h4></div>
+                            <h4>Asignación de Profesor a Proyecto</h4></div>
+                        
                         <h:form id="vista_validar">
                             <br/>
                             <p:growl id="messages" showDetail="true" />
+                            
+                            <div class="form-group">
+                               Seleccione la Facultad
+                            </div>
                             <div class="form-group">
                                 <h:selectOneMenu id="car" class="form-control input-lg" value="#{validarProfesor.facultad}" >
                                     <f:selectItem itemLabel="*--Seleccione Facultad--*" itemValue="" />
@@ -153,7 +158,7 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="HERRAMIENTA"></h:outputText>
+                                            <h:outputText value="APELLIDO"></h:outputText>
                                         </f:facet>
                                         <h:outputText value="#{Profesor.apellido}" />
                                     </h:column>
