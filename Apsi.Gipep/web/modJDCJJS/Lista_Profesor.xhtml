@@ -15,27 +15,7 @@
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
     <h:body onload="#{listaProfesoresBeans.cargar_años()}"> 
-        <nav class="navbar navbar-trans " role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar-collapsible">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
-                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
-                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
-                        <li>&nbsp;</li>
-                    </ul>                   
-                </div>
-            </div>
-        </nav>
+
 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
@@ -47,75 +27,8 @@
 
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
 
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                        <li><a href="Asig_Festivos.xhtml" ><i class="fa fa-plus"> </i>Festivos</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Lista Proyectos</a></li>
-                                        <li><a href="AsignarDirector.xhtml" ><i class="fa fa-cogs"> </i>Asignar Director</a></li>
-
-                                    </ul>
-                                </li>
-
-
-
-                            </ul>
-                        </div>
-                    </aside>
-                </div>
-                <div class="col-sm-9">
+                <div class="col-sm-12">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
@@ -123,20 +36,22 @@
 
                         <h:form id="vista_validar">
 
-                            <div class="form-group">
-                                <h:outputLabel  value="Año :" />
-                                <h:selectOneMenu id="car" class="form-control"  value="#{listaProfesoresBeans.año}" >
-                                    <f:selectItems value="#{listaProfesoresBeans.b_año}"/>   
-                                </h:selectOneMenu>
-                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <h:outputLabel  value="Año :" />
+                                    <h:selectOneMenu id="car" class="form-control"  value="#{listaProfesoresBeans.año}" >
+                                        <f:selectItems value="#{listaProfesoresBeans.b_año}"/>   
+                                    </h:selectOneMenu>
+                                </div></div>
 
-                            <div class="form-group">
-                                <h:outputLabel value="Periodo :" />
-                                <h:selectOneMenu id="car2" class="form-control" value="#{listaProfesoresBeans.periodo}" >
-                                    <f:selectItems value="#{listaProfesoresBeans.peri}"/>   
-                                </h:selectOneMenu>
-                            </div>
-
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <h:outputLabel value="Periodo :" />
+                                    <h:selectOneMenu id="car2" class="form-control" value="#{listaProfesoresBeans.periodo}" >
+                                        <f:selectItems value="#{listaProfesoresBeans.peri}"/>   
+                                    </h:selectOneMenu>
+                                </div></div>
+                            <label></label>
                             <br></br>
 
                             <center>
@@ -145,6 +60,7 @@
 
                             <br></br>
 
+                            <label></label>
                             <br></br>
 
                             <h:dataTable id="tabla" var="Profesor" value="#{listaProfesoresBeans.profe}"
@@ -179,7 +95,8 @@
 
                                 </h:column>
                             </h:dataTable>
-
+                            <label></label>
+                            <br></br>
                         </h:form>
                     </div>
                 </div>

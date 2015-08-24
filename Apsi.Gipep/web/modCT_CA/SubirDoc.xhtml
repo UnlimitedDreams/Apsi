@@ -15,7 +15,7 @@
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
 
-     <h:body onload="#{cargarArchivos.cargar_tipo()}"> 
+    <h:body onload="#{cargarArchivos.cargar_tipo()}"> 
 
 
         <section class="container-fluid" id="section6">
@@ -28,72 +28,8 @@
 
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
 
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
-
-                                    </ul>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </aside>
-                </div>
-                <div class="col-sm-9">
+                <div class="col-sm-12">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
@@ -103,26 +39,37 @@
                         <h:form id="uploadDoc" enctype="multipart/form-data" >
                             <p:growl id="grwol" showDetail="true"></p:growl>
 
-                            <div class="form-group">
-                                <h:outputLabel for="f2" value="Ruta de Archivo :" style="font-weight:bold" />
-                                <h:inputFile  id="f2"  value="#{cargarArchivos.file1}" required="true" requiredMessage="Añadir Archivo" >
-                                </h:inputFile>
-
+                            <div class="col-sm-6">
+                                <br></br>
+                                <div class="form-group">
+                                    <h:outputLabel for="at" value="Nombre del Proyecto :" style="font-weight:bold" />
+                                    <h:inputText id="at" class="form-control" value="#{cargarArchivos.nombre}" required="true"  requiredMessage="Añadir Titulo" />
+                                </div> 
                             </div>
-                            <div class="form-group">
-                                <h:outputLabel for="at" value="Nombre del Proyecto :" style="font-weight:bold" />
-                                <h:inputText id="at" class="form-control" value="#{cargarArchivos.nombre}" required="true"  requiredMessage="Añadir Titulo" />
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Tipo de Proyecto :" style="font-weight:bold" />
-                                <h:selectOneMenu value="#{cargarArchivos.tipo_proyc}" class="form-control"  required="true" requiredMessage="Selecionar Tipo" >
-                                    <f:selectItem itemLabel="Seleccione " itemValue="" class="form-control input-lg" />
-                                    <f:selectItems value="#{cargarArchivos.tipo}" var="gru" itemLabel="#{gru.descripcion}" itemValue="#{gru.codTipo}" class="form-control input-lg" />
-                                </h:selectOneMenu>
-                            </div> 
 
+                            <div class="col-sm-6">
+                                <br></br>
+                                <div class="form-group">
+                                    <h:outputLabel value="Tipo de Proyecto :" style="font-weight:bold" />
+                                    <h:selectOneMenu value="#{cargarArchivos.tipo_proyc}" class="form-control"  required="true" requiredMessage="Selecionar Tipo" >
+                                        <f:selectItem itemLabel="Seleccione " itemValue="" class="form-control input-lg" />
+                                        <f:selectItems value="#{cargarArchivos.tipo}" var="gru" itemLabel="#{gru.descripcion}" itemValue="#{gru.codTipo}" class="form-control input-lg" />
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                            <br></br>
+
+                            <label></label>
                             <br/><br/>
                             <center>
+                                <div class="form-group">
+                                    <h:outputLabel for="f2" value="Ruta de Archivo :" style="font-weight:bold" />
+                                    <h:inputFile  id="f2"  value="#{cargarArchivos.file1}" required="true" requiredMessage="Añadir Archivo" >
+                                    </h:inputFile>
+                                </div>
+                                <br></br>
+                                <label></label>
+                                <br></br>
                                 <h:commandButton value="Siguiente " class="btn btn-primary btn-lg" actionListener="#{cargarArchivos.mandarAVista()}"></h:commandButton>
                             </center>
                             <br></br>

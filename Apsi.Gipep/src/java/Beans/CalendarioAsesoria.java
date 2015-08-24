@@ -10,7 +10,6 @@ import Modelo.Conecion_postgres1;
 import Modelo.MDias;
 import Modelo.Secuencia;
 import dao.Dias;
-import static dao.prueba.Numero_asesorias;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;

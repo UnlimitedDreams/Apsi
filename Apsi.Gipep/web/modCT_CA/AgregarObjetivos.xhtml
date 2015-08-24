@@ -24,82 +24,26 @@
         </section>
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </aside>
-                </div>
-                <div class="col-sm-9">
+             
+                <div class="col-sm-12">
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>Objetivos</h4></div>
+                            <h4>Objetivos De Poryecto</h4></div>
+                        
                         <h:form id="uploadDoc" >
                             <p:growl id="grwol" showDetail="true"></p:growl>
-                            <h3><h:outputLabel class="text-primary" value="Titulo Proyecto : #{objetivosDocumento.nombre}"></h:outputLabel></h3>
+                            <h3><h:outputLabel class="text-primary" value="Nombre Proyecto : #{objetivosDocumento.nombre}"></h:outputLabel></h3>
                             <div class="form-group">
                                 <h:outputLabel for="at3" value=" Adicionar Objetivo :" style="font-weight:bold" />
                                 <h:inputTextarea id="at3" class="form-control" value="#{objetivosDocumento.descripcion}"  />
                             </div>
+                            <br></br>
                             <center>
-                                <h:commandButton  style="width:90px" class="btn btn-lg" value="Agregar" actionListener="#{objetivosDocumento.añadirObt()}">                           
+                                <h:commandButton  style="width:90px" class="btn btn-lg btn-primary" value="Guardar" actionListener="#{objetivosDocumento.añadirObt()}">                           
                                 </h:commandButton>
                             </center>
                             <br></br>
+                            <label></label>
                             <div class="form-group">
                                 <h:dataTable var="Obj" value="#{objetivosDocumento.obj}"
                                              class="table">
@@ -113,19 +57,21 @@
                                         <f:facet name="header">
                                             <h:outputText value="Herramienta"></h:outputText>
                                         </f:facet>
-                                        <h:commandButton value="Borrar" class="btn btn-lg btn-danger" actionListener="#{objetivosDocumento.borrar_Obejtivo(Obj.cod)}"></h:commandButton>
+                                        <h:commandButton class="btn btn-lg btn-eliminar" actionListener="#{objetivosDocumento.borrar_Obejtivo(Obj.cod)}"></h:commandButton>
                                     </h:column>
                                 </h:dataTable>
                             </div>
                             <label></label>
                             <br></br>
+                            <label></label>
+                            <br></br>
                             <center>
-                                <h:commandButton  class="btn btn-lg btn-succes"  value="Atras" actionListener="#{objetivosDocumento.atras()}">                           
+                                <h:commandButton  class="btn btn-lg "  value="Atras" actionListener="#{objetivosDocumento.atras()}">                           
                                 </h:commandButton>
                                 <label></label>
                                 <label></label>
                                 <label></label>
-                                <h:commandButton  class="btn btn-lg btn-danger"  value="Cancelar" actionListener="#{objetivosDocumento.cancelar()}">                           
+                                <h:commandButton  class="btn btn-lg r"  value="Cancelar" actionListener="#{objetivosDocumento.cancelar()}">                           
                                 </h:commandButton>
                                 <label></label>
                                 <label></label>

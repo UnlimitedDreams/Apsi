@@ -47,123 +47,70 @@
 
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
 
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                        <li><a href="Asig_Festivos.xhtml" ><i class="fa fa-plus"> </i>Festivos</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Lista Proyectos</a></li>
-                                        <li><a href="AsignarDirector.xhtml" ><i class="fa fa-cogs"> </i>Asignar Director</a></li>
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </aside>
-                </div>
-                <div class="col-sm-9">
+                <div class="col-sm-12">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>Cronograma Asesorías</h4></div>
 
                         <h:form>
-                            <table>
-                                <tr>
-                                    <td><h:outputLabel  value="Fecha :" /></td>
-                                    <td><p:calendar value="#{reporte_Asesoria.fecha}" ></p:calendar>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><h:outputLabel  value="Estado :" /></td>
-                                    <td><h:selectOneMenu value="#{reporte_Asesoria.estado_ase}">
-                                            <f:selectItem itemValue="Asistio" itemLabel="Asistieron" />
-                                            <f:selectItem itemValue="No Asistio" itemLabel="No Asistieron" />
-                                            <f:selectItem itemValue="Pendiente" itemLabel="Pendiente" />
-                                        </h:selectOneMenu>
-                                    </td>
-                                </tr>
 
-                            </table>
-                            <h:commandButton value="Cargar" actionListener="#{reporte_Asesoria.buscar()}"></h:commandButton>
-                            <br/>
-                            <h:dataTable var="Profesor" value="#{reporte_Asesoria.list_aseso}" border="1">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <br></br>
+                                    <h:outputLabel  value="Fecha :" /><br></br>
+                                    <p:calendar  value="#{reporte_Asesoria.fecha}" ></p:calendar>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <br></br>
+                                    <h:outputLabel  value="Estado :" />
+                                    <h:selectOneMenu class="form-control input-lg" value="#{reporte_Asesoria.estado_ase}">
+                                        <f:selectItem itemValue="Asistio" itemLabel="Asistieron" />
+                                        <f:selectItem itemValue="No Asistio" itemLabel="No Asistieron" />
+                                        <f:selectItem itemValue="Pendiente" itemLabel="Pendiente" />
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                            <br></br>
+                            <lable></lable>
+                            <center>
+                                <h:commandButton value="Cargar" class="btn btn-primary btn-lg " actionListener="#{reporte_Asesoria.buscar()}"></h:commandButton>
+                            </center>
+                            <br></br>
+                            <h:dataTable var="Profesor" value="#{reporte_Asesoria.list_aseso}" class="table">
                                 <h:column>
                                     <f:facet name="header">
                                         <h:outputText value="Titulo"></h:outputText>
                                     </f:facet>
                                     <h:outputText value="#{Profesor.nombre_proyecto}" />
                                 </h:column>
-                                 <h:column>
+                                <h:column>
                                     <f:facet name="header">
                                         <h:outputText value="Cantidad asesorias"></h:outputText>
                                     </f:facet>
-                                     <h:outputText value="#{Profesor.cantidad}" />
+                                    <h:outputText value="#{Profesor.cantidad}" />
                                 </h:column>
-                                 <h:column>
+                                <h:column>
                                     <f:facet name="header">
                                         <h:outputText value="Progreso"></h:outputText>
                                     </f:facet>
-                                     <h:outputText value="#{Profesor.porcentaje}" />
+                                    <h:outputText value="#{Profesor.porcentaje}" />
                                 </h:column>
-                               
+
                             </h:dataTable>
                             <br/>
+                            <center>
+                                <h:commandButton value="PDF" class="btn btn-danger btn-lg " actionListener="#{reporte_Profesor.reportPDF()}"></h:commandButton>
+                                <label></label>
+                                <h:commandButton value="Excel" class="btn btn-succes btn-lg " actionListener="#{reporte_Profesor.reportExcel()}"></h:commandButton>
+                            </center>
 
-                            <h:commandButton value="PDF" actionListener="#{reporte_Profesor.reportPDF()}"></h:commandButton>
-                            <h:commandButton value="Excel" actionListener="#{reporte_Profesor.reportExcel()}"></h:commandButton>
-
+                            <br></br>
+                            <label></label>
                         </h:form>
                     </div>
                 </div>
@@ -175,13 +122,30 @@
         <footer id="footer">
             <div class="container">
                 <div class="row">
-                    <p class="text-muted text-center"> ApSi <br></br>UNIAJC</p>
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>ApSi;</strong>
+                        </h4>
+                        <p>Institucin Universitaria Antonio Jos; Camacho<br></br>Santiago de Cali, Colombia</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
+                            </li>
+                        </ul>
+                        <br></br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small"></hr>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright  Unlimited Dreams, Todos los derechos reservados.</p>
+                    </div>
                 </div>
-                <br></br>
-                <p class="text-center text-muted">©2015</p>
             </div>
         </footer>
-
         <div class="scroll-up">
             <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>

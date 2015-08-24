@@ -27,6 +27,12 @@ a:hover {
     border-radius:0;
 }
 
+.btn-eliminar{
+     background-image: url(../img/eliminar.png);
+     background-size: cover;
+  
+}
+
 .btn-danger {
     background-color:#f44d3c;
 }
