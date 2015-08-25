@@ -11,7 +11,9 @@ import Modelo.Profesor;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -64,7 +66,6 @@ public final class ajusteProfesorBean implements Serializable {
 
     public void Recuerpar_informacion() {
         System.out.println("Entro al recuerdo");
-
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste") != null) {
             ajusteProfesorBean ajuste = new ajusteProfesorBean();
             ajuste = (ajusteProfesorBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste");
@@ -94,8 +95,6 @@ public final class ajusteProfesorBean implements Serializable {
 
     }
 
-    
-
     public void inicionombreProfe() throws IOException {
         faceContext = FacesContext.getCurrentInstance();
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
@@ -107,6 +106,8 @@ public final class ajusteProfesorBean implements Serializable {
             temp = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
             this.nombreProfesor = temp.getNombre() + " " + temp.getApellido();
             System.out.println("--- " + temp.toString());
+            hora_inicial = "";
+            hora_Final = "";
             cargarDias();
             Recuerpar_informacion();
             cargar_Periodo();
@@ -119,12 +120,42 @@ public final class ajusteProfesorBean implements Serializable {
 
     public void cargarDias() {
         Dias.clear();
-        Dias.add(new MDias(false, "Lunes", "0", "0"));
-        Dias.add(new MDias(false, "Martes", "0", "0"));
-        Dias.add(new MDias(false, "Mieroles", "0", "0"));
-        Dias.add(new MDias(false, "Jueves", "0", "0"));
-        Dias.add(new MDias(false, "Viernes", "0", "0"));
-        Dias.add(new MDias(false, "Sabado", "0", "0"));
+
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("List_dias") != null) {
+            MDias temp = null;
+            MDias temp2 = null;
+            ArrayList<MDias> list = new ArrayList();
+            list = (ArrayList) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("List_dias");
+            Dias.add(new MDias(false, "Lunes", "0", "0"));
+            Dias.add(new MDias(false, "Martes", "0", "0"));
+            Dias.add(new MDias(false, "Mieroles", "0", "0"));
+            Dias.add(new MDias(false, "Jueves", "0", "0"));
+            Dias.add(new MDias(false, "Viernes", "0", "0"));
+            Dias.add(new MDias(false, "Sabado", "0", "0"));
+            for (int i = 0; i < list.size(); i++) {
+                temp = (MDias) list.get(i);
+                for (int k = 0; k < Dias.size(); k++) {
+                    temp2 = (MDias) Dias.get(k);
+                    if (temp.getDia().equals(temp2.getDia())) {
+                        temp2.setEstado(true);
+                    }
+                }
+            }
+        } else {
+            Dias.add(new MDias(false, "Lunes", "0", "0"));
+            Dias.add(new MDias(false, "Martes", "0", "0"));
+            Dias.add(new MDias(false, "Mieroles", "0", "0"));
+            Dias.add(new MDias(false, "Jueves", "0", "0"));
+            Dias.add(new MDias(false, "Viernes", "0", "0"));
+            Dias.add(new MDias(false, "Sabado", "0", "0"));
+
+        }
+        MDias temp3 = null;
+        for (int k = 0; k < Dias.size(); k++) {
+            temp3 = (MDias) Dias.get(k);
+            System.out.println("---> " + temp3.toString());
+
+        }
 
     }
 
@@ -175,26 +206,228 @@ public final class ajusteProfesorBean implements Serializable {
         hora_Final = "";
     }
 
-    public void cargarTodo() throws IOException {
-        ArrayList<MDias> d = new ArrayList();
+    public boolean validarFechas() {
+        Calendar fecha_hoy = new GregorianCalendar();
+        Calendar fecha_I = new GregorianCalendar();
+        Calendar fechaF = new GregorianCalendar();
+        fecha_I.setTime(fecha_inicial);
+        fechaF.setTime(fecha_final);
+        boolean r = false;
+        System.out.println("fecha hoy " + fecha_hoy.getTime());
+        System.out.println("fecha Inicial " + fecha_I.getTime());
+        System.out.println("fecha Final " + fechaF.getTime());
+
+        if (fecha_I.get(Calendar.DAY_OF_MONTH) < fecha_hoy.get(Calendar.DAY_OF_MONTH)) {
+            r = true;
+        } else if (fechaF.get(Calendar.DAY_OF_MONTH) < fecha_hoy.get(Calendar.DAY_OF_MONTH)) {
+            r = true;
+
+        }
+
+        return r;
+    }
+
+    public boolean validarFechasMayores() {
+        Calendar fecha_I = new GregorianCalendar();
+        Calendar fechaF = new GregorianCalendar();
+        fecha_I.setTime(fecha_inicial);
+        fechaF.setTime(fecha_final);
+        boolean r = false;
+        System.out.println("fecha Inicial " + fecha_I.getTime());
+        System.out.println("fecha Final " + fechaF.getTime());
+
+        if (fechaF.get(Calendar.DAY_OF_MONTH) < fecha_I.get(Calendar.DAY_OF_MONTH)) {
+            r = true;
+        }
+        return r;
+    }
+
+    public boolean validarJornada(ArrayList x) {
         MDias temp = null;
-        for (int i = 0; i < Dias.size(); i++) {
-            temp = (MDias) Dias.get(i);
-            if (temp.isEstado() == true) {
-                d.add(temp);
+        boolean r = false;
+        String Estado = "";
+        try {
+            System.out.println("Dias size " + x.size());
+            for (int k = 0; k < x.size(); k++) {
+                temp = (MDias) x.get(k);
+                Calendar Horas = new GregorianCalendar();
+                System.out.println("fechaI " + temp.getHora_inicio());
+                String v1[] = temp.getHora_inicio().split(":");
+                Horas.set(Calendar.HOUR_OF_DAY, Integer.parseInt(v1[0]));
+                Horas.set(Calendar.MINUTE, Integer.parseInt(v1[1]));
+                System.out.println("fechaI final " + Horas.getTime());
+                Calendar Horas2 = new GregorianCalendar();
+                System.out.println("fechaF " + temp.getHora_final());
+
+                String v2[] = temp.getHora_final().split(":");
+                Horas2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(v2[0]));
+                Horas2.set(Calendar.MINUTE, Integer.parseInt(v2[1]));
+                System.out.println("fechaF final " + Horas2.getTime());
+
+                System.out.println(Horas.get(Calendar.HOUR_OF_DAY) + " >7---" + Horas2.get(Calendar.HOUR_OF_DAY) + " <21");
+                if (Horas.get(Calendar.HOUR_OF_DAY) > 7 && Horas2.get(Calendar.HOUR_OF_DAY) < 21) {
+                    System.out.println("paso primera fase");
+                    if (Horas2.get(Calendar.HOUR_OF_DAY) == 21 && Horas2.get(Calendar.MINUTE) == 00) {
+                        r = true;
+                    } else if (Horas2.get(Calendar.HOUR_OF_DAY) < 21) {
+                        r = true;
+                    } else {
+                        r = false;
+                        break;
+                    }
+                } else {
+                    r = false;
+                    break;
+                }
+
             }
+        } catch (Exception ex) {
+            System.out.println("Error ValidarHoras" + ex.toString());
         }
-        System.out.println("tamaño de d " + d.size());
-        if (d.size() > 0) {
-            System.out.println("entro");
-            ajusteProfesorBean ajuste = new ajusteProfesorBean(nombreProfesor, fecha_inicial, fecha_final, RamgoHora, Cantidad_horas, periodo);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Dias_ajuste", d);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Datos_ajuste", ajuste);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("AjusteProfesor2.xhtml");
+
+        System.out.println(
+                "retorna r " + Estado);
+        return r;
+    }
+
+    public String validarHoras(ArrayList x) {
+        MDias temp = null;
+        boolean r = false;
+        String Estado = "";
+        try {
+            System.out.println("Dias size " + x.size());
+            for (int k = 0; k < x.size(); k++) {
+                temp = (MDias) x.get(k);
+                Calendar Horas = new GregorianCalendar();
+                System.out.println("fechaI " + temp.getHora_inicio());
+                String v1[] = temp.getHora_inicio().split(":");
+                Horas.set(Calendar.HOUR_OF_DAY, Integer.parseInt(v1[0]));
+                Horas.set(Calendar.MINUTE, Integer.parseInt(v1[1]));
+                Calendar Horas2 = new GregorianCalendar();
+                System.out.println("fechaF " + temp.getHora_final());
+
+                String v2[] = temp.getHora_final().split(":");
+                Horas2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(v2[0]));
+                Horas2.set(Calendar.MINUTE, Integer.parseInt(v2[1]));
+                System.out.println("1");
+
+                if (Horas.get(Calendar.HOUR_OF_DAY) == Horas2.get(Calendar.HOUR_OF_DAY)) {
+                    if (Horas.get(Calendar.MINUTE) == Horas2.get(Calendar.MINUTE)) {
+                        System.out.println("iguales de hora");
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Las Horas son iguales", "" + temp.getHora_inicio() + " y " + temp.getHora_final() + " del dia " + temp.getDia()));
+                        r = true;
+                        Estado = "P";
+                    } else {
+                        for (int i = 0; r = true; i++) {
+                            System.out.println(Horas.get(Calendar.HOUR_OF_DAY) + ":" + Horas.get(Calendar.MINUTE)
+                                    + "==" + Horas2.get(Calendar.HOUR_OF_DAY) + ":" + Horas2.get(Calendar.MINUTE));
+                            if (Horas.get(Calendar.HOUR_OF_DAY) == Horas2.get(Calendar.HOUR_OF_DAY)) {
+                                if (Horas.get(Calendar.MINUTE) == Horas2.get(Calendar.MINUTE)) {
+                                    System.out.println("iguales");
+                                    r = false;
+                                    Estado = "I";
+                                    break;
+                                }
+                            } else if (Horas.get(Calendar.HOUR_OF_DAY) > Horas2.get(Calendar.HOUR_OF_DAY)) {
+                                if (Horas.get(Calendar.MINUTE) > Horas2.get(Calendar.MINUTE)) {
+                                    System.out.println("se paso");
+                                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Las Horas no encajan en el rango de tiempo", "" + temp.getHora_inicio() + " y " + temp.getHora_final() + " del dia " + temp.getDia()));
+                                    r = true;
+                                    Estado = "P";
+                                    break;
+                                }
+
+                            }
+                            Horas.add(Calendar.MINUTE, Integer.parseInt(RamgoHora));
+                        }
+                    }
+                } else {
+                    for (int i = 0; r = true; i++) {
+                        System.out.println(Horas.get(Calendar.HOUR_OF_DAY) + ":" + Horas.get(Calendar.MINUTE)
+                                + "==" + Horas2.get(Calendar.HOUR_OF_DAY) + ":" + Horas2.get(Calendar.MINUTE));
+                        if (Horas.get(Calendar.HOUR_OF_DAY) == Horas2.get(Calendar.HOUR_OF_DAY)) {
+                            if (Horas.get(Calendar.MINUTE) == Horas2.get(Calendar.MINUTE)) {
+                                System.out.println("iguales");
+                                r = false;
+                                Estado = "I";
+                                break;
+                            }
+                        } else if (Horas.get(Calendar.HOUR_OF_DAY) > Horas2.get(Calendar.HOUR_OF_DAY)) {
+                            if (Horas.get(Calendar.MINUTE) > Horas2.get(Calendar.MINUTE)) {
+                                System.out.println("se paso");
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Las Horas no encajan en el rango de tiempo", "" + temp.getHora_inicio() + " y " + temp.getHora_final() + " del dia " + temp.getDia()));
+                                r = true;
+                                Estado = "P";
+                                break;
+                            }
+
+                        }
+                        Horas.add(Calendar.MINUTE, Integer.parseInt(RamgoHora));
+                    }
+                }
+
+                System.out.println("----------------- " + r);
+                if (r == true) {
+                    break;
+                } else {
+                    r = false;
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("Error ValidarHoras" + ex.toString());
+        }
+
+        System.out.println("retorna r " + Estado);
+        return Estado;
+    }
+
+    public void cargarTodo() throws IOException {
+   
+        if (validarFechas() == false) {
+            if (validarFechasMayores() == false) {
+                ArrayList<MDias> d = new ArrayList();
+                MDias temp = null;
+                for (int i = 0; i < Dias.size(); i++) {
+                    temp = (MDias) Dias.get(i);
+                    if (temp.isEstado() == true) {
+                        d.add(temp);
+                    }
+                }
+                System.out.println("tamaño de d " + d.size());
+                if (d.size() > 0) {
+                    if (validarJornada(d) == true) {
+                        if (validarHoras(d) == "I") {
+                            traerPeriodo();
+                            System.out.println("entro todo bien");
+                            ajusteProfesorBean ajuste = new ajusteProfesorBean(nombreProfesor, fecha_inicial, fecha_final, RamgoHora, Cantidad_horas, periodo);
+
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("List_dias"); //                        ajusteProfesorBean ajuste = new ajusteProfesorBean(nombreProfesor, fecha_inicial, fecha_final, RamgoHora, Cantidad_horas, periodo);
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Dias_ajuste", d);
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Datos_ajuste", ajuste);
+                            FacesContext.getCurrentInstance().getExternalContext().redirect("AjusteProfesor2.xhtml");
+                        } else {
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("List_dias", d);
+                        }
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Las horas validas son de 7:00 AM hasta 9:00 PM", ""));
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("List_dias", d);
+
+                    }
+
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No ha seleccionado ningun dia", ""));
+                    System.out.println("No ha seleccionado ningun dia");
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "La fecha final es menor que la fecha inicial", ""));
+
+            }
+
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No ha seleccionado ningun dia", ""));
-            System.out.println("No ha seleccionado ningun dia");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Una de las fechas es menor que la fecha de hoy", ""));
+
         }
+
     }
 
     public void RevisarHoras() {
@@ -215,6 +448,19 @@ public final class ajusteProfesorBean implements Serializable {
                 }
 
             }
+        }
+    }
+
+    public void traerPeriodo() {
+        Date fechahoy = new Date();
+        if (fecha_inicial.getYear() == fechahoy.getYear() && fecha_final.getYear() == fechahoy.getYear()) {
+            if (fecha_inicial.getMonth() >= 1 && fecha_final.getMonth() <= 6) {
+                periodo = 1;
+            } else {
+                periodo=2;
+            }
+        } else {
+            System.out.println("Fecha pasada");
         }
     }
 

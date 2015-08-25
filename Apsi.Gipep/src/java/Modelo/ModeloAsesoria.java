@@ -19,6 +19,9 @@ public class ModeloAsesoria {
     private int cod_proyecto;
     private String porcentaje;
     private int cantidad;
+    private String pege_id;
+    private String tarea;
+    private String responsable;
 
     public ModeloAsesoria() {
     }
@@ -27,6 +30,11 @@ public class ModeloAsesoria {
         this.codigo_ase = codigo_ase;
         this.nombre_proyecto = nombre_proyecto;
         this.fecha = fecha;
+    }
+
+    public ModeloAsesoria(String responsable, String tarea) {
+        this.responsable = responsable;
+        this.tarea = tarea;
     }
 
     public int getCodigo_ase() {
@@ -73,8 +81,33 @@ public class ModeloAsesoria {
         this.cantidad = cantidad;
     }
 
- 
+    public String getPege_id() {
+        return pege_id;
+    }
 
-   
+    public void setPege_id(String pege_id) {
+        this.pege_id = pege_id;
+    }
+
+    public String getTarea() {
+        return tarea;
+    }
+
+    public void setTarea(String tarea) {
+        this.tarea = tarea;
+    }
+
+    public String getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(String responsable) {
+        this.responsable = responsable;
+    }
+
+    @Override
+    public String toString() {
+        return "ModeloAsesoria{" + "codigo_ase=" + codigo_ase + ", nombre_proyecto=" + nombre_proyecto + ", fecha=" + fecha + ", cod_proyecto=" + cod_proyecto + ", porcentaje=" + porcentaje + ", cantidad=" + cantidad + '}';
+    }
 
 }

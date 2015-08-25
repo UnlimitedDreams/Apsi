@@ -101,7 +101,7 @@ public class CalendarioImple implements CalendarioP {
         try {
             calen = (ArrayList) session.createQuery("select A from Asesoria A INNER JOIN A.disponibilidad D "
                     + " INNER JOIN D.dispoUsuarios UD "
-                    + " INNER JOIN UD.usuarioByProfesor Usu WHERE Usu.pegeId=3").list();
+                    + " INNER JOIN UD.usuarioByProfesor Usu WHERE Usu.pegeId=" + cod).list();
             t.commit();
         } catch (Exception ex) {
 

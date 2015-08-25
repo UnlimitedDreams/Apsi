@@ -15,6 +15,12 @@ public class Conecion_postgres1 {
     public static ResultSet rs;
     public static Connection con;
 
+    /**
+     * Conectar rapida y temporalmente a la base de datos.
+     *
+     * @return Estado de la Conexion a la base de datos del Sistema Apsi
+     * @throws ClassNotFoundException (Libreria de la conexion Postgres no encontrada)
+     */
     public static Connection conectar() throws ClassNotFoundException {
         boolean r = false;
         try {
@@ -22,7 +28,7 @@ public class Conecion_postgres1 {
             con = DriverManager.getConnection(connectString, user, password);
             stat = con.createStatement();
             r = true;
-            System.out.println("conecto");
+            //System.out.println("conecto");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

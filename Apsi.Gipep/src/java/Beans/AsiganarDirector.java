@@ -7,7 +7,6 @@ package Beans;
 
 import Entity.EstadoProyecto;
 import Entity.Estados;
-import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Usuario;
 import Entity.UsuarioProyecto;
@@ -15,14 +14,12 @@ import Modelo.Conecion_postgres1;
 import Modelo.Profesor;
 import Modelo.ProyectosModelo;
 import Modelo.Secuencia;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -36,49 +33,34 @@ import util.HibernateUtil;
 public class AsiganarDirector {
 
     ArrayList<ProyectosModelo> pro2 = new ArrayList();
-    private HttpServletRequest httpServletRequest;
-    private FacesContext faceContext;
-    private String NombreUsuario;
 
     public AsiganarDirector() {
     }
 
-    public void cargar_Proyectos() throws IOException {
-        faceContext = FacesContext.getCurrentInstance();
-        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
-        if (httpServletRequest.getSession().getAttribute("user") != null) {
-            System.out.println("Existe");
-            ArrayList<Proyectos> pro = new ArrayList();
-            pro2.clear();
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            Transaction t = session.beginTransaction();
-            try {
-                pro = (ArrayList) session.createQuery("select distinct P FROM Proyectos P"
-                        + " INNER JOIN P.usuarioProyectos U INNER JOIN"
-                        + " U.usuarioByDirector UD where "
-                        + "UD.pegeId=0").list();
-                ProyectosModelo temp = null;
-                Proyectos temp2 = null;
-                for (int i = 0; i < pro.size(); i++) {
-                    temp2 = (Proyectos) pro.get(i);
-                    System.out.println("codigoooooo " + temp2.getCodigoProyecto());
-                    pro2.add(new ProyectosModelo(temp2.getCodigoProyecto().intValue(), temp2.getNombre(), false));
-                }
-                System.out.println("---- " + pro2.size());
-            } catch (Exception ex) {
-                System.out.println("Error " + ex.toString());
+    public void cargar_Proyectos() {
+        ArrayList<Proyectos> pro = new ArrayList();
+        pro2.clear();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        try {
+            pro = (ArrayList) session.createQuery("select distinct P FROM Proyectos P"
+                    + " INNER JOIN P.usuarioProyectos U INNER JOIN"
+                    + " U.usuarioByDirector UD where "
+                    + "UD.pegeId=0").list();
+            ProyectosModelo temp = null;
+            Proyectos temp2 = null;
+            for (int i = 0; i < pro.size(); i++) {
+                temp2 = (Proyectos) pro.get(i);
+                System.out.println("codigoooooo " + temp2.getCodigoProyecto());
+                pro2.add(new ProyectosModelo(temp2.getCodigoProyecto().intValue(), temp2.getNombre(), false));
             }
-            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
-            NombreUsuario = p.getNombres() + " " + p.getApellidos();
-//            System.out.println("--- " + p.toString());
-
-        } else {
-            System.out.println("No existe");
-            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
-
+            System.out.println("---- " + pro2.size());
+        } catch (Exception ex) {
+            System.out.println("Error " + ex.toString());
         }
-
     }
+    
+
 
     public void pasar_Proyectos(int x) {
         ProyectosModelo temp = null;
@@ -222,6 +204,7 @@ public class AsiganarDirector {
         }
 
     }
+    
 
     public ArrayList<ProyectosModelo> getPro2() {
         return pro2;
@@ -233,30 +216,6 @@ public class AsiganarDirector {
 
     public void mns() {
         System.out.println("entro");
-    }
-
-    public HttpServletRequest getHttpServletRequest() {
-        return httpServletRequest;
-    }
-
-    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
-        this.httpServletRequest = httpServletRequest;
-    }
-
-    public FacesContext getFaceContext() {
-        return faceContext;
-    }
-
-    public void setFaceContext(FacesContext faceContext) {
-        this.faceContext = faceContext;
-    }
-
-    public String getNombreUsuario() {
-        return NombreUsuario;
-    }
-
-    public void setNombreUsuario(String NombreUsuario) {
-        this.NombreUsuario = NombreUsuario;
     }
 
 }

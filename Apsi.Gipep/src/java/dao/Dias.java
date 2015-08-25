@@ -25,13 +25,16 @@ public class Dias {
         this.dia = dia;
     }
 
-    public Dias( Date fechas) {
-       
+    public Dias(Date fechas) {
+
         this.fechas = fechas;
     }
-    
 
-    
+    public Dias(int cod, Date fechas) {
+        this.cod = cod;
+        this.fechas = fechas;
+    }
+
     public int getCod() {
         return cod;
     }
@@ -55,6 +58,9 @@ public class Dias {
     public void setFechas(Date fechas) {
         this.fechas = fechas;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Dias{" + "cod=" + cod + ", dia=" + dia + ", fechas=" + fechas + '}';
+    }
 }

@@ -6,6 +6,7 @@
 package Beans;
 
 import Entity.Objetivos;
+import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Rol;
 import Entity.UsuRol;
@@ -23,6 +24,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -38,40 +41,89 @@ public class Proyecto_Compañeros {
 
     ArrayList<Estudiante> lista_estu = new ArrayList();
     private String nombre;
+    private HttpServletRequest httpServletRequest;
+    private HttpServletResponse httpServletResponse;
+    private FacesContext faceContext;
+    private String NombreUsuario;
 
     public Proyecto_Compañeros() {
     }
 
-    public void cargar_estudiante() {
+    public void cargar_estudiante() throws IOException {
         System.out.println("entro");
-        if (lista_estu.size() == 0) {
-            Estudiante estu = new Estudiante(false,
-                    "234343", "Samuel", "Valencia", "6543");
-            lista_estu.add(estu);
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+            if (lista_estu.size() == 0) {
+                Estudiante estu = new Estudiante(false,
+                        p.getIdpersona().toString(), p.getNombres(), p.getApellidos(), "" + p.getUsuario().getPegeId().intValue());
+                lista_estu.add(estu);
+            }
+////            httpServletRequest.getAttribute("user");
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
         }
+
 //        System.out.println("+++ " + lista_estu.size());
     }
 
-    public void buscarEstudiante() throws ClassNotFoundException {
+    public void buscarEstudiante() throws ClassNotFoundException, IOException {
         System.out.println("entor a buscar");
-        Conecion_postgres.conectar();
-        Conecion_postgres.ejecuteQuery("select * from estudiante where cedula='" + nombre + "'");
-        boolean r = false;
-        try {
-            while (Conecion_postgres.rs.next()) {
-                r = true;
-                lista_estu.add(new Estudiante(false, Conecion_postgres.rs.getString(2), Conecion_postgres.rs.getString(3), Conecion_postgres.rs.getString(4), Conecion_postgres.rs.getString(1)));
+        
+            if (lista_estu.size() < 3) {
+                if (nombre.equalsIgnoreCase("")) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Debes escribir una cedula", ""));
+                } else {
+                    if (buscarCedula()==true) {
+                        System.out.println("entro");
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No Puede cargar la misma cedula que ya tienes", ""));
+                    } else {
+                        Conecion_postgres.conectar();
+                        Conecion_postgres.ejecuteQuery("select * from estudiante where cedula='" + nombre + "'");
+                        boolean r = false;
+                        try {
+                            while (Conecion_postgres.rs.next()) {
+                                r = true;
+                                lista_estu.add(new Estudiante(false, Conecion_postgres.rs.getString(2), Conecion_postgres.rs.getString(3), Conecion_postgres.rs.getString(4), Conecion_postgres.rs.getString(1)));
+                            }
+                            System.out.println("--- " + lista_estu.size());
+                            Conecion_postgres.cerrarConexion();
+                            if (r == false) {
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No existe Cedula en la UNIAJC", ""));
+
+                            }
+                        } catch (Exception ex) {
+
+                        }
+                    }
+                }
+
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ya no puedes cargar mas personas", ""));
             }
-            System.out.println("--- " + lista_estu.size());
-            Conecion_postgres.cerrarConexion();
-            if (r == false) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No existe Cedula en la UNIAJC", ""));
+////            httpServletRequest.getAttribute("user");
+        
 
+    }
+
+    public boolean buscarCedula() {
+        Estudiante temp = null;
+        boolean esta=false;
+        for (int i = 0; i < lista_estu.size(); i++) {
+            temp = (Estudiante) lista_estu.get(i);
+            if(temp.getCedula().equalsIgnoreCase(nombre)){
+                esta=true;
+                break;
             }
-
-        } catch (Exception ex) {
-
         }
+        return esta;
     }
 
     public Usuario Crearusuario(String pege_id, String nombre) {
@@ -217,7 +269,8 @@ public class Proyecto_Compañeros {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ok", ""));
             lista_estu.clear();
             t.commit();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("../mainMenu.jsp");
+//            httpServletResponse.sendRedirect("../logIn/mainMenu.jsp");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../modCT_CA/MisProyectos.xhtml");
 
         } catch (Exception ex) {
             r = false;

@@ -266,7 +266,7 @@ public class ajusteProfesorInfo {
         try {
             System.out.println("entro");
             Rol r = new Rol();
-            r.setCodRol(new BigDecimal(2));
+            r.setCodRol(new BigDecimal(4));
             r.setEstado("esta");
             r.setNombre("nombre");
             UsuRol usuR = new UsuRol();

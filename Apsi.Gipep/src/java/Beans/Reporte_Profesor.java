@@ -171,7 +171,7 @@ public class Reporte_Profesor {
 //    }
     public R_profesor TraerInfo(String pege_id) throws ClassNotFoundException {
         Conecion_postgres.conectar();
-        System.out.println("pege_id " +pege_id);
+        System.out.println("pege_id " + pege_id);
         Conecion_postgres.ejecuteQuery("select * from profesor where pege_id=" + pege_id);
         R_profesor p = new R_profesor();
 
@@ -209,7 +209,6 @@ public class Reporte_Profesor {
 //        exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
 //        exporter.exportReport();
 //    }
-
 //    public void reporteHorasProfeXml() throws JRException {
 //        System.out.println("--------- size " + lista_Profe.size());
 //        Report_profe datasource = new Report_profe();
@@ -227,7 +226,6 @@ public class Reporte_Profesor {
 //        exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
 //        exporter.exportReport();
 //    }
-
     public void llenarDatosProfe() throws ClassNotFoundException {
 
         Conecion_postgres1.conectar();
@@ -241,8 +239,8 @@ public class Reporte_Profesor {
                 + "                            usuario.pege_id=dispo_usuario.profesor and \n"
                 + "                            usuario.pege_id=persona.pege_id and\n"
                 + "                             dispo_usuario.cod_dis=disponibilidad.cod_dis \n"
-                + "                             and disponibilidad.periodo="+periodo+"\n"
-                + "                               and fecha_inicial>='"+fechaI+"' and fecha_final<='"+FechaF+"'");
+                + "                             and disponibilidad.periodo=" + periodo + "\n"
+                + "                               and fecha_inicial>='" + fechaI + "' and fecha_final<='" + FechaF + "'");
         try {
             while (Conecion_postgres1.rs.next()) {
                 System.out.println("entro");
@@ -251,7 +249,7 @@ public class Reporte_Profesor {
                 System.out.println("1");
                 R_profesor R = new R_profesor();
                 R = TraerInfo(Conecion_postgres1.rs.getString(2));
-                 System.out.println("2 " + R.getCedula());
+                System.out.println("2 " + R.getCedula());
                 p.setCedula(R.getCedula());
                 p.setNombre(R.getNombre());
                 p.setApellido(R.getApellido());
@@ -267,8 +265,6 @@ public class Reporte_Profesor {
         }
 
     }
-
-  
 
     public void mns() {
         System.out.println("entro");

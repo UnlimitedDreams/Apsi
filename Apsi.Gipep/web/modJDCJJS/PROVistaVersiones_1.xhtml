@@ -3,8 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,33 +14,14 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{validarProfesor.cargar_facultad()}"> 
-        <nav class="navbar navbar-trans " role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar-collapsible">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
-                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
-                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
-                        <li>&nbsp;</li>
-                    </ul>                   
-                </div>
-            </div>
-        </nav>
+    <!-- <h:body onload="#/{validarProfesor.cargar_facultad()}"> -->
+    <h:body>
+
 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User :  <h:outputLabel value="#{validarProfesor.nombreUsuario}"></h:outputLabel></h3> 
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
                 </div>
             </div>
         </section>
@@ -116,80 +96,84 @@
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>Asignacion de Director</h4></div>
+                            <h4>REVICIONES</h4></div>
+
+                        <br></br>
                         <h:form id="vista_validar">
-                            <br/>
+
+
                             <p:growl id="messages" showDetail="true" />
+
                             <div class="form-group">
-                                <h:selectOneMenu id="car" class="form-control input-lg" value="#{validarProfesor.facultad}" >
-                                    <f:selectItem itemLabel="*--Seleccione Facultad--*" itemValue="" />
-                                    <f:selectItems value="#{validarProfesor.facul}" />
-                                    <p:ajax  event="change" listener="#{validarProfesor.cargarProfesores()}" update=":vista_validar:tabla,messages"></p:ajax>
+                                <h:outputLabel  value="Año :" />
+                                <h:selectOneMenu class="form-control" value="#{revision.año}" >
+                                    <f:selectItems value="#{revision.b_año}"/>   
                                 </h:selectOneMenu>
                             </div>
 
-                            <br/><br/>
-                            <div class="form-group">
-                                <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
-                                             class="table">
-                                    <h:column>
+                            <br></br>
+                            <h:commandButton value="Cargar" class="btn btn-primary btn-lg btn-block" actionListener="#{revision.listaProfeProyect()}"></h:commandButton>
+                            <br></br>
+                            <h:dataTable id="tabla" var="Proyecto" value="#{revision.p}" class="table">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{Proyecto.nombre}" />
+                                </h:column>
+                                <h:column>
+                                    <center>
                                         <f:facet name="header">
-                                            <h:outputText value="SELECCIONAR"></h:outputText>
+                                            <h:outputText value="Porcentaje"></h:outputText>
                                         </f:facet>
-                                        <p:selectBooleanCheckbox >
-                                            <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,1)}" update=":vista_validar:messages"/>
-                                        </p:selectBooleanCheckbox>
-                                    </h:column>
-                                    <h:column>
+                                        <h:outputText value="#{Proyecto.porcentaje} %" />
+                                    </center>
+                                </h:column>
+                                <h:column>
+                                    <center>
                                         <f:facet name="header">
-                                            <h:outputText value="PROYECTOS 
-                                                          ASIGNADOS"></h:outputText>
+                                            <h:outputText value="Opciones"></h:outputText>
                                         </f:facet>
-                                        <h:outputText value="#{Profesor.num_proyectos}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Disponibilidad Asignada"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.dispo}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="CEDULA"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.cedula}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="NOMBRE"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.nombre}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="HERRAMIENTA"></h:outputText>
-                                        </f:facet>
-                                        <h:outputText value="#{Profesor.apellido}" />
-                                    </h:column>
-                                </h:dataTable>
-                            </div>
-
-
+                                        <center>
+                                            <h:commandButton value="R" class="btn btn-primary btn-lg" actionListener="#{validarProfesor.validarProyecto(Proyecto,1)}"></h:commandButton>
+                                            <label></label>
+                                            <h:commandButton value="V" class="btn btn-succes btn-lg" actionListener="#{validarProfesor.validarProyecto(Proyecto,2)}"></h:commandButton>
+                                        </center>
+                                    </center>
+                                </h:column>
+                            </h:dataTable>
                         </h:form>
+
                     </div>
                 </div>
             </div>
 
         </section>
-
-
         <footer id="footer">
             <div class="container">
                 <div class="row">
-                    <p class="text-muted text-center"> ApSi <br></br>UNIAJC</p>
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>ApSi&REG;</strong>
+                        </h4>
+                        <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br></br>Santiago de Cali, Colombia</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
+                            </li>
+                        </ul>
+                        <br></br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small"></hr>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
+                    </div>
                 </div>
-                <br></br>
-                <p class="text-center text-muted">©2015</p>
             </div>
         </footer>
 
@@ -208,6 +192,7 @@
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
+
 
         <!--scripts loaded here-->
 

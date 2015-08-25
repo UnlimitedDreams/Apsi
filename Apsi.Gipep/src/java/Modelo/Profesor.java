@@ -14,6 +14,8 @@ public class Profesor implements Serializable {
     private String nombre;
     private String apellido;
     private String pege_id;
+    private int num_proyectos;
+    private String dispo;
 
     public Profesor(boolean activo, String cedula, String nombre, String apellido, String pege_id) {
         this.activo = activo;
@@ -23,8 +25,32 @@ public class Profesor implements Serializable {
         this.pege_id = pege_id;
     }
 
+    public Profesor(String pege_id, String nombre, String apellido) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.pege_id = pege_id;
+    }
+
     public Profesor() {
     }
+
+    public int getNum_proyectos() {
+        return num_proyectos;
+    }
+
+    public void setNum_proyectos(int num_proyectos) {
+        this.num_proyectos = num_proyectos;
+    }
+
+    public String getDispo() {
+        return dispo;
+    }
+
+    public void setDispo(String dispo) {
+        this.dispo = dispo;
+    }
+    
+    
 
     public String getCedula() {
         return cedula;
@@ -70,6 +96,5 @@ public class Profesor implements Serializable {
     public String toString() {
         return "Profesor{" + "activo=" + activo + ", cedula=" + cedula + ", nombre=" + nombre + ", apellido=" + apellido + ", pege_id=" + pege_id + '}';
     }
-    
 
 }

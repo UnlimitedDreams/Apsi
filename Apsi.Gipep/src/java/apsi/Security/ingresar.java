@@ -76,6 +76,7 @@ public class ingresar extends HttpServlet {
                     if (Loguin.getContrasea().equals(x.getContrasea()) && Loguin.getUsuario().equals(x.getUsuario())) {
                         s.setAttribute("user", x.getUsuario());
                         s.setAttribute("pass", x.getContrasea());
+                        //mandar el codigo del proyecto
                         Persona ww = new UsuarioImple().verPersona(Loguin.getPegeId().toString());
                         s.setAttribute("persona", ww);
                         response.sendRedirect("index.jsp");

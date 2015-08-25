@@ -14,7 +14,7 @@ and open the template in the editor.
         <title>ApSi.GiPep - Menú Principal</title>
         <link rel="icon" type="image/png" href="../img/apsi.ico"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="../css/ingreso.css"/>
+
         <link rel="stylesheet" href="../css/Tablas.css"/>
         <link rel="stylesheet" href="../css/formas.css"/>
         <link rel="stylesheet" href="../css/Estilo_hoja.css"/>
@@ -25,53 +25,78 @@ and open the template in the editor.
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/> 
     </h:head>
-    <h:body > 
+    <h:body  onload="#{calendarioAsesoria.traerDocente()}"> 
 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel ></h:outputLabel></h3> 
                 </div>
             </div>
         </section>
 
         <h:form>
+
+            <p:growl id="messages" showDetail="true" />
             <center>
+                <h2 class="text-muted">Calendario para Asignación de Asesorías</h2>
+                <h3 class="text-muted">Selecciona un asesor, luego presiona Cargar Calendario</h3><br/>
                 <div id="calendar" >
-                    <p:growl id="messages" showDetail="true" />
+                    <!--<p:growl id="messages" showDetail="true" />-->
                     <b:container>
+                        <table class="table-condensed">
+                            <tr>
+                                <td>
+                                    <h:selectOneMenu class="input-lg" id="car3" value="#{calendarioAsesoria.pegeString}" >
+                                        <f:selectItems value="#{calendarioAsesoria.docentes}"
+                                                       var="calendarioDocente"
+                                                       itemLabel="#{calendarioDocente.nombre} #{calendarioDocente.apellido}" itemValue="#{calendarioDocente.pege_id}"/>   
+                                    </h:selectOneMenu>
+                                </td>
+                                <td>
+                                    <h:commandButton class="btn btn-dark btn-lg" actionListener="#{calendarioAsesoria.añadir_eventos()}" value="Cargar Calendario"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
                         <h:panelGrid columnClasses="value">
-                            <h3 style="margin-top: 0">Calendario Profesor</h3>
                             <p:schedule  id="schedule" value="#{calendarioAsesoria.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false" showWeekends="true" resizable="false"  > 
-                                <p:ajax event="dateSelect" listener="#{calendarioAsesoria.onDateSelect}"  oncomplete="PF('eventDialog2').show();" />
-                                <p:ajax event="eventSelect" listener="#{calendarioAsesoria.onEventSelect}"  oncomplete="PF('eventDialog').show();" />
+                                <p:ajax event="eventSelect" listener="#{calendarioAsesoria.onEventSelect}" update="tabla" oncomplete="PF('eventDialog').show();" />
                             </p:schedule>
                         </h:panelGrid>
                         <br/><br/>
-                        <p:dialog widgetVar="eventDialog"  modal="true" header="Informacion" showEffect="clip" hideEffect="clip">
-                            <h:panelGrid id="eventDetails" columns="2">
-                                <b:commandButton id="addButton" value="Info" actionListener="#{calendario_profesor.actualizar()}" icon="ui-icon-check" update="messages" />
-                                <b:commandButton id="addButton23" value="Borrar"  actionListener="#{calendario_profesor.cancelar()}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"  />
-                            </h:panelGrid>
-                        </p:dialog> 
-                        <p:dialog  modal="true" widgetVar="eventDialog2" header="Actividad" showEffect="clip" hideEffect="clip">
-                            <h:panelGrid id="eventDetails2" columns="2">
-                                <h:outputLabel for="at" value="Actividad :" style="font-weight:bold" />
-                                <b:inputText id="at" value="#{calendario_profesor.titulo}" />
-                                <h:outputLabel for="f1" value="Fecha inicio:" style="font-weight:bold"  />
-                                <p:calendar id="f1" value="#{calendario_profesor.fecha_inicio}" showOn="button" size="30" /> 
-                                <h:outputLabel for="f2" value="Fecha Final:" style="font-weight:bold" />
-                                <p:calendar id="f2" value="#{calendario_profesor.fecha_final}" showOn="button" size="30" style="top: 3px;"/>
-                                <h:outputLabel for="h1" value="Hora inicial :" style="font-weight:bold" />
-                                <b:inputText id="h1" value="#{calendario_profesor.hora1}" type="time"/>
-                                <h:outputLabel for="h2" value="Hora final :" style="font-weight:bold" />
-                                <b:inputText id="h2" value="#{calendario_profesor.hora2}" type="time" >
-                                </b:inputText>
-                            </h:panelGrid>
+                        <p:dialog widgetVar="eventDialog"  modal="true" header="Seleccionar asesoría" showEffect="clip" hideEffect="clip">
+                            <h:dataTable id="tabla" var="dias" value="#{calendarioAsesoria.asesoriasPorDia}"
+                                         class="table">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="SELECCIONAR"></h:outputText>
+                                    </f:facet>
+                                    <p:selectBooleanCheckbox disabled="#{dias.asiginado}" value="#{dias.asiginado}">
 
-                            <b:commandButton id="Guardar" value="Guardar" tooltip="Guardar Actividad"  actionListener="#{calendario_profesor.addEvent(actionEvent)}" update="messages" oncomplete="PF('myschedule').update();PF('eventDialog2').hide();"  />
-                            <b:commandButton id="Cancelar" value="Resest" type="reset" />
-                        </p:dialog>   
+                                    </p:selectBooleanCheckbox>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Fecha"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dias.fecha}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Hora"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dias.hora}" />
+                                </h:column>
+                                <h:column>
+                                    <h:commandButton value="Guardar" disabled="#{dias.asiginado}" actionListener="#{calendarioAsesoria.guardarAsesoria(dias.fecha, dias.cod_dis, dias.hora)}"></h:commandButton>
+
+                                </h:column>
+
+                            </h:dataTable>
+                            <br/>
+                        </p:dialog> 
+
                     </b:container>
 
                 </div>
@@ -111,11 +136,10 @@ and open the template in the editor.
             <a href="#"><i class="fa fa-angle-up"></i></a>
         </div>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="../js/scripts.js"></script>
+
         <!--scripts para panel menu-->
-        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+
         <script src="../js/bootstrap.min.js"></script>
-        <script src="../js/scripts1.js"></script>
 
     </h:body>
 
