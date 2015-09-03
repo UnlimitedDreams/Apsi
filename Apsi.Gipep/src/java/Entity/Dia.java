@@ -1,5 +1,5 @@
 package Entity;
-// Generated 18-ago-2015 14:13:44 by Hibernate Tools 4.3.1
+// Generated 15/10/2015 01:16:32 AM by Hibernate Tools 4.3.1
 
 
 import java.math.BigDecimal;
@@ -67,6 +67,11 @@ public class Dia  implements java.io.Serializable {
     
     public void setHoraInicial(String horaInicial) {
         this.horaInicial = horaInicial;
+    }
+
+    @Override
+    public String toString() {
+        return  dia+"-"+horaInicial+"-"+horaFinal;
     }
 
 

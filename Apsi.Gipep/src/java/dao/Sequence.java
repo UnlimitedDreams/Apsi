@@ -5,7 +5,6 @@
  */
 package dao;
 
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -17,11 +16,26 @@ import util.HibernateUtil;
  */
 public class Sequence {
 
-    public static Query GetUltimoRegistro(String sql){
-        System.out.println("entro a sequence");
-        Session session = HibernateUtil.getSessionFactory().openSession();
+    public static int GetUltimoRegistro(String sql) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
-        Query query = session.createQuery(sql).setMaxResults(1);
-        return query;
+        int cod = 0;
+        try {
+            Query query = session.createQuery(sql).setMaxResults(1);
+            if (query.uniqueResult() == null) {
+                cod = 1;
+            } else {
+                cod = Integer.parseInt(query.uniqueResult().toString()) + 1;
+
+            }
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error GetUltimoRegistro " + ex.toString());
+            if (t != null) {
+                t.rollback();
+            }
+        }
+
+        return cod;
     }
 }

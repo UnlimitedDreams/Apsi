@@ -17,12 +17,14 @@ public class asesoria {
     private String hora;
     private boolean asiginado;
     private int cod_dis;
+    private String fechaF;
 
-    public asesoria(Date fecha, String hora, boolean asiginado, int cod_dis) {
+    public asesoria(Date fecha, String hora, boolean asiginado, int cod_dis,String fechaF) {
         this.fecha = fecha;
         this.hora = hora;
         this.asiginado = asiginado;
         this.cod_dis = cod_dis;
+        this.fechaF=fechaF;
     }
 
   
@@ -54,15 +56,24 @@ public class asesoria {
 
     @Override
     public String toString() {
-        return "asesoria{" + "fecha=" + fecha + ", hora=" + hora + ", asiginado=" + asiginado + '}';
+        return "asesoria{" + "fecha=" + fecha + ", hora=" + hora + ", asiginado=" + asiginado + ", cod_dis=" + cod_dis + ", fechaF=" + fechaF + '}';
     }
 
+   
     public int getCod_dis() {
         return cod_dis;
     }
 
     public void setCod_dis(int cod_dis) {
         this.cod_dis = cod_dis;
+    }
+
+    public String getFechaF() {
+        return fechaF;
+    }
+
+    public void setFechaF(String fechaF) {
+        this.fechaF = fechaF;
     }
     
     

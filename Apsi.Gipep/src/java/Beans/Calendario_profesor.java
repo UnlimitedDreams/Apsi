@@ -6,8 +6,11 @@ import dao.Sequence;
 import Entity.Asesoria;
 import Entity.Asistente;
 import Entity.Calendario;
+import Entity.Estados;
+import Entity.EstadosAsesoria;
 import Entity.Persona;
 import Entity.Usuario;
+import Modelo.Conecion_postgres;
 import Modelo.Conecion_postgres1;
 import Modelo.MDias;
 import Modelo.Secuencia;
@@ -60,12 +63,42 @@ public class Calendario_profesor implements Serializable {
     private ScheduleEvent event = new DefaultScheduleEvent();
     ArrayList<String> res = new ArrayList();
     ArrayList<CalendarioProfe_update> cal = new ArrayList();
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
+    private String pege_id;
 
     @PostConstruct
     public void init() {
+
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+            pege_id = (String) httpServletRequest.getSession().getAttribute("pege_id");
+//            System.out.println("--- " + p.toString());
             borrarTodo();
-            añadir_eventos();
+            try {
+                añadir_eventos();
+            } catch (IOException ex) {
+                Logger.getLogger(Calendario_profesor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+////            httpServletRequest.getAttribute("user");
+////            httpServletRequest.getAttribute("user");
+        } else {
+            System.out.println("No existe");
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+            } catch (IOException ex) {
+                Logger.getLogger(Calendario_profesor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
+
+    }
 
     public void borrarTodo() {
         try {
@@ -81,7 +114,7 @@ public class Calendario_profesor implements Serializable {
         }
     }
 
-    public void añadir_eventos() {
+    public void añadir_eventos() throws IOException {
         eventModel = new DefaultScheduleModel();
         ArrayList a = null;
         ArrayList b = null;
@@ -96,15 +129,18 @@ public class Calendario_profesor implements Serializable {
             int h1 = 0, h2 = 0;
             System.out.println("3");
             int min1 = 0, min2 = 0;
-            System.out.println("comenzamos ---" + b.size());
+            System.out.println("comenzamos ---" + a.size());
             for (int i = 0; i < a.size(); i++) {
                 System.out.println(".l.");
                 temp = (MDias) a.get(i);
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+                System.out.println("-- fecha " + temp.getFecha1());
                 Date date1 = fmt.parse(temp.getFecha1());
                 Date date2 = fmt.parse(temp.getFecha1());
+                System.out.println("-- : " + temp.getHora_inicio());
                 h1 = Integer.parseInt((String) temp.getHora_inicio().subSequence(0, 2));
                 min1 = Integer.parseInt((String) temp.getHora_inicio().subSequence(3, 5));
+                System.out.println("-- : " + temp.getHora_final());
                 h2 = Integer.parseInt((String) temp.getHora_final().subSequence(0, 2));
                 min2 = Integer.parseInt((String) temp.getHora_final().subSequence(3, 5));
                 date1.setHours(h1);
@@ -149,11 +185,12 @@ public class Calendario_profesor implements Serializable {
         }
     }
 
-    public ArrayList traer_dias() throws ClassNotFoundException {
+    public ArrayList traer_dias() throws ClassNotFoundException, IOException {
+        System.out.println("pege_id::::::::::: " + pege_id);
         ArrayList<MDias> dias = new ArrayList();
         CalendarioP calen = new CalendarioImple();
         ArrayList<Asesoria> usu = new ArrayList();
-        usu = calen.TraerAsesorias(6);
+        usu = calen.TraerAsesorias(Integer.parseInt(pege_id));
         String dia = "";
         String hora1 = "", hora2 = "", hfinal = "";
         int cod = 0;
@@ -215,7 +252,7 @@ public class Calendario_profesor implements Serializable {
 //        }
 //        return calen;
 //    }
-    public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
+    public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException, IOException {
         System.out.println("------------------ " + hora1);
         Date h1 = new Date();
         Date h2 = new Date();
@@ -373,7 +410,7 @@ public class Calendario_profesor implements Serializable {
         return "ScheduleView2{" + "eventModel=" + eventModel + ", lazyEventModel=" + lazyEventModel + ", event=" + event + '}';
     }
 
-    public void cancelar() {
+    public void cancelar() throws IOException, ClassNotFoundException {
         String no = "", cod = "";
         String cod1[] = null;
         System.err.println("Nombre " + event.getTitle());
@@ -387,19 +424,58 @@ public class Calendario_profesor implements Serializable {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
             System.err.println("Codigo es " + cod);
-            Asesoria asesoria = new Asesoria();
-            int convertir = Integer.parseInt(cod);
-            asesoria.setCodAsesoria(new BigDecimal(convertir));
-            Asistente asistente = new Asistente();
-            asistente.setAsesoria(asesoria);
-            boolean a = calen.BorrarASesoria(asesoria, asistente);
-//            boolean a = Control.ejecuteUpdate("delete from asistente where cod_asesoria=" + cod);
-            if (a) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
-                añadir_eventos();
+            Date fecha_hoy = new Date();
+            if (event.getStartDate().getMonth() == fecha_hoy.getMonth() && event.getStartDate().getDay() < fecha_hoy.getDay()) {
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                Transaction t = session.beginTransaction();
+                try {
+                    Estados asis = (Estados) session.load(Estados.class, new BigDecimal(8));
+                    EstadosAsesoria e = new EstadosAsesoria();
+                    e = (EstadosAsesoria) session.createQuery("select e from EstadosAsesoria e "
+                            + " inner join e.asesoria a where a.codAsesoria=" + cod).uniqueResult();
+                    e.setEstados(asis);
+                    session.update(e);
+//                Conecion_postgres1.conectar();
+//                Conecion_postgres1.ejecuteUpdate("update asistente set asistencia='Cancelado' where cod_asesoria=" + cod);
+//                boolean a = Conecion_postgres1.ejecuteUpdate("update estados_asesoria set codigo_estados=8 where cod_asesoria=" + cod);
+////           
+                    t.commit();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
+                    añadir_eventos();
+                } catch (Exception ex) {
+                    System.out.println("Error : " + ex.toString());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No Cancelado", ""));
+
+                }
+
+            } else if (event.getStartDate().getMonth() > fecha_hoy.getMonth()) {
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                Transaction t = session.beginTransaction();
+                try {
+                    Estados asis = (Estados) session.load(Estados.class, new BigDecimal(8));
+                    EstadosAsesoria e = new EstadosAsesoria();
+                    e = (EstadosAsesoria) session.createQuery("select e from EstadosAsesoria e "
+                            + " inner join e.asesoria a where a.codAsesoria=" + cod).uniqueResult();
+                    e.setEstados(asis);
+                    session.update(e);
+
+//                Conecion_postgres1.conectar();
+//                Conecion_postgres1.ejecuteUpdate("update asistente set asistencia='Cancelado' where cod_asesoria=" + cod);
+//                boolean a = Conecion_postgres1.ejecuteUpdate("update estados_asesoria set codigo_estados=8 where cod_asesoria=" + cod);
+////           
+                    t.commit();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelado", ""));
+                    añadir_eventos();
+                } catch (Exception ex) {
+                    System.out.println("Error : " + ex.toString());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No Cancelado", ""));
+
+                }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "NO Cancelado", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No Puedes cancelar una asesoria el mismo dia", "Maximo 24 horas antes de la fecha"));
+
             }
+
         } else {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
@@ -449,7 +525,11 @@ public class Calendario_profesor implements Serializable {
             no = event.getTitle();
         }
         if (no.equals("Asesoria")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puede Actualizar", ""));
+            cod1 = event.getTitle().split("#");
+            cod = cod1[1];
+            System.out.println("codigo " + cod);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Codigo_asesoria", cod);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("Calendario_updateAsesoria.xhtml");
         } else {
             cod1 = event.getTitle().split("#");
             cod = cod1[1];
@@ -571,6 +651,38 @@ public class Calendario_profesor implements Serializable {
 
     public void setCal(ArrayList<CalendarioProfe_update> cal) {
         this.cal = cal;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
+    }
+
+    public String getPege_id() {
+        return pege_id;
+    }
+
+    public void setPege_id(String pege_id) {
+        this.pege_id = pege_id;
     }
 
 }

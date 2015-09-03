@@ -67,7 +67,7 @@ public class ListaProfesoresBeans {
         fechaI = "01-01-" + año;
         FechaF = "31-12-" + año;
         ArrayList<DispoUsuario> codigos = new ArrayList();
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Pege_idProfe.clear();
         profe.clear();
@@ -99,13 +99,14 @@ public class ListaProfesoresBeans {
 
         try {
             while (Conecion_postgres.rs.next()) {
-                profe.add(new Profesor(false, Conecion_postgres.rs.getString(5), Conecion_postgres.rs.getString(2) + " "
-                        + Conecion_postgres.rs.getString(2),
-                        Conecion_postgres.rs.getString(3), Conecion_postgres.rs.getString(1)));
+                profe.add(new Profesor(false, Conecion_postgres.rs.getString(2), Conecion_postgres.rs.getString(3),
+                        Conecion_postgres.rs.getString(4), Conecion_postgres.rs.getString(1)));
             }
             Conecion_postgres.cerrarConexion();
         } catch (Exception ex) {
             System.out.println("Error Profe" + ex.toString());
+            Conecion_postgres.cerrarConexion();
+
         }
     }
 //
@@ -143,7 +144,7 @@ public class ListaProfesoresBeans {
 //
 //    }
 
-    public void delete(String pege_id) {
+    public void delete(String pege_id) throws IOException {
         Disponibilidad d = new Disponibilidad();
         d = cod_dispoProfe(pege_id);
         ArrayList n = null;
@@ -151,7 +152,7 @@ public class ListaProfesoresBeans {
         System.out.println("Entroo delete  pege " + pege_id + " dispo " + d.getCodDis());
         if (n.size() > 0) {
             System.out.println("entro opcion 1");
-            Session session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             Transaction t = session.beginTransaction();
             try {
                 d.setEstado("I");
@@ -183,14 +184,13 @@ public class ListaProfesoresBeans {
 
             }
         }
-        FacesContext.getCurrentInstance().getExternalContext().responseReset();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("Lista_Profesor.xhtml");
 
     }
 
-
     public boolean borrarDias(Disponibilidad d) {
         boolean r = false;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         ArrayList<Dia> dias = new ArrayList();
         try {
@@ -215,7 +215,7 @@ public class ListaProfesoresBeans {
 
     public boolean BorrarDispo(Disponibilidad d) {
         boolean r = false;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         DispoUsuario dis = new DispoUsuario();
         try {
@@ -241,9 +241,7 @@ public class ListaProfesoresBeans {
             calen = (ArrayList) session.createQuery("select A from Disponibilidad D INNER JOIN "
                     + "D.asesorias A where D.codDis=" + d.getCodDis()).list();
 
-            for (int i = 0; i < calen.size(); i++) {
-                System.out.println("-" + calen.get(i).getCodigoProyecto());
-            }
+        
             t.commit();
 
         } catch (Exception ex) {
@@ -266,7 +264,7 @@ public class ListaProfesoresBeans {
         String fechaI = "", FechaF = "";
         fechaI = "01-01-" + año;
         FechaF = "31-12-" + año;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Disponibilidad d = new Disponibilidad();
         try {
@@ -275,7 +273,6 @@ public class ListaProfesoresBeans {
                     + " INNER JOIN UD.usuarioByProfesor Usu WHERE Usu.pegeId=" + x + " and D.periodo=" + periodo + " "
                     + " and D.fechaInicial>='" + fechaI + "' and  D.fechaFinal<='" + FechaF + "'").uniqueResult();
             t.commit();
-            session.close();
         } catch (Exception e) {
             System.out.println("Error " + e.toString());
         }

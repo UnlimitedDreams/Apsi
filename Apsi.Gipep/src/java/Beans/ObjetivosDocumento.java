@@ -95,7 +95,7 @@ public class ObjetivosDocumento {
     public void upload() throws IOException, ClassNotFoundException {
         if (obj.size() != 0) {
             System.out.println("Crear nuevo");
-            int Codigo_Proyecto = Secuencia.seque("select max(codigo_proyecto) from proyectos");
+            int Codigo_Proyecto = Sequence.GetUltimoRegistro("select max(p.codigoProyecto) from Proyectos p");
             System.out.println("cod " + Codigo_Proyecto);
             Date fecha = new Date();
             CargarArchivos CA = new CargarArchivos();
@@ -149,7 +149,7 @@ public class ObjetivosDocumento {
     }
 
     public boolean crearVersion(Proyectos p, String ruta) throws ClassNotFoundException {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Versiones v = new Versiones();
 
@@ -173,7 +173,7 @@ public class ObjetivosDocumento {
 
     public boolean RegistroEstados(Proyectos p) throws ClassNotFoundException {
         boolean r = false;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Estados e = new Estados();
         e.setCodigoEstados(new BigDecimal(5));
@@ -225,7 +225,7 @@ public class ObjetivosDocumento {
 
     public boolean insertObjetivos(Proyectos p) {
         boolean r = false;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             int cod = 0;
@@ -253,7 +253,7 @@ public class ObjetivosDocumento {
 
     public boolean insertProyect(Proyectos p) {
         boolean r = false;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         System.out.println(".++++ " + p.getTipoProyecto());
         try {

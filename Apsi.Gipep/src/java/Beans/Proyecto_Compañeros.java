@@ -13,9 +13,11 @@ import Entity.UsuRol;
 import Entity.Usuario;
 import Entity.UsuarioProyecto;
 import Modelo.Conecion_postgres;
+import Modelo.Conecion_postgres1;
 import Modelo.Estudiante;
 import Modelo.Profesor;
 import Modelo.Secuencia;
+import dao.Sequence;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -76,53 +78,77 @@ public class Proyecto_Compañeros {
 
     public void buscarEstudiante() throws ClassNotFoundException, IOException {
         System.out.println("entor a buscar");
-        
-            if (lista_estu.size() < 3) {
-                if (nombre.equalsIgnoreCase("")) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Debes escribir una cedula", ""));
+
+        if (lista_estu.size() < 3) {
+            if (nombre.equalsIgnoreCase("")) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Debes escribir una cedula", ""));
+            } else {
+                if (buscarCedula() == true) {
+                    System.out.println("entro");
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No Puede cargar la misma cedula que ya tienes", ""));
                 } else {
-                    if (buscarCedula()==true) {
-                        System.out.println("entro");
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No Puede cargar la misma cedula que ya tienes", ""));
-                    } else {
-                        Conecion_postgres.conectar();
-                        Conecion_postgres.ejecuteQuery("select * from estudiante where cedula='" + nombre + "'");
-                        boolean r = false;
-                        try {
-                            while (Conecion_postgres.rs.next()) {
-                                r = true;
-                                lista_estu.add(new Estudiante(false, Conecion_postgres.rs.getString(2), Conecion_postgres.rs.getString(3), Conecion_postgres.rs.getString(4), Conecion_postgres.rs.getString(1)));
-                            }
-                            System.out.println("--- " + lista_estu.size());
-                            Conecion_postgres.cerrarConexion();
-                            if (r == false) {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No existe Cedula en la UNIAJC", ""));
-
-                            }
-                        } catch (Exception ex) {
-
+                    Conecion_postgres1.conectar();
+                    Conecion_postgres1.ejecuteQuery("select * from persona where idpersona='" + nombre + "'");
+                    System.out.println("select * from persona where idpersona='" + nombre + "'");
+                    boolean r = false;
+                    try {
+                        while (Conecion_postgres1.rs.next()) {
+                            r = true;
+                            lista_estu.add(new Estudiante(false, Conecion_postgres1.rs.getString(1), Conecion_postgres1.rs.getString(2), Conecion_postgres1.rs.getString(3), Conecion_postgres1.rs.getString(4)));
                         }
+                        System.out.println("--- " + lista_estu.size());
+                        if (r == false) {
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No existe Cedula en la UNIAJC", ""));
+                        } else {
+                            System.out.println("true si trajo");
+                        }
+                    } catch (Exception ex) {
+
+                    } finally {
+                        Conecion_postgres1.cerrarConexion();
+
                     }
                 }
-
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ya no puedes cargar mas personas", ""));
             }
+
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ya no puedes cargar mas personas", ""));
+        }
 ////            httpServletRequest.getAttribute("user");
-        
 
     }
 
     public boolean buscarCedula() {
         Estudiante temp = null;
-        boolean esta=false;
+        boolean esta = false;
         for (int i = 0; i < lista_estu.size(); i++) {
             temp = (Estudiante) lista_estu.get(i);
-            if(temp.getCedula().equalsIgnoreCase(nombre)){
-                esta=true;
+            if (temp.getCedula().equalsIgnoreCase(nombre)) {
+                esta = true;
                 break;
             }
         }
+        return esta;
+    }
+
+    public boolean borrarEstudiante(String cedula) {
+        Estudiante temp = null;
+        boolean esta = false;
+        for (int i = 0; i < lista_estu.size(); i++) {
+            temp = (Estudiante) lista_estu.get(i);
+
+            if (temp.getCedula().equalsIgnoreCase(cedula)) {
+                if (i == 0) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No puedes borrarte tu mismo", ""));
+
+                } else {
+                    lista_estu.remove(i);
+                }
+
+                break;
+            }
+        }
+        FacesContext.getCurrentInstance().getExternalContext().responseReset();
         return esta;
     }
 
@@ -132,7 +158,7 @@ public class Proyecto_Compañeros {
 
         try {
             System.out.println("entro a usuario");
-            Session session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             Transaction t = session.beginTransaction();
             u = (Usuario) session.createQuery("FROM Usuario as usu where usu.pegeId=" + pege_id).uniqueResult();
             if (u != null) {
@@ -159,16 +185,14 @@ public class Proyecto_Compañeros {
     }
 
     public void crearUsuRol(Usuario u) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        int cod_U = Sequence.GetUltimoRegistro("select max(r.codUsurol) from UsuRol");
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             System.out.println("entro");
-            Rol r = new Rol();
-            r.setCodRol(new BigDecimal(3));
-            r.setEstado("esta");
-            r.setNombre("nombre");
+            Rol r = (Rol)session.load(Rol.class, new BigDecimal(3));
             UsuRol usuR = new UsuRol();
-            int cod_U = Secuencia.seque("select max(cod_usurol) from usu_rol");
             usuR.setCodUsurol(new BigDecimal(cod_U));
             usuR.setUsuario(u);
             usuR.setRol(r);
@@ -202,7 +226,7 @@ public class Proyecto_Compañeros {
         }
         Proyectos p = new Proyectos();
         p = (Proyectos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Upload_proyecto");
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         ArrayList<Objetivos> ob = new ArrayList();
 
@@ -212,7 +236,8 @@ public class Proyecto_Compañeros {
                     + " P.codigoProyecto=" + p.getCodigoProyecto()).list();
             System.out.println("size " + ob.size());
             for (int i = 0; i < ob.size(); i++) {
-                session.createQuery("delete from Objetivos where codObjetivo=" + ob.get(i).getCodObjetivo()).executeUpdate();
+                Objetivos obje=(Objetivos)session.load(Objetivos.class,new Long(ob.get(i).getCodObjetivo()));
+                session.delete(obje);
             }
 //            ArrayList<UsuarioProyecto> usu = new ArrayList();
 //            usu = (ArrayList) session.createQuery("select U from UsuarioProyecto U "
@@ -222,7 +247,7 @@ public class Proyecto_Compañeros {
 //            for (int i = 0; i < ob.size(); i++) {
 //                session.createQuery("delete from UsuarioProyecto where codUsuproyecto=" + usu.get(i).getCodUsuproyecto()).executeUpdate();
 //            }
-            session.createQuery("delete from Proyectos where codigoProyecto=" + p.getCodigoProyecto()).executeUpdate();
+            session.delete(p);
             t.commit();
         } catch (Exception ex) {
             System.out.println("Error " + ex.toString());
@@ -230,40 +255,40 @@ public class Proyecto_Compañeros {
 
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Upload_proyecto");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Documentos");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("Menu_Usuario.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("SubirDoc.xhtml");
 
     }
 
     public boolean insertProyectUsu() throws ClassNotFoundException {
-        int Codigo_UsuPro = Secuencia.seque("select max(cod_usuproyecto) from usuario_proyecto");
+        int Codigo_UsuPro = Sequence.GetUltimoRegistro("select max(u.codUsuproyecto) from UsuarioProyecto u");
         Proyectos p = null;
         p = (Proyectos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Upload_proyecto");
         Estudiante temp = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         boolean r = false;
         Transaction t = session.beginTransaction();
         try {
             Usuario U = new Usuario();
             for (int i = 0; i < lista_estu.size(); i++) {
                 temp = (Estudiante) lista_estu.get(i);
-                U = Crearusuario(temp.getPege_id(), temp.getNombre() + " " + temp.getApellido());
-                if (U == null) {
-                    break;
-                } else {
-                    Usuario U1 = new Usuario();
-                    U1.setPegeId(new BigDecimal(0));
-                    Usuario UEstudiante = new Usuario();
-                    UEstudiante.setPegeId(new BigDecimal(temp.getPege_id()));
-                    UsuarioProyecto usu = new UsuarioProyecto();
-                    usu.setProyectos(p);
-                    usu.setCodUsuproyecto(new BigDecimal(Codigo_UsuPro));
-                    usu.setUsuarioByDirector(U1);
-                    usu.setUsuarioByEstudiante(UEstudiante);
+//                U = Crearusuario(temp.getPege_id(), temp.getNombre() + " " + temp.getApellido());
+//                if (U == null) {
+//                    break;
+//                } else {
+                Usuario U1 = new Usuario();
+                U1.setPegeId(new BigDecimal(0));
+                Usuario UEstudiante = new Usuario();
+                UEstudiante.setPegeId(new BigDecimal(temp.getPege_id()));
+                UsuarioProyecto usu = new UsuarioProyecto();
+                usu.setProyectos(p);
+                usu.setCodUsuproyecto(new BigDecimal(Codigo_UsuPro));
+                usu.setUsuarioByDirector(U1);
+                usu.setUsuarioByEstudiante(UEstudiante);
 
-                    session.save(usu);
-                    r = true;
-                    Codigo_UsuPro++;
-                }
+                session.save(usu);
+                r = true;
+                Codigo_UsuPro++;
+//                }
 
             }
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ok", ""));

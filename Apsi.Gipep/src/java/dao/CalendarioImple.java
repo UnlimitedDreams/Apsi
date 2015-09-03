@@ -22,20 +22,28 @@ public class CalendarioImple implements CalendarioP {
 
     @Override
     public void buscarAsesorias() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();;
         Transaction t = session.beginTransaction();
         Asesoria ase = new Asesoria();
-        ase = (Asesoria) session.createQuery("FROM Asesoria as aseso where aseso.asistentes.usuario.pegeId=1").uniqueResult();
-        if (ase == null) {
-            System.out.println("no esta");
-        } else {
-            System.out.println("esta");
+        try {
+            ase = (Asesoria) session.createQuery("FROM Asesoria as aseso where aseso.asistentes.usuario.pegeId=1").uniqueResult();
+            if (ase == null) {
+                System.out.println("no esta");
+            } else {
+                System.out.println("esta");
+            }
+        } catch (Exception ex) {
+            if (t != null) {
+                t.rollback();
+            }
+            throw ex;
         }
+
     }
 
     @Override
     public boolean CrearCalendario(Calendario c) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
         try {
@@ -44,6 +52,10 @@ public class CalendarioImple implements CalendarioP {
             r = true;
         } catch (Exception ex) {
             r = false;
+            if (t != null) {
+                t.rollback();
+            }
+            throw ex;
         }
         return r;
     }
@@ -101,7 +113,10 @@ public class CalendarioImple implements CalendarioP {
         try {
             calen = (ArrayList) session.createQuery("select A from Asesoria A INNER JOIN A.disponibilidad D "
                     + " INNER JOIN D.dispoUsuarios UD "
-                    + " INNER JOIN UD.usuarioByProfesor Usu WHERE Usu.pegeId=" + cod).list();
+                    + " INNER JOIN UD.usuarioByProfesor Usu "
+                    + " INNER JOIN A.estadosAsesorias ES "
+                    + " INNER JOIN ES.estados E "
+                    + "WHERE Usu.pegeId=" + cod + " and E.codigoEstados=1").list();
             t.commit();
         } catch (Exception ex) {
 

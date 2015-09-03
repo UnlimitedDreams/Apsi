@@ -16,104 +16,23 @@
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
     <h:body onload="#{calendarioAsesoriaUpdate.cargarInformacion()}"  >
-        <nav class="navbar navbar-trans " role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar-collapsible">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
-                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
-                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
-                        <li>&nbsp;</li>
-                    </ul>                   
-                </div>
-            </div>
-        </nav>
+        
 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
-                <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="#{ajusteProfesorBean.nombreUsuario}"></h:outputLabel></h3> 
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="  "></h:outputLabel></h3> 
+                    </div>
+                    <div class="col-sm-1"> <center><h3><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h3></center></div>
                 </div>
             </div>
         </section>
 
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
-
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </aside>
-                </div>
-                <div class="col-sm-9">
-
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>Informacion Asesoria</h4></div>
@@ -142,7 +61,8 @@
                                 <h:outputLabel for="Ra2" value="Detalle Asesoria Anterior :"  />
                                 <h:outputText  id="Ra2" value="#{calendarioAsesoriaUpdate.detalle_Asesoria}" > </h:outputText>
                             </div>
-                            <br/>
+                            <br></br>
+                            <label></label>
                             <div class="form-group">
                                 <h:dataTable id="tabla" var="tareas" value="#{calendarioAsesoriaUpdate.list_tareas}"
                                              class="table">
@@ -159,20 +79,20 @@
                                         </f:facet>
                                         <h:outputText value="#{tareas.tarea}" />
                                     </h:column>
-                                   
+
                                 </h:dataTable>
                             </div>
-                            <br/>
-                            <h:commandButton value="Next" class="btn btn-primary btn-lg btn-block" actionListener="#{ajusteProfesorBean.cargarTodo()}" >
-
-                            </h:commandButton>
-
+                            <br></br>
+                            <label></label>
+                            <center>
+                            <h:commandButton value="Atras" class="btn btn-primary btn-lg " action="Calendario_profesor.xhtml" >
+                            </h:commandButton></center>
+                            <br></br>
+                            <label></label>
                         </h:form>
-
                     </div>
                 </div>
             </div>
-
         </section>
 
 

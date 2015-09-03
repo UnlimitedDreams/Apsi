@@ -126,9 +126,7 @@ public class Calendario_profesorInfo implements Serializable {
     public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
         System.err.println("------------------");
         CalendarioP calen = new CalendarioImple();
-        Query query = Sequence.GetUltimoRegistro("FROM Calendario order by codCalendario DESC");
-        String cod_salvador = "" + query.uniqueResult();
-        int Codigo_calendario = Integer.parseInt(cod_salvador);
+        int Codigo_calendario = Sequence.GetUltimoRegistro("select max(c.codCalendario) from Calendario c");
         Usuario usu = new Usuario();
         usu.setPegeId(new BigDecimal(1));
         Calendario c = new Calendario();

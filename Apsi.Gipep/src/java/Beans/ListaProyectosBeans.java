@@ -45,6 +45,7 @@ public class ListaProyectosBeans {
     ArrayList<ProyectosModelo> pro2 = new ArrayList();
     ArrayList<Carreras> lista_Carrera = new ArrayList();
     private int cod_carrera;
+    private String carre;
     ArrayList<Profesor> profe = new ArrayList();
 
     public ListaProyectosBeans() {
@@ -52,7 +53,7 @@ public class ListaProyectosBeans {
 
     public ArrayList TraerPege_idCArrera() throws ClassNotFoundException {
         Conecion_postgres.conectar();
-        Conecion_postgres.ejecuteQuery("select * from estudiante where tipo_carrera=" + cod_carrera);
+        Conecion_postgres.ejecuteQuery("select * from estudiante where facultad='" + carre+"'");
         ArrayList<Estudiante> lista_pege_id = new ArrayList();
         try {
             while (Conecion_postgres.rs.next()) {
@@ -118,7 +119,7 @@ public class ListaProyectosBeans {
         if (httpServletRequest.getSession().getAttribute("user") != null) {
             lista_Carrera.clear();
             Conecion_postgres.conectar();
-            Conecion_postgres.ejecuteQuery("select * from carreras");
+            Conecion_postgres.ejecuteQuery("select * from facultad");
             try {
                 while (Conecion_postgres.rs.next()) {
                     lista_Carrera.add(new Carreras(Conecion_postgres.rs.getInt(1),
@@ -273,6 +274,38 @@ public class ListaProyectosBeans {
 
     public void setProfe(ArrayList<Profesor> profe) {
         this.profe = profe;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
+    }
+
+    public String getCarre() {
+        return carre;
+    }
+
+    public void setCarre(String carre) {
+        this.carre = carre;
     }
 
 }

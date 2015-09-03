@@ -13,22 +13,31 @@
         <link rel="stylesheet" href="../css/styles.css" />
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
+             <link rel="stylesheet" href="../css/styles.css" />
+        <link href="../css/stylish-portfolio.css" rel="stylesheet"></link>
+        <!-- Link para panel menu-->
+        <link href="../css/style.css" rel="stylesheet"/>
+        <!-- Custom Fonts -->
+        <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"></link>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
     </h:head>
-    <h:body onload="#{reporte_Proyectos.cargar_años(2)}"> 
-    <h:body>
-
+ <h:body onload="#{reporte_Proyectos.cargar_años(2)}">
+     
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
-                <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="  "></h:outputLabel></h3> 
+                    </div>
+                    <div class="col-sm-1"> <center><h3><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h3></center></div>
                 </div>
             </div>
         </section>
 
         <section class="container-fluid" id="section2">
             <div class="row">
-
-                <div class="col-sm-12">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
@@ -62,10 +71,13 @@
 
                             <br></br>
                             <label></label>
-                              
+
                             <center>
                                 <h:commandButton value="Buscar" class="btn btn-primary btn-lg " actionListener="#{reporte_Proyectos.buscar(2)}" ></h:commandButton>
                             </center>
+                            <br></br>
+                            <lable></lable>
+                            
                             <br></br>
                             <lable></lable>
 
@@ -111,12 +123,15 @@
                             </h:dataTable>  
                             <br></br>
                             <lable></lable>
-                             <br></br>
+                            <br></br>
+                            <lable></lable>
+                            <br></br>
                             <lable></lable>
                         </h:form>
 
                     </div>
                 </div>
+                <div class="col-sm-1"></div>
             </div>
 
         </section>

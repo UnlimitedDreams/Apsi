@@ -30,7 +30,7 @@ and open the template in the editor.
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel ></h:outputLabel></h3> 
+                    <h3><i class="fa fa-user"></i> Nombre de Usuario: <h:outputLabel  value="#{calendarioAsesoria.nombreUsuario}"></h:outputLabel></h3> 
                 </div>
             </div>
         </section>
@@ -60,7 +60,7 @@ and open the template in the editor.
                         </table>
                         <br/>
                         <h:panelGrid columnClasses="value">
-                            <p:schedule  id="schedule" value="#{calendarioAsesoria.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false" showWeekends="true" resizable="false"  > 
+                            <p:schedule  id="schedule"    value="#{calendarioAsesoria.eventModel}" widgetVar="myschedule" timeZone="GMT-5" draggable="false" showWeekends="true" resizable="false"  > 
                                 <p:ajax event="eventSelect" listener="#{calendarioAsesoria.onEventSelect}" update="tabla" oncomplete="PF('eventDialog').show();" />
                             </p:schedule>
                         </h:panelGrid>
@@ -80,7 +80,7 @@ and open the template in the editor.
                                     <f:facet name="header">
                                         <h:outputText value="Fecha"></h:outputText>
                                     </f:facet>
-                                    <h:outputText value="#{dias.fecha}" />
+                                    <h:outputText value="#{dias.fechaF}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">

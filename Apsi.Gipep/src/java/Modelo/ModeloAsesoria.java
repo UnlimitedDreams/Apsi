@@ -22,8 +22,16 @@ public class ModeloAsesoria {
     private String pege_id;
     private String tarea;
     private String responsable;
+    private String Estado;
 
     public ModeloAsesoria() {
+    }
+
+    public ModeloAsesoria(int codigo_ase, int cod_proyecto, Date fecha, String Estado) {
+        this.codigo_ase = codigo_ase;
+        this.cod_proyecto = cod_proyecto;
+        this.fecha = fecha;
+        this.Estado=Estado;
     }
 
     public ModeloAsesoria(int codigo_ase, String nombre_proyecto, Date fecha) {
@@ -31,6 +39,7 @@ public class ModeloAsesoria {
         this.nombre_proyecto = nombre_proyecto;
         this.fecha = fecha;
     }
+    
 
     public ModeloAsesoria(String responsable, String tarea) {
         this.responsable = responsable;
@@ -103,6 +112,14 @@ public class ModeloAsesoria {
 
     public void setResponsable(String responsable) {
         this.responsable = responsable;
+    }
+
+    public String getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(String Estado) {
+        this.Estado = Estado;
     }
 
     @Override

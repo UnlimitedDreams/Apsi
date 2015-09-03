@@ -44,7 +44,7 @@ public class DatosProyecto {
     }
 
     public void actualizar() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Proyectos p = new Proyectos();
         Proyectos Pr = new Proyectos();

@@ -33,7 +33,7 @@ public class UsuarioImple implements UsuarioDao {
      * @return Lista con todos los usuarios del sistema
      */
     public List cargarTodo() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         try {
             return session.createQuery("FROM Usuario").list();
         } catch (Exception ex) {
@@ -50,14 +50,14 @@ public class UsuarioImple implements UsuarioDao {
     @Override
     public Usuario Loguin(Usuario usu) {
         Usuario temp = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             temp = (Usuario) session.createQuery("FROM Usuario WHERE usuario='" + usu.getUsuario() + "' and contrasea='" + usu.getContrasea() + "'").uniqueResult();
             t.commit();
-
+            System.out.println("temp " + temp.getUsuario());
         } catch (Exception ex) {
-
+            System.out.println("Error " + ex.toString());
         }
         return temp;
     }
@@ -71,13 +71,12 @@ public class UsuarioImple implements UsuarioDao {
      */
     @Override
     public boolean CrearUsuario(Usuario usu) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             if (!BuscarUsuario(usu)) {
                 session.save(usu);
                 t.commit();
-                session.clear();
                 return true;
             } else {
                 return false;
@@ -100,7 +99,7 @@ public class UsuarioImple implements UsuarioDao {
      */
     @Override
     public boolean BuscarUsuario(Usuario usu) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
         Usuario u = new Usuario();
@@ -125,7 +124,7 @@ public class UsuarioImple implements UsuarioDao {
      * @return Datos del usuario .class Usuario
      */
     public Usuario cargarUsu(String pege) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Usuario u = new Usuario();
         try {
@@ -137,7 +136,6 @@ public class UsuarioImple implements UsuarioDao {
             }
             throw e;
         } finally {
-            session.close();
         }
         return u;
     }
@@ -149,7 +147,7 @@ public class UsuarioImple implements UsuarioDao {
      * @param nPass Nueva contraseña a asignar al usuario
      */
     public void CambiarContraseña(String pege, String nPass) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Usuario u = new Usuario();
         try {
@@ -162,7 +160,7 @@ public class UsuarioImple implements UsuarioDao {
                 t.rollback();
             }
             throw e;
-        } 
+        }
     }
 
     /**
@@ -172,7 +170,7 @@ public class UsuarioImple implements UsuarioDao {
      * @return Entidad de persona
      */
     public Persona verPersona(String id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Persona p = new Persona();
         try {
@@ -184,7 +182,6 @@ public class UsuarioImple implements UsuarioDao {
             }
             throw e;
         } finally {
-            session.close();
         }
         return p;
     }
@@ -196,14 +193,14 @@ public class UsuarioImple implements UsuarioDao {
      * @return Lista con los números posibles del usuario
      */
     public List cargarTelefonos(String id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         List<Telefonos> telefonos = null;
 
         try {
             telefonos = session.createQuery(" from Telefonos \n"
                     + "where idPersona = " + id).list();
-            session.close();
+            t.commit();
             return telefonos;
         } catch (Exception e) {
             if (t != null) {
@@ -221,14 +218,14 @@ public class UsuarioImple implements UsuarioDao {
      * @return Lista de correos d un usuario
      */
     public List cargarCorreos(String id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         List<Correospersona> telefonos = null;
 
         try {
             telefonos = session.createQuery(" from Correospersona \n"
                     + "where idPersona = " + id).list();
-            session.close();
+            t.commit();
             return telefonos;
         } catch (Exception e) {
             if (t != null) {
@@ -245,7 +242,7 @@ public class UsuarioImple implements UsuarioDao {
      * @return Lista de Roles asignados al usuario
      */
     public TreeMap cargarRoles(String id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         List<UsuRol> usuRols = null;
         TreeMap roles = new TreeMap();
@@ -256,8 +253,7 @@ public class UsuarioImple implements UsuarioDao {
                 Rol r = (Rol) session.get(Rol.class, get.getRol().getCodRol());
                 roles.put(r.getCodRol(), r);
             }
-            session.clear();
-            session.close();
+            t.commit();
             return roles;
         } catch (Exception e) {
             if (t != null) {
@@ -268,7 +264,7 @@ public class UsuarioImple implements UsuarioDao {
     }
 
     public TreeMap cargarActividades(String id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         List<RolActividad> rolActividad = null;
         TreeMap roles = new TreeMap();
@@ -278,8 +274,7 @@ public class UsuarioImple implements UsuarioDao {
                 Actividades act = (Actividades) session.get(Actividades.class, get.getActividades().getCodigoActividad());
                 roles.put(act.getCodigoActividad(), act);
             }
-            session.clear();
-            session.close();
+            t.commit();
             return roles;
         } catch (Exception e) {
             if (t != null) {

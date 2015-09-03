@@ -14,133 +14,77 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-   <h:body onload="#{proyectoVersones.listarVersiones()}"> 
-        
+    <h:body onload="#{proyectoVersones.listarVersiones()}"> 
 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
-                <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="  "></h:outputLabel></h3> 
+                    </div>
+                    <div class="col-sm-1"> <center><h3><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h3></center></div>
                 </div>
             </div>
         </section>
 
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
+                <div class="col-sm-1">
 
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
-
-                                    </ul>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </aside>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>Versiones</h4></div>
-                        
-                       
+                            <h4>Versiones  de Proyecto</h4></div>
+
+
                         <h:form id="vista_validar">
-                <center>
-                    <br/>
-                    <p:growl id="messages" showDetail="true" />
+                            <center>
+                                <br></br>
+                                <label></label>
+                                <p:growl id="messages" showDetail="true" />
 
-                    <h:dataTable id="tabla" class="table" var="versiones" value="#{proyectoVersones.lista_ver}" >
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Nombre Version"></h:outputText>
-                            </f:facet>
-                            <h:outputText id="prueba" value="#{versiones.nombre}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Fecha"></h:outputText>
-                            </f:facet>
-                            <h:outputText value="#{versiones.fecha}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Descargar"></h:outputText>
-                            </f:facet>
-                            <h:commandButton value="descargar" actionListener="#{proyectoVersones.prepDownload(versiones.rutaArchivo)}" 
-                                             class="btn btn-danger " >
-                                <p:fileDownload value="#{proyectoVersones.download}" />
-                            </h:commandButton> 
-                        </h:column>
+                                <h:dataTable id="tabla" class="table" var="versiones" value="#{proyectoVersones.lista_ver}" >
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre de Version"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText id="prueba" value="#{versiones.nombre}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Fecha"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{versiones.fecha}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Descargar"></h:outputText>
+                                        </f:facet>
+                                        <h:commandButton value="descargar" actionListener="#{proyectoVersones.prepDownload(versiones.rutaArchivo)}" 
+                                                         class="btn btn-danger " >
+                                            <p:fileDownload value="#{proyectoVersones.download}" />
+                                        </h:commandButton> 
+                                    </h:column>
 
 
 
-                    </h:dataTable>
+                                </h:dataTable>
 
-                    <br/>
-                    <h:commandButton value="Atras" class="btn btn-succes btn-lg "  actionListener="#{proyectoVersones.atrasVista1()}"></h:commandButton>
+                                <br/>
+                                <h:commandButton value="Atras" class="btn btn-succes btn-lg "  actionListener="#{proyectoVersones.atrasVista1()}"></h:commandButton>
 
-                </center>
-            </h:form>
-                        
-                        
-                        
+                            </center>
+                            <br></br>
+                            <label></label>
+                        </h:form>
+
+
+
                     </div>
                 </div>
+                <div class="col-sm-1"></div>
             </div>
 
         </section>
@@ -167,8 +111,8 @@
                                 <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
                             </li>
                         </ul>
-                            <hr class="small"></hr>
-                            <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
+                        <hr class="small"></hr>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
                     </div>
                 </div>
             </div>
@@ -189,14 +133,14 @@
         <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/scripts1.js"></script>
-        
-        
-         <!--scripts loaded here-->
+
+
+        <!--scripts loaded here-->
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-        
+
         <!--scripts para panel menu-->
         <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
         <script src="../js/custom/scripts1.js"></script>

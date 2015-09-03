@@ -1,5 +1,5 @@
 package Entity;
-// Generated 18-ago-2015 14:13:44 by Hibernate Tools 4.3.1
+// Generated 15/10/2015 01:16:32 AM by Hibernate Tools 4.3.1
 
 
 
@@ -47,6 +47,11 @@ public class Objetivos  implements java.io.Serializable {
     
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    @Override
+    public String toString() {
+        return  descripcion ;
     }
 
 

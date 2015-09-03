@@ -9,6 +9,7 @@ import Entity.Proyectos;
 import Entity.RevisionProyecto;
 import Entity.Revisiones;
 import Modelo.Secuencia;
+import dao.Sequence;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -38,13 +39,18 @@ public class NuevaRevision {
 
     public void revi() throws ClassNotFoundException {
         System.err.println("entro al nuevo");
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        int cod_Revicion = Sequence.GetUltimoRegistro("select max(r.codigoRevision) from Revisiones r");
+        int revision_proye = Sequence.GetUltimoRegistro("select max(r.codRevisionproyecto) from RevisionProyecto r ");
+
+        System.out.println("codigo revicion : " + cod_Revicion);
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             String a = "";
             int codProyecto = 0;
             Revisiones re = new Revisiones();
-            int cod_Revicion = Secuencia.seque("select max(codigo_revision) from revisiones");
+            System.out.println("---");
+            System.out.println("codigo " + cod_Revicion);
             re.setCodigoRevision(new BigDecimal(cod_Revicion));
             re.setDescripcion(nueva);
             Date fecha = new Date();
@@ -52,7 +58,8 @@ public class NuevaRevision {
             System.out.println("datos " + re.toString());
             session.save(re);
             t.commit();
-            insertReviPro(re);
+            System.out.println("- 1");
+            insertReviPro(re,revision_proye);
             FacesContext.getCurrentInstance().getExternalContext().redirect("PROVistaRevision-1.2.xhtml");
         } catch (Exception e) {
             System.err.println("Error revi" + e.toString());
@@ -60,15 +67,15 @@ public class NuevaRevision {
 
     }
 
-    public void insertReviPro(Revisiones re) throws ClassNotFoundException {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+    public void insertReviPro(Revisiones re,int revision_proye) throws ClassNotFoundException {
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             System.out.println("entrooooo a insert 2");
-            Proyectos pro=new Proyectos();
+            Proyectos pro = new Proyectos();
             pro = (Proyectos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Poryecto_Revi");//guardo un dato con nueva llave para recuperarla en la nueva vista
             System.out.println("Proyecto +++ : " + pro.getCodigoProyecto());
-            int revision_proye = Secuencia.seque("select max(cod_revisionproyecto) from revision_proyecto");
             RevisionProyecto rp = new RevisionProyecto();
             rp.setCodRevisionproyecto(new BigDecimal(revision_proye));
             rp.setProyectos(pro);

@@ -1,7 +1,9 @@
 package Beans;
 
+import Entity.Persona;
 import Entity.Proyectos;
 import Entity.Revisiones;
+import Modelo.Conecion_postgres;
 import Modelo.Profesor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -26,6 +29,10 @@ public class Revision {
     ArrayList<String> b_año = new ArrayList();
     private String año;
     private String mns;
+    private HttpServletRequest httpServletRequest;
+    private FacesContext faceContext;
+    private String NombreUsuario;
+    private String pege_id;
 
     /**
      * Creates a new instance of Revision
@@ -41,12 +48,28 @@ public class Revision {
         this.p = p;
     }
 
-    public void cargar_años() {
-        System.out.println("entro a cargar");
-        b_año.clear();
-        for (int i = 2015; i < 2030; i++) {
-            b_año.add("" + i);
+    public void cargar_años() throws IOException {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            System.out.println("Existe");
+
+            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            NombreUsuario = p.getNombres() + " " + p.getApellidos();
+//            System.out.println("--- " + p.toString());
+            pege_id=(String)httpServletRequest.getSession().getAttribute("pege_id");
+            System.out.println("entro a cargar");
+            b_año.clear();
+            for (int i = 2015; i < 2030; i++) {
+                b_año.add("" + i);
+            }
+////            httpServletRequest.getAttribute("user");
+        } else {
+            System.out.println("No existe");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
         }
+
     }
 
 ////    public void revi(int codigoProyecto) throws IOException {
@@ -66,7 +89,7 @@ public class Revision {
 ////    }
     public void listaProfeProyect() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Poryecto_Revi");
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         p.clear();
         String fechaI = "", FechaF = "";
@@ -74,7 +97,7 @@ public class Revision {
         FechaF = "31-12-" + año;
         try {
             p = (ArrayList) session.createQuery("select distinct p from Proyectos p INNER JOIN p.usuarioProyectos "
-                    + "up INNER JOIN up.usuarioByDirector u where u.pegeId=6 and p.fechaInicio>='" + fechaI + "' "
+                    + "up INNER JOIN up.usuarioByDirector u where u.pegeId="+pege_id+" and p.fechaInicio>='" + fechaI + "' "
                     + " and p.fechaInicio<='" + FechaF + "'").list();
             t.commit();
 //            System.out.println("proyectos " + p.size() + " nombre " + p.get(0).getNombre());
@@ -95,7 +118,7 @@ public class Revision {
     }
 
     public void listaReviciones() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Proyectos p = new Proyectos();
         p = (Proyectos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Poryecto_Revi");
@@ -152,4 +175,37 @@ public class Revision {
         System.out.println("entrooo a pasar");
         this.mns = mns;
     }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    public FacesContext getFaceContext() {
+        return faceContext;
+    }
+
+    public void setFaceContext(FacesContext faceContext) {
+        this.faceContext = faceContext;
+    }
+
+    public String getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
+    }
+
+    public String getPege_id() {
+        return pege_id;
+    }
+
+    public void setPege_id(String pege_id) {
+        this.pege_id = pege_id;
+    }
+    
 }

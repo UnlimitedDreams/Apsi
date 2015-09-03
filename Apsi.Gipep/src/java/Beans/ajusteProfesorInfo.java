@@ -60,44 +60,53 @@ public class ajusteProfesorInfo {
     }
 
     public void recuperarInfo() throws IOException {
-         faceContext = FacesContext.getCurrentInstance();
+        faceContext = FacesContext.getCurrentInstance();
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
         if (httpServletRequest.getSession().getAttribute("user") != null) {
             System.out.println("Existe");
             Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
             NombreUsuario = p.getNombres() + " " + p.getApellidos();
-             System.out.println("recupero");
-        ajusteProfesorBean ajuste;
-        ajuste = new ajusteProfesorBean();
-        ajuste = (ajusteProfesorBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste");
-        Dias = (ArrayList) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Dias_ajuste");
-        System.out.println("dias qe trajo " + Dias.size());
-        nombreProfesor = ajuste.getNombreProfesor();
-        fecha_inicial = ajuste.getFecha_inicial();
-        fecha_final = ajuste.getFecha_final();
-        RamgoHora = ajuste.getRamgoHora();
-        Cantidad_horas = ajuste.getCantidad_horas();
-        periodo = ajuste.getPeriodo();
+            System.out.println("recupero");
+            ajusteProfesorBean ajuste;
+            ajuste = new ajusteProfesorBean();
+            ajuste = (ajusteProfesorBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Datos_ajuste");
+            Dias = (ArrayList) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Dias_ajuste");
+            System.out.println("dias qe trajo " + Dias.size());
+            nombreProfesor = ajuste.getNombreProfesor();
+            fecha_inicial = ajuste.getFecha_inicial();
+            fecha_final = ajuste.getFecha_final();
+            RamgoHora = ajuste.getRamgoHora();
+            Cantidad_horas = ajuste.getCantidad_horas();
+            periodo = ajuste.getPeriodo();
         } else {
             System.out.println("No existe");
             FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
         }
-       
+
     }
 
     public void insertar_ajuste() throws ClassNotFoundException, IOException {
-
         System.out.println("Entro al ajuste");
-        Usuario temp = Crearusuario();
-        Date fecha = new Date();
+
         int Codigo_Dispo = 0, codigo_dispoUsu = 0;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        codigo_dispoUsu = Secuencia.seque("select max(cod_dispousu) from dispo_usuario");
+        Codigo_Dispo = Secuencia.seque("select max(cod_dis) from disponibilidad");
+
+        System.out.println("codigo dis : " + codigo_dispoUsu);
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
-        Codigo_Dispo = Modelo.Secuencia.seque("select max(cod_dis) from disponibilidad");
+        Profesor profe = null;
+
+        profe = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
+        Usuario temp = (Usuario) session.load(Usuario.class, new BigDecimal(Integer.parseInt(profe.getPege_id())));
+        Usuario temp2 = (Usuario) session.load(Usuario.class, new BigDecimal(1));
+
+        t.commit();
+
         Disponibilidad dispo = new Disponibilidad();
         dispo.setCodDis(new BigDecimal(Codigo_Dispo));
-        dispo.setFechaInicial(fecha);
-        dispo.setFechaFinal(fecha);
+        dispo.setFechaInicial(fecha_inicial);
+        dispo.setFechaFinal(fecha_final);
         dispo.setNumHoras(new BigDecimal(Integer.parseInt(Cantidad_horas)));
         dispo.setRango(new BigDecimal(Integer.parseInt(RamgoHora)));
         dispo.setPeriodo(new BigDecimal(periodo));
@@ -106,27 +115,20 @@ public class ajusteProfesorInfo {
         System.out.println("----");
         boolean CrearDispo = Insert_Dispo(dispo);
         System.out.println("---------" + CrearDispo);
+
         if (CrearDispo) {
-            System.out.println("creo dispo");
+            System.out.println("creo dispo cod : " + codigo_dispoUsu);
             DispoUsuario dispo_usu = new DispoUsuario();
-//            Query query2 = session.createQuery("FROM DispoUsuario order by codDispousu DESC ").setMaxResults(1);
-//            if (query2.uniqueResult() == null) {
-//                codigo_dispoUsu = 1;
-//            } else {
-//                String cod_salvador = "" + query2.uniqueResult();
-//                codigo_dispoUsu = Integer.parseInt(cod_salvador);
-//            }
-            codigo_dispoUsu = Modelo.Secuencia.seque("select max(cod_dispousu) from dispo_usuario");
-            System.out.println("codigo de dispop_usu " + codigo_dispoUsu + 1);
-            Usuario temp2 = new Usuario();
-            temp2.setPegeId(new BigDecimal(1));
             dispo_usu.setCodDispousu(new BigDecimal(codigo_dispoUsu));
             dispo_usu.setDisponibilidad(dispo);
             dispo_usu.setUsuarioByProfesor(temp);
             dispo_usu.setUsuarioByAdmon(temp2);
+            System.out.println("::::: "  +dispo.toString());
             boolean dis_usu = InsertDispo_Usu(dispo_usu);
+            System.out.println("--: " + dis_usu);
             if (dis_usu) {
                 boolean dispo_dias = Insert_Dias(dispo, Dias);
+                System.out.println("-- 2 : " + dispo_dias);
                 if (dispo_dias) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ok", ""));
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Datos_ajuste");
@@ -146,9 +148,11 @@ public class ajusteProfesorInfo {
 
     public boolean Insert_Dispo(Disponibilidad dis) {
         System.out.println("entro al insert dispo " + dis.getCodDis());
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
+        System.out.println("codigooooo disssssssssssssssssssssss : " + dis.getCodDis());
+
         try {
             session.save(dis);
             t.commit();
@@ -161,7 +165,8 @@ public class ajusteProfesorInfo {
     }
 
     public boolean InsertDispo_Usu(DispoUsuario dis_usu) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        System.out.println("----- entro ");
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
         try {
@@ -178,7 +183,7 @@ public class ajusteProfesorInfo {
     public boolean Insert_Dias(Disponibilidad dis, ArrayList dias) {
         boolean r = false;
         MDias temp = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         int cod_dia = 0;
         System.out.println("codigo de dispo " + dis.getCodDis());
@@ -212,7 +217,7 @@ public class ajusteProfesorInfo {
             System.out.println("entro a usuario");
             Profesor profe = null;
             profe = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
-            Session session = HibernateUtil.getSessionFactory().openSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             Transaction t = session.beginTransaction();
             System.out.println("" + profe.toString());
             System.out.println("-------------------------------- profe " + profe.getPege_id());
@@ -223,7 +228,7 @@ public class ajusteProfesorInfo {
             } else {
 
                 temp.setPegeId(new BigDecimal(profe.getPege_id()));
-                temp.setUsuario(profe.getNombre());
+                temp.setUsuario(profe.getNombre().substring(0, 1) + "" + profe.getApellido());
                 temp.setContrasea("123456");
                 session.save("Usuario", temp);
                 Persona p = new Persona();
@@ -232,8 +237,9 @@ public class ajusteProfesorInfo {
                 p.setApellidos(profe.getApellido());
                 p.setUsuario(temp);
 //                session.save("Persona", p);
+                session.save(p);
                 t.commit();
-                crearPersona(p);
+////                crearPersona(p);
                 System.out.println("usuario----- " + temp.toString());
 
                 crearUsuRol(temp);
@@ -249,7 +255,7 @@ public class ajusteProfesorInfo {
     }
 
     public void crearPersona(Persona p) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             session.save("Persona", p);
@@ -261,7 +267,7 @@ public class ajusteProfesorInfo {
     }
 
     public void crearUsuRol(Usuario u) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             System.out.println("entro");
@@ -362,6 +368,5 @@ public class ajusteProfesorInfo {
     public void setNombreUsuario(String NombreUsuario) {
         this.NombreUsuario = NombreUsuario;
     }
-    
 
 }

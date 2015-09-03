@@ -26,6 +26,7 @@ package apsi.Security;
 import dao.UsuarioImple;
 import Entity.Persona;
 import Entity.Usuario;
+import dao.proyectoHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -72,11 +73,13 @@ public class ingresar extends HttpServlet {
                 Usuario x;
                 x = new Usuario(new BigDecimal(1), md5.getMD5(request.getParameter("pass")), request.getParameter("user"));
                 try {
+                    System.out.println("1233");
                     Usuario Loguin = new UsuarioImple().Loguin(x);
                     if (Loguin.getContrasea().equals(x.getContrasea()) && Loguin.getUsuario().equals(x.getUsuario())) {
                         s.setAttribute("user", x.getUsuario());
                         s.setAttribute("pass", x.getContrasea());
-                        //mandar el codigo del proyecto
+                        s.setAttribute("pege_id",Loguin.getPegeId().toString());
+                        s.setAttribute("codProyecto", new proyectoHelper().leer(Loguin.getPegeId().toString()));
                         Persona ww = new UsuarioImple().verPersona(Loguin.getPegeId().toString());
                         s.setAttribute("persona", ww);
                         response.sendRedirect("index.jsp");
@@ -85,12 +88,13 @@ public class ingresar extends HttpServlet {
                         a.forward(request, response);
                     }
                 } catch (java.lang.NullPointerException e) {
+                     System.out.println("Error " + e.toString() );
                     RequestDispatcher a = request.getRequestDispatcher("index.jsp?msg=Usuario y/o contraseña incorrectos&msgAlt=danger");
                     a.forward(request, response);
                 }
-
+                
             }
-
+            
         }
     }
 
@@ -121,7 +125,7 @@ public class ingresar extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
+        
     }
 
     /**

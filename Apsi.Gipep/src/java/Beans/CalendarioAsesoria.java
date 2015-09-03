@@ -5,6 +5,12 @@ import dao.CalendarioP;
 import Entity.Asesoria;
 import Entity.Asistente;
 import Entity.Calendario;
+import Entity.Disponibilidad;
+import Entity.Estados;
+import Entity.EstadosAsesoria;
+import Entity.Persona;
+import Entity.Proyectos;
+import Entity.Ubicacion;
 import Entity.Usuario;
 import Modelo.Conecion_postgres1;
 import Modelo.MDias;
@@ -12,10 +18,13 @@ import Modelo.Profesor;
 import Modelo.Secuencia;
 import Modelo.asesoria;
 import dao.Dias;
+import dao.Sequence;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,6 +73,8 @@ public class CalendarioAsesoria implements Serializable {
     ArrayList<Profesor> docentes = new ArrayList();
     ArrayList<asesoria> asesoriasPorDia = new ArrayList();
     private String prueba;
+    Proyectos proyecto = new Proyectos();
+    private String pege_id;
 
     public String getPegeString() {
         return pegeString;
@@ -86,9 +97,12 @@ public class CalendarioAsesoria implements Serializable {
     @PostConstruct
     public void init() {
         eventModel = new DefaultScheduleModel();
-//        borrarTodo();
-        //añadir_eventos();
-        traerDocente();
+        try {
+            docentes.clear();
+            traerDocente();
+        } catch (IOException ex) {
+            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -102,7 +116,6 @@ public class CalendarioAsesoria implements Serializable {
             titulo = "";
             fecha_final = null;
             fecha_inicio = null;
-            System.out.println("borrado todo");
         } catch (Exception ex) {
             System.out.println("Error borrarTodo " + ex.toString());
         }
@@ -114,7 +127,6 @@ public class CalendarioAsesoria implements Serializable {
     public void añadir_eventos() {
 
         eventModel = new DefaultScheduleModel();
-        System.out.println("---- " + pegeString);
         ArrayList<Dias> asesorias = null;
 
         try {
@@ -122,14 +134,9 @@ public class CalendarioAsesoria implements Serializable {
             MDias temp = null;
             MDias temp2 = null;
             String fecha = "";
-            // System.out.println("2");
             int h1 = 0, h2 = 0;
-            //  System.out.println("3");
             int min1 = 0, min2 = 0;
-            for (Dias asesoria : asesorias) {
-                System.out.println("Dias fechas:::::::::::::::\n" + asesoria.getFechas() + "----" + asesoria.getCod());
 
-            }
             for (Dias asesoria : asesorias) {
                 eventModel.addEvent(new DefaultScheduleEvent("Asesoria #" + asesoria.getCod(), asesoria.getFechas(), asesoria.getFechas()));
             }
@@ -144,34 +151,65 @@ public class CalendarioAsesoria implements Serializable {
      * Cargar los usuarios (Rol: Docente) con carga previa de disponibilidad.
      *
      */
-    public void traerDocente() {
+    public void traerDocente() throws IOException {
         docentes.clear();
-        try {
-            Conecion_postgres1.conectar();
-            Conecion_postgres1.ejecuteQuery("SELECT \n"
-                    + "    usuario.pege_id, persona.nombres,persona.apellidos\n"
-                    + " FROM \n"
-                    + "  public.disponibilidad, \n"
-                    + "  public.dia, \n"
-                    + "  public.dispo_usuario, \n"
-                    + "  public.usuario, \n"
-                    + "  public.persona\n"
-                    + " WHERE \n"
-                    + "  disponibilidad.cod_dis = dia.cod_dis AND\n"
-                    + "  dispo_usuario.cod_dis = disponibilidad.cod_dis AND\n"
-                    + "  usuario.pege_id = dispo_usuario.profesor AND\n"
-                    + "  usuario.pege_id = persona.pege_id");
-            while (Conecion_postgres1.rs.next()) {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            faceContext = FacesContext.getCurrentInstance();
+            httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+            if (httpServletRequest.getSession().getAttribute("user") != null) {
+                System.out.println("Existe");
+                proyecto = (Proyectos) httpServletRequest.getSession().getAttribute("codProyecto");
+                if (proyecto == null) {
+                    System.out.println("esta vacio");
+                } else {
+                    System.out.println("no esta vasio");
+                }
+                pege_id = (String) httpServletRequest.getSession().getAttribute("pege_id");
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                Transaction t = session.beginTransaction();
+                try {
+                    ArrayList<Persona> per = new ArrayList();
+                    per = (ArrayList) session.createQuery("select p from Persona p inner join "
+                            + " p.usuario u inner join u.dispoUsuariosForProfesor d "
+                            + " inner join d.disponibilidad di "
+                            + " where  di.estado='A'").list();
+//                    Conecion_postgres1.conectar();
+//                    Conecion_postgres1.ejecuteQuery("SELECT  distinct \n"
+//                            + "    usuario.pege_id, persona.nombres,persona.apellidos\n"
+//                            + " FROM \n"
+//                            + "  public.disponibilidad, \n"
+//                            + "  public.dia, \n"
+//                            + "  public.dispo_usuario, \n"
+//                            + "  public.usuario, \n"
+//                            + "  public.persona\n"
+//                            + " WHERE \n"
+//                            + "  disponibilidad.cod_dis = dia.cod_dis AND\n"
+//                            + "  dispo_usuario.cod_dis = disponibilidad.cod_dis AND\n"
+//                            + "  usuario.pege_id = dispo_usuario.profesor AND\n"
+//                            + "  usuario.pege_id = persona.pege_id");
 
-                docentes.add(new Profesor(Conecion_postgres1.rs.getString(1), Conecion_postgres1.rs.getString(2), Conecion_postgres1.rs.getString(3)));
+//                    while (Conecion_postgres1.rs.next()) {
+//
+//                        docentes.add(new Profesor(Conecion_postgres1.rs.getString(1), Conecion_postgres1.rs.getString(2), Conecion_postgres1.rs.getString(3)));
+//                    }
+                    for (Persona pe : per) {
+                        docentes.add(new Profesor(pe.getUsuario().getPegeId().toString(), pe.getNombres(), pe.getApellidos()));
+                    }
+
+                    t.commit();
+                } catch (Exception ex) {
+                    System.out.println("No hay docentes" + ex.toString());
+                } finally {
+//                    Conecion_postgres1.cerrarConexion();
+                }
+            } else {
+                System.out.println("No existe");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
+
             }
-        } catch (NullPointerException e) {
-            System.out.println("No hay docentes" + e);
-        } catch (SQLException | ClassNotFoundException ex) {
-            System.out.println("-------------------");
-            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            Conecion_postgres1.cerrarConexion();
+
         }
     }
 
@@ -188,35 +226,51 @@ public class CalendarioAsesoria implements Serializable {
         // System.out.println("************************Existe");
         ArrayList<Dias> di = new ArrayList();
         ArrayList<Dias> dias = new ArrayList();
-        System.out.println("----------------------------------------");
-        System.out.println("pegeID " + pegeString);
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction t = session.beginTransaction();
         try {
-            Conecion_postgres1.conectar();
-            Conecion_postgres1.ejecuteQuery("SELECT dia.*, disponibilidad.fecha_inicial,disponibilidad.fecha_final,disponibilidad.rango FROM \n"
-                    + "  public.usuario, \n"
-                    + "  public.disponibilidad, \n"
-                    + "  public.dispo_usuario, \n"
-                    + "  public.dia\n"
-                    + " WHERE \n"
-                    + "  usuario.pege_id = dispo_usuario.profesor AND\n"
-                    + "  disponibilidad.cod_dis = dispo_usuario.cod_dispousu AND\n"
-                    + "  disponibilidad.cod_dis = dia.cod_dis AND \n"
-                    + "  usuario.pege_id = " + pegeString);
+            Disponibilidad dis = new Disponibilidad();
+            dis = (Disponibilidad) session.createQuery("select di from Persona p inner join "
+                    + " p.usuario u inner join u.dispoUsuariosForProfesor d "
+                    + " inner join d.disponibilidad di "
+                    + " where  di.estado='A' and u.pegeId=" + pegeString).uniqueResult();
+            Object lis_dias[] = dis.getDias().toArray();
+            String nom_dia = "";
+            for (int i = 0; i < lis_dias.length; i++) {
+                nom_dia = lis_dias[i].toString();
+                String nom[] = nom_dia.split("-");
+                di.add(new Dias(dis.getCodDis().intValue(), nom[0]));
 
-            Date f1 = null;
-            Date f2 = null;
-            while (Conecion_postgres1.rs.next()) {
-                System.out.println("----->>>>>>>>>>" + Conecion_postgres1.rs.getString(3));
-                di.add(new Dias(Integer.parseInt(Conecion_postgres1.rs.getString(3)), Conecion_postgres1.rs.getString(2)));
-                f1 = Conecion_postgres1.rs.getDate(6);
-                f2 = Conecion_postgres1.rs.getDate(7);
             }
+//            while (Conecion_postgres1.rs.next()) {
+//                System.out.println("----->>>>>>>>>>" + Conecion_postgres1.rs.getString(3));
+//                di.add(new Dias(Integer.parseInt(Conecion_postgres1.rs.getString(3)), Conecion_postgres1.rs.getString(2)));
+//                f1 = Conecion_postgres1.rs.getDate(6);
+//                f2 = Conecion_postgres1.rs.getDate(7);
+//            }
 
-            if (new Date().before(f2)) {
-                dias = Numero_asesorias(new SimpleDateFormat("YYYY-MM-dd").format(new Date()).toString(), f2.toString(), di);
-                System.out.println("La fecha esta antes");
+//            Conecion_postgres1.conectar();
+//            Conecion_postgres1.ejecuteQuery("SELECT dia.*, disponibilidad.fecha_inicial,disponibilidad.fecha_final,disponibilidad.rango FROM \n"
+//                    + "  public.usuario, \n"
+//                    + "  public.disponibilidad, \n"
+//                    + "  public.dispo_usuario, \n"
+//                    + "  public.dia\n"
+//                    + " WHERE \n"
+//                    + "  usuario.pege_id = dispo_usuario.profesor AND\n"
+//                    + "  disponibilidad.cod_dis = dispo_usuario.cod_dispousu AND\n"
+//                    + "  disponibilidad.cod_dis = dia.cod_dis AND \n"
+//                    + "  usuario.pege_id = " + pegeString);
+//            Date f1 = null;
+//            Date f2 = null;
+//            while (Conecion_postgres1.rs.next()) {
+//                System.out.println("----->>>>>>>>>>" + Conecion_postgres1.rs.getString(3));
+//                di.add(new Dias(Integer.parseInt(Conecion_postgres1.rs.getString(3)), Conecion_postgres1.rs.getString(2)));
+//                f1 = Conecion_postgres1.rs.getDate(6);
+//                f2 = Conecion_postgres1.rs.getDate(7);
+//            }
+            if (new Date().before(dis.getFechaFinal())) {
+                dias = Numero_asesorias(new SimpleDateFormat("YYYY-MM-dd").format(new Date()).toString(), dis.getFechaFinal().toString(), di);
             } else {
-                System.out.println("Sin sentivo");
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Lo sentimos, el docente que ha seleccionado "
                         + "ya no esta disponible",
@@ -226,12 +280,10 @@ public class CalendarioAsesoria implements Serializable {
             //System.out.println(new SimpleDateFormat("YYYY-MM-dd").format(new Date()));
 
 //            añadir_eventos();
-        } catch (SQLException ex) {
-            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CalendarioAsesoria.class.getName()).log(Level.SEVERE, null, ex);
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error : " + ex.toString());
         } finally {
-            Conecion_postgres1.cerrarConexion();
         }
 
         return dias;
@@ -241,14 +293,12 @@ public class CalendarioAsesoria implements Serializable {
     public static ArrayList<Dias> Numero_asesorias(String fechaInicial, String fechaFinal, ArrayList x) throws ParseException {
         String diaInicio = "", mesInicio = "", añoInicio = "";
         diaInicio = fechaInicial.substring(8, 10);
-        mesInicio = fechaInicial.substring(6, 7);
+        mesInicio = fechaInicial.substring(5, 7);
         añoInicio = fechaInicial.substring(0, 4);
-        System.out.println("----------------------" + fechaInicial);
         String diaFinal = "", mesFinal = "", añoFinal = "";
         diaFinal = fechaFinal.substring(8, 10);
-        mesFinal = fechaFinal.substring(6, 7);
+        mesFinal = fechaFinal.substring(5, 7);
         añoFinal = fechaFinal.substring(0, 4);
-        //System.err.println("----------------------");
         String dias_semana = "";
         String fecha_final = "";
         ArrayList<Dias> n = new ArrayList();
@@ -294,14 +344,12 @@ public class CalendarioAsesoria implements Serializable {
                     diia = 7;
                 }
                 if (Diadehoy.get(Calendar.DAY_OF_WEEK) == diia) {
-                    //          System.out.println("-----");
                     fechas_final.add(new Dias(temp.getCod(), Diadehoy.getTime()));
                 }
                 diia = 0;
             }
             if ((Diadehoy.get(Calendar.YEAR) == d2) && (Diadehoy.get(Calendar.MONTH) == m2) && (Diadehoy.get(Calendar.DAY_OF_MONTH) == a2)) {
                 p = true;
-                //    System.out.println("Salio");
                 break;
 
             }
@@ -309,73 +357,6 @@ public class CalendarioAsesoria implements Serializable {
 
         }
         return fechas_final;
-    }
-
-    public void addEvent(ActionEvent actionEvent) throws ClassNotFoundException, ParseException {
-        System.out.println("------------------ " + hora1);
-        Date h1 = new Date();
-        Date h2 = new Date();
-        String v[] = hora1.split(":");
-        h1.setHours(Integer.parseInt(v[0]));
-        h1.setMinutes(Integer.parseInt(v[1]));
-        h1.setSeconds(00);
-        System.out.println("h1: " + h1);
-        String v2[] = hora1.split(":");
-        h2.setHours(Integer.parseInt(v2[0]));
-        h2.setMinutes(Integer.parseInt(v2[1]));
-        h2.setSeconds(00);
-//        if (buscarFechas(h1, h2) == null) {
-        System.out.println("timeee " + h2.getTime());
-        System.out.println("h2: " + h2);
-        CalendarioP calen = new CalendarioImple();
-        int Codigo_calendario = Secuencia.seque("select max(cod_calendario) from calendario");
-        Usuario usu = new Usuario();
-        usu.setPegeId(new BigDecimal(1));
-        Calendario c = new Calendario();
-        c.setCodCalendario(Codigo_calendario);
-        c.setFechaInicial(fecha_inicio);
-        c.setFechaFinal(fecha_final);
-        c.setUsuario(usu);
-        System.out.println("2");
-
-        System.out.println("3");
-
-        c.setHoraIni(h1);
-        c.setHoraFin(h2);
-        c.setDescripcion(titulo);
-        System.out.println("1");
-        boolean r = calen.CrearCalendario(c);
-        System.out.println("2 " + r);
-        if (r) {
-            String f1 = "", f2 = "";
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-            f1 = format.format(fecha_final);
-            f2 = format.format(fecha_inicio);
-            System.out.println("4");
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-            Date date1 = fmt.parse(f1);
-//            date1.setTime(Long.parseLong(hora1));
-            Date date2 = fmt.parse(f2);
-//            date2.setTime(Long.parseLong(hora2));
-            System.out.println("5");
-////            event.setId("" + Codigo_calendario);
-            eventModel.addEvent(new DefaultScheduleEvent(titulo, date2, date1));
-            event = new DefaultScheduleEvent();
-            hora1 = null;
-            hora2 = null;
-            System.out.println("6");
-            añadir_eventos();
-            System.out.println("7");
-            borrarTodo();
-            System.out.println("8");
-
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Executed", ""));
-        }
-//        } else {
-//            System.out.println("ya esta el calendario");
-//        }
-
     }
 
     public ArrayList<String> getRes() {
@@ -394,112 +375,292 @@ public class CalendarioAsesoria implements Serializable {
      */
     public void onEventSelect(SelectEvent x) throws ClassNotFoundException {
         asesoriasPorDia.clear();
-        event = (ScheduleEvent) x.getObject();
-        Date fechaCalendario = null;
-        fechaCalendario = event.getEndDate();
-        int diaNumero = fechaCalendario.getDay();
-        String diaLetra = "";
-        if (diaNumero == 1) {
-            diaLetra = "Lunes";
-        } else if (diaNumero == 2) {
-            diaLetra = "Martes";
-        } else if (diaNumero == 3) {
-            diaLetra = "Miercoles";
-        } else if (diaNumero == 4) {
-            diaLetra = "Jueves";
-        } else if (diaNumero == 5) {
-            diaLetra = "Viernes";
-        } else if (diaNumero == 6) {
-            diaLetra = "Sabado";
-        }
-        System.out.println(diaLetra + "--- " + event.getTitle());
-        String v[] = event.getTitle().split("#");
-        Conecion_postgres1.conectar();
-        Conecion_postgres1.ejecuteQuery("select hora_inicial,hora_final,rango from disponibilidad,dia where\n"
-                + "    disponibilidad.cod_dis = dia.cod_dis \n"
-                + "    and disponibilidad.cod_dis=" + v[1] + " and dia.dia='" + diaLetra + "'"); // day.setDate(day.getDate() - 1);
-        //System.err.println("fechaaa " + day);}
-        String horaI = "", horaF = "";
-        int rango = 0;
-
         try {
-            while (Conecion_postgres1.rs.next()) {
-                asesoriasPorDia = calcularHoras(Conecion_postgres1.rs.getString(1), Conecion_postgres1.rs.getString(2), Conecion_postgres1.rs.getInt(3), fechaCalendario, Integer.parseInt(v[1]));
+            event = (ScheduleEvent) x.getObject();
+            Date fechaCalendario = null;
+            fechaCalendario = event.getEndDate();
+            int diaNumero = 0;
+            fechaCalendario.getDay();
+            String diaLetra = "";
+            System.out.println("Diaaaa " + event.getStartDate());
+            Calendar Horas = new GregorianCalendar();
+            Horas.setTime(event.getStartDate());
+            System.out.println("Diaaa ...... " + Horas.get(Calendar.DAY_OF_WEEK));
+            diaNumero = Horas.get(Calendar.DAY_OF_WEEK);
+            if (diaNumero == 2) {
+                diaLetra = "Lunes";
+            } else if (diaNumero == 3) {
+                diaLetra = "Martes";
+            } else if (diaNumero == 4) {
+                diaLetra = "Miercoles";
+            } else if (diaNumero == 5) {
+                diaLetra = "Jueves";
+            } else if (diaNumero == 6) {
+                diaLetra = "Viernes";
+            } else if (diaNumero == 7) {
+                diaLetra = "Sabado";
             }
-            validarAssoria();
+            String v[] = event.getTitle().split("#");
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Transaction t = session.beginTransaction();
+            Disponibilidad dis = (Disponibilidad) session.load(Disponibilidad.class, new BigDecimal(Integer.parseInt(v[1])));
+            System.out.println("codigo dis : " + dis.getCodDis());
+//            Conecion_postgres1.conectar();
+//        Conecion_postgres1.ejecuteQuery("select hora_inicial,hora_final,rango from disponibilidad,dia where\n"
+//                + "    disponibilidad.cod_dis = dia.cod_dis \n"
+//                + "    and disponibilidad.cod_dis=" + v[1] + " and dia.dia='" + diaLetra + "'"); // day.setDate(day.getDate() - 1);
+            String horaI = "", horaF = "";
+            int rango = 0;
+            Object lis_dia[] = dis.getDias().toArray();
+            String trajo = "";
+            System.out.println("dia letra : " + diaLetra);
+            for (int i = 0; i < lis_dia.length; i++) {
+                trajo = lis_dia[i].toString();
+                String di[] = trajo.split("-");
+                System.out.println("diaa ____ " + di[0]);
+                if (diaLetra.equalsIgnoreCase(di[0])) {
+                    System.out.println("Entro");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String stringDate = sdf.format(fechaCalendario);
+                    System.out.println("h1: " + di[1] + " h2: " + di[2]);
+                    asesoriasPorDia = calcularHoras(di[1], di[2], dis.getRango().intValue(), fechaCalendario, dis.getCodDis().intValue(), stringDate);
+                } else {
+                    System.out.println("No entro");
+                }
+
+            }
+            System.out.println("---- ::: " + asesoriasPorDia.size());
+//            while (Conecion_postgres1.rs.next()) {
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//                String stringDate = sdf.format(fechaCalendario);
+//                asesoriasPorDia = calcularHoras(Conecion_postgres1.rs.getString(1), Conecion_postgres1.rs.getString(2), Conecion_postgres1.rs.getInt(3), fechaCalendario, Integer.parseInt(v[1]), stringDate);
+//            }
+
             for (asesoria asesoriasPorDia1 : asesoriasPorDia) {
                 System.out.println("-- " + asesoriasPorDia1.toString());
             }
             System.out.println("size : " + asesoriasPorDia.size());
+            t.commit();
+            System.out.println("-------------------");
+
+            validarAssoria();
 
         } catch (Exception ex) {
 
         } finally {
-            Conecion_postgres1.cerrarConexion();
         }
     }
 
-    public void guardarAsesoria(Date fecha, int cod_dis, String hora) throws ClassNotFoundException {
+    public int[] comprobar(int cod) throws ClassNotFoundException {
+        Conecion_postgres1.conectar();
+        int num[] = new int[2];
+
+        Conecion_postgres1.ejecuteQuery("SELECT \n"
+                + " count(asesoria.cod_asesoria) as asignadas , num_horas \n"
+                + "FROM \n"
+                + " public.disponibilidad, \n"
+                + " public.asesoria, \n"
+                + " public.dispo_usuario, \n"
+                + " public.usuario\n"
+                + "WHERE \n"
+                + " disponibilidad.cod_dis = asesoria.cod_dis AND\n"
+                + " disponibilidad.cod_dis = dispo_usuario.cod_dis AND\n"
+                + " dispo_usuario.profesor = usuario.pege_id AND\n"
+                + " disponibilidad.cod_dis = " + cod + "\n"
+                + "Group by\n"
+                + " num_horas; ");
         try {
-            int codgio_ase = Secuencia.seque("select max(cod_asesoria) from asesoria");
-            int cod_asis=Secuencia.seque("select max(cod_asis) from asistente");
-            Calendar Horas = new GregorianCalendar();
-            ArrayList<asesoria> horas = new ArrayList();
-            String vectorHoras[] = hora.split(":");
-            System.out.println("horaa--  " + hora);
-            Horas.set(Calendar.HOUR_OF_DAY, Integer.parseInt(vectorHoras[0]));
-            Horas.set(Calendar.MINUTE, Integer.parseInt(vectorHoras[1]));
-            String hora_fina = "";
-            Conecion_postgres1.conectar();
-            Conecion_postgres1.ejecuteQuery("select rango from disponibilidad where cod_dis=" + cod_dis);
-            int rango = 0;
+            int num1 = 0, num2 = 0;
+
             while (Conecion_postgres1.rs.next()) {
-                rango = Conecion_postgres1.rs.getInt(1);
+                num1 = Conecion_postgres1.rs.getInt(1);
+                num2 = Conecion_postgres1.rs.getInt(2);
             }
-            Horas.add(Calendar.MINUTE, rango);
-            String hora_f=Horas.get(Calendar.HOUR)+":"+Horas.get(Calendar.MINUTE);
-            Conecion_postgres1.ejecuteUpdate("insert into asesoria values(" + codgio_ase + ",'" + fecha + "',1,'pendiente','pendiente'," + cod_dis + "," + 1 + ",'" + hora + "','" +hora_f+"')");
-            Conecion_postgres1.ejecuteUpdate("insert into asistente values("+cod_asis+",'Pendiente',6,"+codgio_ase+")");
-            
-        } catch (ClassNotFoundException | NumberFormatException ex ) {
-            System.out.println("Erorr " + ex.toString());
-        } catch(SQLException ex){
-            System.out.println("Error 2 " +ex.toString());
-        }
-        finally {
-            Conecion_postgres1.cerrarConexion();
+            if (num1 == 0 && num2 == 0) {
+                num[0] = 10;
+                num[1] = 10;
+            } else {
+                num[0] = num1;
+                num[1] = num2;
+            }
+
+        } catch (Exception ex) {
+
         }
 
-//         faceContext = FacesContext.getCurrentInstance();
-//        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
-//        if (httpServletRequest.getSession().getAttribute("user") != null) {
-//             faceContext = FacesContext.getCurrentInstance();
-//        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
-//        if (httpServletRequest.getSession().getAttribute("user") != null) {
-//            System.out.println("Existe");
-//
-//            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
-//           
-//        } else {
-//            System.out.println("No existe");
-//            FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
-//
-//        }
+        return num;
+
+    }
+
+    public void guardarAsesoria(Date fecha, int cod_dis, String hora) throws ClassNotFoundException, ParseException {
+        String cod = event.getTitle().toString();
+        System.out.println("codigo " + cod);
+        String co[] = cod.split("#");
+
+        int v[] = comprobar(Integer.parseInt(co[1]));
+        System.out.println("cod 1 : " + v[0] + " cod 2: " + v[1]);
+        if (v[0] < v[1] || v[0]==10 && v[1]==10) {
+            DateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd");
+            String convertido = fechaHora.format(fecha);
+            if (aprobarAsesoria(convertido) == false) {
+                System.out.println("Entroooooooo 1 ");
+                int codgio_ase = Sequence.GetUltimoRegistro("select max(a.codAsesoria) from Asesoria a");
+                int cod_asis = Sequence.GetUltimoRegistro("select max(a.codAsis) from Asistente a");
+                int cod_estado = Sequence.GetUltimoRegistro("select max(e.codEstadoasee) from EstadosAsesoria e");
+                System.out.println("codigooo : " + cod_estado);
+                Calendar Horas = new GregorianCalendar();
+                ArrayList<asesoria> horas = new ArrayList();
+                String vectorHoras[] = hora.split(":");
+                System.out.println("horaa--  " + hora);
+                Horas.set(Calendar.HOUR_OF_DAY, Integer.parseInt(vectorHoras[0]));
+                Horas.set(Calendar.MINUTE, Integer.parseInt(vectorHoras[1]));
+                String hora_fina = "";
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                Transaction t = session.beginTransaction();
+                try {
+                    System.out.println("disponibilidad " + cod_dis);
+                    Disponibilidad d = (Disponibilidad) session.load(Disponibilidad.class, new BigDecimal(cod_dis));
+                    int rango = 0;
+                    Ubicacion u = (Ubicacion) session.load(Ubicacion.class, new BigDecimal(1));
+                    rango = d.getRango().intValue();
+                    Horas.add(Calendar.MINUTE, rango);
+                    String hora_f = Horas.get(Calendar.HOUR_OF_DAY) + ":" + Horas.get(Calendar.MINUTE);
+                    if (hora_f.length() == 4) {
+                        if (hora_f.substring(1, 2).equalsIgnoreCase(":")) {
+                            hora_f = "0" + hora_f;
+                        } else {
+                            hora_f = hora_f + "0";
+                        }
+                    }
+                    if (hora.length() == 4) {
+                        if (hora.substring(1, 2).equalsIgnoreCase(":")) {
+                            hora = "0" + hora;
+                        }
+                    }
+
+                    fecha.setHours(Integer.parseInt(vectorHoras[0]));
+                    fecha.setMinutes(Integer.parseInt(vectorHoras[1]));
+                    fecha.setSeconds(00);
+                    System.out.println("proyecto:::::: " + proyecto.getCodigoProyecto());
+                    System.out.println("fecha Final : " + fecha.getHours() + ":" + fecha.getMinutes());
+
+                    Asesoria asesoria = new Asesoria();
+                    asesoria.setCodAsesoria(new BigDecimal(codgio_ase));
+                    asesoria.setFechaAsesoria(fecha);
+                    asesoria.setCodigoProyecto(proyecto.getCodigoProyecto());
+                    asesoria.setDescription("Pendiente");
+                    asesoria.setTipoAsesoria("Pendiente");
+                    asesoria.setDisponibilidad(d);
+                    asesoria.setUbicacion(u);
+                    System.out.println("------");
+                    asesoria.setHoraIni(hora);
+                    asesoria.setHoraFin(hora_f);
+                    session.save(asesoria);
+                    ArrayList<Usuario> usu = new ArrayList();
+                    System.out.println("-----2 ");
+                    usu = (ArrayList) session.createQuery("select u from Usuario u inner join "
+                            + "u.usuarioProyectosForEstudiante up inner join up.proyectos p"
+                            + " where p.codigoProyecto=" + proyecto.getCodigoProyecto()).list();
+                    for (Usuario get : usu) {
+                        System.out.println("----3");
+                        Asistente asi = new Asistente();
+                        asi.setCodAsis(new BigDecimal(cod_asis));
+                        asi.setAsistencia("Pendiente");
+                        asi.setAsesoria(asesoria);
+                        asi.setUsuario(get);
+                        session.save(asi);
+                        cod_asis++;
+//                Conecion_postgres1.ejecuteUpdate("insert into asistente values(" + cod_asis + ",'Pendiente'," + get.getPegeId() + "," + codgio_ase + ")");
+
+                    }
+                    System.out.println("----4");
+                    Estados e = (Estados) session.load(Estados.class, new BigDecimal(1));
+                    EstadosAsesoria EA = new EstadosAsesoria();
+                    EA.setCodEstadoasee(new BigDecimal(cod_estado));
+                    System.out.println("----5");
+                    EA.setAsesoria(asesoria);
+                    EA.setEstados(e);
+                    System.out.println("-----6");
+                    session.save(EA);
+                    System.out.println("----7");
+                    t.commit();
+
+                } catch (Exception ex) {
+                    System.out.println("Error :++ " + ex.toString());
+                }
+                //            Conecion_postgres1.ejecuteUpdate("insert into estados_asesoria values(" + cod_estado + "," + codgio_ase + ",1)");
+
+            } else {
+                System.out.println("Entroooooooo 2 ");
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puedes pedir 2 asesoria en un dia", ""));
+
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ya paso el tope de asesorias para el docente", ""));
+
+        }
+
+//     
+    }
+
+    public boolean aprobarAsesoria(String fecha) throws ClassNotFoundException {
+        System.out.println("pege_id --> " + pege_id + " fecha:--- " + fecha);
+        boolean r = false;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction t = session.beginTransaction();
+
+        try {
+
+            Asesoria a = new Asesoria();
+            a = (Asesoria) session.createQuery("select A from Asesoria A inner join "
+                    + " A.asistentes S inner join S.usuario U where"
+                    + " A.fechaAsesoria='" + fecha + "' and U.pegeId=" + pege_id).uniqueResult();
+            if (a != null) {
+                r = true;
+            }
+            t.commit();
+        } catch (Exception ex) {
+            System.out.println("Error AprobarAsesria " + ex.toString());
+        } finally {
+        }
+        return r;
+
     }
 
     public void validarAssoria() throws ClassNotFoundException {
-        Conecion_postgres1.conectar();
+        System.out.println("entroooooooooo : " + asesoriasPorDia.size());
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction t = session.beginTransaction();
+        System.out.println("----´-´´-");
+//        Conecion_postgres1.conectar();
         try {
             for (int i = 0; i < asesoriasPorDia.size(); i++) {
-                Conecion_postgres1.ejecuteQuery("select * from asesoria where hora_ini='" + asesoriasPorDia.get(i).getHora() + "'");
-                while (Conecion_postgres1.rs.next()) {
+                System.out.println("hora asesoria : " + asesoriasPorDia.get(i).getHora());
+//                Conecion_postgres1.ejecuteQuery("select * from asesoria where hora_ini='" + asesoriasPorDia.get(i).getHora() + "'");
+                Asesoria list_ase = new Asesoria();
+                list_ase = (Asesoria) session.createQuery("select A from Asesoria A inner join "
+                        + " A.estadosAsesorias es inner join es.estados e "
+                        + " where A.fechaAsesoria='" + new SimpleDateFormat("YYYY-MM-dd").format(asesoriasPorDia.get(i).getFecha()) + "' "
+                        + " and A.horaIni='" + asesoriasPorDia.get(i).getHora() + "' and e.codigoEstados=1").uniqueResult();
+//                Conecion_postgres1.ejecuteQuery("select * from asesoria,estados_asesoria where asesoria.cod_asesoria=estados_asesoria.cod_asesoria and hora_ini='"
+//                        + asesoriasPorDia.get(i).getHora()
+//                        + "' and fecha_asesoria = '"
+//                        + new SimpleDateFormat("YYYY-MM-dd").format(asesoriasPorDia.get(i).getFecha())
+//                        + "' and estados_asesoria.codigo_estados=1");
+//                while (Conecion_postgres1.rs.next()) {
+//                    asesoriasPorDia.get(i).setAsiginado(true);
+//                }
+                if (list_ase != null) {
                     asesoriasPorDia.get(i).setAsiginado(true);
                 }
             }
+            t.commit();
         } catch (Exception ex) {
-            System.err.println("Error " + ex.toString());
+            System.err.println("Error validarAsesoria" + ex.toString());
         } finally {
-            Conecion_postgres1.cerrarConexion();
+//            Conecion_postgres1.cerrarConexion();
         }
 
     }
@@ -573,7 +734,7 @@ public class CalendarioAsesoria implements Serializable {
         fecha_final = (Date) selectEvent.getObject();
     }
 
-    public static ArrayList<asesoria> calcularHoras(String horaInicio, String horaFinal, int rango, Date fecha, int cod_dis) {
+    public static ArrayList<asesoria> calcularHoras(String horaInicio, String horaFinal, int rango, Date fecha, int cod_dis, String fec) {
         boolean r = false;
         Calendar Horas = new GregorianCalendar();
         ArrayList<asesoria> horas = new ArrayList();
@@ -595,7 +756,7 @@ public class CalendarioAsesoria implements Serializable {
             if (minutos.length() == 1) {
                 minutos = minutos + "0";
             }
-            horas.add(new asesoria(fecha, Horas.get(Calendar.HOUR_OF_DAY) + ":" + minutos, false, cod_dis));
+            horas.add(new asesoria(fecha, Horas.get(Calendar.HOUR_OF_DAY) + ":" + minutos, false, cod_dis, fec));
             //horas.add(Horas.get(Calendar.HOUR_OF_DAY) + ":" + minutos);
             Horas.add(Calendar.MINUTE, rango);
         }
@@ -828,6 +989,22 @@ public class CalendarioAsesoria implements Serializable {
 
     public void setPrueba(String prueba) {
         this.prueba = prueba;
+    }
+
+    public Proyectos getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyectos proyecto) {
+        this.proyecto = proyecto;
+    }
+
+    public String getPege_id() {
+        return pege_id;
+    }
+
+    public void setPege_id(String pege_id) {
+        this.pege_id = pege_id;
     }
 
 }

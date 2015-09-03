@@ -96,8 +96,10 @@ public class Reporte_Profesor {
             o = query;
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("Query", o);
+            parametros.put("Año", año);
+            parametros.put("Periodo", periodo);
             System.out.println("query " + o);
-            JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\usuario\\Documents\\GitHub\\Apsi\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
+            JasperPrint jasperPrint = JasperFillManager.fillReport("d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
             System.out.println("1");
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
@@ -137,7 +139,9 @@ public class Reporte_Profesor {
             Map<String, Object> parametros = new HashMap<String, Object>();
             System.out.println("query " + o);
             parametros.put("Query", o);
-            JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\usuario\\Documents\\GitHub\\Apsi\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
+            parametros.put("Año", año);
+            parametros.put("Periodo", periodo);
+            JasperPrint jasperPrint = JasperFillManager.fillReport("d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\Reportes\\ProfesoresHoras.jasper", parametros, con);
             System.out.println("1");
             JRExporter exporter = new JRXlsxExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
@@ -187,6 +191,8 @@ public class Reporte_Profesor {
             Conecion_postgres.cerrarConexion();
         } catch (Exception ex) {
             System.out.println("Error traerinfo " + ex.toString());
+            Conecion_postgres.cerrarConexion();
+
         }
         return p;
 
@@ -233,7 +239,7 @@ public class Reporte_Profesor {
         String fechaI = "", FechaF = "";
         fechaI = "01-01-" + año;
         FechaF = "31-12-" + año;
-        Conecion_postgres1.ejecuteQuery("select disponibilidad.cod_dis,persona.idpersona,nombres,apellidos,disponibilidad.num_horas \"Horas Asignadas\",disponibilidad.horas_cumplidas \"Hora Relizadas\" \n"
+        Conecion_postgres1.ejecuteQuery("select disponibilidad.cod_dis,persona.pege_id,nombres,apellidos,disponibilidad.num_horas \"Horas Asignadas\",disponibilidad.horas_cumplidas \"Hora Relizadas\" \n"
                 + "                            from usuario,dispo_usuario,disponibilidad,persona\n"
                 + "                             where\n"
                 + "                            usuario.pege_id=dispo_usuario.profesor and \n"

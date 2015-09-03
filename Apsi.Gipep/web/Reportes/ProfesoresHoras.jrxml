@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="70"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<topPen lineWidth="1.0" lineColor="#000000"/>
@@ -76,6 +76,8 @@
 		</conditionalStyle>
 	</style>
 	<parameter name="Query" class="java.lang.String"/>
+	<parameter name="Año" class="java.lang.String"/>
+	<parameter name="Periodo" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[$P!{Query}]]>
 	</queryString>
@@ -89,7 +91,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="139" splitType="Stretch">
+		<band height="133" splitType="Stretch">
 			<staticText>
 				<reportElement x="135" y="89" width="258" height="20"/>
 				<textElement textAlignment="Center">
@@ -99,16 +101,41 @@
 			</staticText>
 			<image>
 				<reportElement x="406" y="0" width="149" height="89"/>
-				<imageExpression><![CDATA["C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\img\\logo uniajc.png"]]></imageExpression>
+				<imageExpression><![CDATA["d:\\Users\\USR_Toshiba\\Desktop\\FinalApsi\\Apsi\\Apsi.Gipep\\web\\img\\logo uniajc.png"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="0" y="0" width="123" height="75"/>
-				<imageExpression><![CDATA["C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\img\\Sin-título-1.png"]]></imageExpression>
+				<imageExpression><![CDATA["d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\img\\Sin-título-1.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="21" splitType="Stretch"/>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="38" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Año :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="0" width="54" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Periodo :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="38" y="1" width="60" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{Año}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{Periodo}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="34" splitType="Stretch">
@@ -201,7 +228,7 @@
 				<reportElement style="table 1" x="0" y="27" width="555" height="136" backcolor="#3300CC">
 					<property name="net.sf.jasperreports.export.pdf.tag.td" value="end"/>
 				</reportElement>
-				<imageExpression><![CDATA["C:\\Users\\Britt\\Desktop\\Apsi.git\\trunk\\Apsi.Gipep\\web\\img\\PIE DE PAGINA.png"]]></imageExpression>
+				<imageExpression><![CDATA["d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\img\\PIE DE PAGINA.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageFooter>

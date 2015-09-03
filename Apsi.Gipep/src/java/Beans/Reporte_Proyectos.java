@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -72,6 +73,7 @@ public class Reporte_Proyectos {
     private int cod_carrera;
     private int cod_estado;
     private int tipo;
+    private String carrera;
     private DefaultStreamedContent download;
 
     public Reporte_Proyectos() {
@@ -79,7 +81,6 @@ public class Reporte_Proyectos {
     }
 
     public void cargar_años(int condi) throws ClassNotFoundException {
-        System.out.println("entro a cargar");
         b_año.clear();
         for (int i = 2015; i < 2030; i++) {
             b_año.add("" + i);
@@ -98,7 +99,6 @@ public class Reporte_Proyectos {
     }
 
     public void cargar_Periodo() {
-        System.out.println("entro a cargar");
         peri.clear();
         for (int i = 1; i <= 2; i++) {
             peri.add("" + i);
@@ -108,32 +108,35 @@ public class Reporte_Proyectos {
     public void cargarCarreras() throws ClassNotFoundException {
         lista_Carrera.clear();
         Conecion_postgres.conectar();
-        Conecion_postgres.ejecuteQuery("select * from carreras");
+        Conecion_postgres.ejecuteQuery("select * from facultad");
         try {
             while (Conecion_postgres.rs.next()) {
                 lista_Carrera.add(new Carreras(Conecion_postgres.rs.getInt(1),
                         Conecion_postgres.rs.getString(2)));
             }
-            Conecion_postgres.cerrarConexion();
+
         } catch (Exception ex) {
             System.out.println("Error carreras " + ex.toString());
+        } finally {
+            Conecion_postgres.cerrarConexion();
         }
 
     }
 
     public void cargarEstados() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Lista_estados.clear();
         try {
             Lista_estados = (ArrayList) session.createQuery("from Estados").list();
+            t.commit();
         } catch (Exception ex) {
             System.out.println("Error estados " + ex.toString());
         }
     }
 
     public void cargarTipos() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Lista_Tipo.clear();
         try {
@@ -146,15 +149,8 @@ public class Reporte_Proyectos {
 
     public void buscar(int condi) throws ClassNotFoundException {
         String query = "";
-        System.out.println("año " + año);
-        System.out.println("perido " + periodo);
-        System.out.println("carrera " + cod_carrera);
-        System.out.println("Estado " + cod_estado);
-        System.out.println("tipo " + tipo);
-
         ArrayList temp = null;
         temp = TraerPege_idCArrera();
-        System.out.println("Trajo " + temp.size() + " pegeId");
         Estudiante estu = null;
         ArrayList<Proyectos> Lista_Proyectos = new ArrayList();
         ArrayList proyec = null;
@@ -177,7 +173,6 @@ public class Reporte_Proyectos {
                 } else {
                     System.out.println("ya estaba");
                 }
-                System.out.println("Size " + Lista_Proyectos.size());
             }
             r = false;
         }
@@ -192,12 +187,9 @@ public class Reporte_Proyectos {
 
             for (int k = 0; k < y.size(); k++) {
                 estu2 = (Estudiante) y.get(k);
-                System.out.println("N- " + estu2.getNombre());
                 integrantes = integrantes + estu2.getNombre() + "\n";
             }
             pro.setIntegrantes(integrantes);
-
-            System.out.println("Integrantes son  " + integrantes);
 
             integrantes = "";
         }
@@ -210,16 +202,14 @@ public class Reporte_Proyectos {
     }
 
     public ArrayList recuperarDatos(String cod_pro) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         ArrayList<Usuario> Lista_Usuarios = new ArrayList();
         ArrayList x = null;
         try {
-            System.out.println("pegeId " + cod_pro);
             Lista_Usuarios = (ArrayList) session.createQuery("select distinct U from Proyectos P INNER JOIN "
                     + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
                     + "where P.codigoProyecto=" + cod_pro).list();
-            System.out.println("lista -- " + Lista_Usuarios.size());
             t.commit();
             x = RecuperarNombres(Lista_Usuarios);
         } catch (Exception ex) {
@@ -236,22 +226,18 @@ public class Reporte_Proyectos {
         try {
             for (int i = 0; i < x.size(); i++) {
                 temp = (Usuario) x.get(i);
-                System.out.println("pege_id a recuperar " + temp.getPegeId());
                 Conecion_postgres.ejecuteQuery("select * from estudiante where pege_id=" + temp.getPegeId());
                 while (Conecion_postgres.rs.next()) {
-                    System.out.println("Nombre que trajo " + Conecion_postgres.rs.getString(3));
-                    nom = Conecion_postgres.rs.getString(3) + " " + Conecion_postgres.rs.getString(4);
+                    nom = Conecion_postgres.rs.getString(2) + " " + Conecion_postgres.rs.getString(3);
 
                 }
                 Nombres.add(new Estudiante(nom));
             }
-
-            for (int i = 0; i < Nombres.size(); i++) {
-                System.out.println("Nom " + Nombres.get(i));
-            }
-            Conecion_postgres.cerrarConexion();
         } catch (Exception ex) {
             System.out.println("Error RecuperarNombres " + ex.toString());
+        } finally {
+            Conecion_postgres.cerrarConexion();
+
         }
         return Nombres;
     }
@@ -261,14 +247,12 @@ public class Reporte_Proyectos {
         Proyectos p = null;
         for (int i = 0; i < x.size(); i++) {
             p = (Proyectos) x.get(i);
-            System.out.println("porcentajeeeee " + p.getPorcentaje());
             ProyectosModelo pr = new ProyectosModelo(p.getCodigoProyecto().intValue(),
                     p.getNombre(), "", p.getFechaInicio().toString(), p.getFechaFinal().toString(), Integer.parseInt(p.getPorcentaje()));
-            if (condi == 2) {
-                String ruta = TraerRutaDescarga(p.getCodigoProyecto().intValue());
-                pr.setRuta(ruta);
-            }
-
+//            if (condi == 2) {
+            String ruta = TraerRutaDescarga(p.getCodigoProyecto().intValue());
+            pr.setRuta(ruta);
+//            }
             proyec.add(pr);
 
         }
@@ -276,15 +260,14 @@ public class Reporte_Proyectos {
     }
 
     public String TraerRutaDescarga(int cod) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         ArrayList<Versiones> v = new ArrayList();
         try {
             v = (ArrayList) session.createQuery("select V from Versiones V INNER JOIN "
                     + " V.proyectos P where P.codigoProyecto=" + cod
                     + "").list();
-            System.out.println("size " + v.size());
-            System.out.println("-- " + v.get(v.size() - 1));
+            t.commit();
         } catch (Exception ex) {
             System.out.println("Error " + ex.toString());
         }
@@ -292,11 +275,10 @@ public class Reporte_Proyectos {
     }
 
     public ArrayList Traer_proyectos(String x, int condi) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         ArrayList<Proyectos> Lista_Proyectos = new ArrayList();
         try {
-            System.out.println("pegeId " + x);
             if (condi == 1) {
                 Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
                         + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
@@ -304,14 +286,21 @@ public class Reporte_Proyectos {
                         + "where U.pegeId=" + x + " and E.codigoEstados=" + cod_estado
                         + " and T.codTipo=" + tipo).list();
             } else if (condi == 2) {
-                Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
-                        + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
-                        + "INNER JOIN P.estadoProyectos EP INNER JOIN EP.estados E INNER JOIN P.tipoProyecto T "
-                        + "where U.pegeId=" + x + " and E.codigoEstados=" + 6
-                        + " and T.codTipo=" + tipo).list();
-            }
+                if (tipo == 1) {
+                    Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
+                            + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
+                            + "INNER JOIN P.estadoProyectos EP INNER JOIN EP.estados E INNER JOIN P.tipoProyecto T "
+                            + "where U.pegeId=" + x + " and E.codigoEstados=" + 6
+                            + " and T.codTipo=" + tipo).list();
+                } else if (tipo == 2) {
+                    Lista_Proyectos = (ArrayList) session.createQuery("select distinct P from Proyectos P INNER JOIN "
+                            + "P.usuarioProyectos UP INNER JOIN UP.usuarioByEstudiante U "
+                            + "INNER JOIN P.tipoProyecto T "
+                            + "where U.pegeId=" + x
+                            + " and T.codTipo=" + tipo).list();
+                }
 
-            System.out.println("lista -- " + Lista_Proyectos.size());
+            }
             t.commit();
 
         } catch (Exception ex) {
@@ -321,7 +310,6 @@ public class Reporte_Proyectos {
     }
 
     public void prepDownload(String date) throws Exception {
-        System.out.println("file " + date);
         File file = new File(date);
         InputStream input = new FileInputStream(file);
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -330,16 +318,18 @@ public class Reporte_Proyectos {
 
     public ArrayList TraerPege_idCArrera() throws ClassNotFoundException {
         Conecion_postgres.conectar();
-        Conecion_postgres.ejecuteQuery("select * from estudiante where tipo_carrera=" + cod_carrera);
+        Conecion_postgres.ejecuteQuery("select * from estudiante where facultad='" + carrera + "'");
         ArrayList<Estudiante> lista_pege_id = new ArrayList();
         try {
             while (Conecion_postgres.rs.next()) {
                 lista_pege_id.add(new Estudiante(false, Conecion_postgres.rs.getString(2),
                         Conecion_postgres.rs.getString(3), Conecion_postgres.rs.getString(4), Conecion_postgres.rs.getString(1)));
             }
-            Conecion_postgres.cerrarConexion();
         } catch (Exception ex) {
             System.out.println("Error Lista pege_id " + ex.toString());
+        } finally {
+            Conecion_postgres.cerrarConexion();
+
         }
         return lista_pege_id;
     }
@@ -373,8 +363,10 @@ public class Reporte_Proyectos {
                 p.setApellido(Conecion_postgres.rs.getString(3));
 
             }
-            Conecion_postgres.cerrarConexion();
         } catch (Exception ex) {
+
+        } finally {
+            Conecion_postgres.cerrarConexion();
 
         }
         return p;
@@ -382,24 +374,40 @@ public class Reporte_Proyectos {
     }
 
     public void reporteHorasProfePDf() throws JRException, ClassNotFoundException {
-        System.out.println("--------- size " + Proyectos.size());
         Report_Proyecto datasource = new Report_Proyecto();
         ProyectosModelo temp = null;
-        for (int i = 0; i < Proyectos.size(); i++) {
-            temp = (ProyectosModelo) Proyectos.get(i);
-            System.out.println("-");
-            datasource.addObjecto(temp);
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction t = session.beginTransaction();
+        System.out.println("proyectos size " + Proyectos.size());
+        try {
+            for (int i = 0; i < Proyectos.size(); i++) {
+                temp = (ProyectosModelo) Proyectos.get(i);
+                datasource.addObjecto(temp);
+            }
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("Año", año);
+            parametros.put("Carrera", carrera);
+            TipoProyecto tip=(TipoProyecto)session.load(TipoProyecto.class, new Long(tipo));
+            parametros.put("Tipo", tip.getDescripcion());
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport("d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", parametros, datasource);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            String user = System.getProperty("user.name");
+            File f = new File("C:\\Users\\" + user + "\\Downloads\\reportePDFProyectos.pdf");
+            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
+            exporter.exportReport();
+            t.commit();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descarga Pdf Exitosa", ""));
+
+        } catch (Exception ex) {
+            System.out.println("Error : " + ex.toString());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Pdf Descarga ", ""));
+
         }
-        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\usuario\\Documents\\GitHub\\Apsi\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
-        JRExporter exporter = new JRPdfExporter();
-        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-        String user = System.getProperty("user.name");
-        File f = new File("C:\\Users\\" + user + "\\Downloads\\reportePDFProyectos.pdf");
-        exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
-        exporter.exportReport();
+
     }
 //
-    
 
     public void reporteHorasProfeXml() throws JRException {
         System.out.println("--------- size " + Proyectos.size());
@@ -410,54 +418,21 @@ public class Reporte_Proyectos {
             System.out.println("-");
             datasource.addObjecto(temp);
         }
-        JasperPrint jasperPrint = JasperFillManager.fillReport("C:\\Users\\usuario\\Documents\\GitHub\\Apsi\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
-        JRExporter exporter = new JRXlsxExporter();
-        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-        String user = System.getProperty("user.name");
-        File f = new File("C:\\Users\\" + user + "\\Downloads\\reporteExcel.xlsx");
-        exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
-        exporter.exportReport();
-    }
+        try {
+            JasperPrint jasperPrint = JasperFillManager.fillReport("d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\Reportes\\Proyectos.jasper", null, datasource);
+            JRExporter exporter = new JRXlsxExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            String user = System.getProperty("user.name");
+            File f = new File("C:\\Users\\" + user + "\\Downloads\\reporteExcel.xlsx");
+            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
+            exporter.exportReport();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descarga Excel Exitosa", ""));
 
-//    public void llenarDatosProfe() throws ClassNotFoundException {
-//
-//        Conecion_postgres1.conectar();
-//        lista_Profe.clear();
-//        String fechaI = "", FechaF = "";
-//        fechaI = "01-01-" + año;
-//        FechaF = "31-12-" + año;
-//        Conecion_postgres1.ejecuteQuery("select disponibilidad.cod_dis,num_horas \"Horas Asignadas\",Count(asesoria.cod_dis) \"Hora Relizadas\" ,\n"
-//                + "                usuario.pege_id\n"
-//                + "               from usuario,dispo_usuario,disponibilidad,asesoria,asistente\n"
-//                + "                where\n"
-//                + "                usuario.pege_id=dispo_usuario.profesor and \n"
-//                + "                dispo_usuario.cod_dis=disponibilidad.cod_dis and \n"
-//                + "                disponibilidad.cod_dis=asesoria.cod_dis and\n"
-//                + "                asesoria.cod_asesoria=asistente.cod_asesoria and periodo= " + periodo + "\n"
-//                + "                and fecha_inicial>='" + fechaI + "' and fecha_final<='" + FechaF + "'\n"
-//                + "                group by \n"
-//                + "                disponibilidad.cod_dis,usuario.pege_id");
-//        try {
-//            while (Conecion_postgres1.rs.next()) {
-//                System.out.println("entro");
-//                R_profesor p = new R_profesor(
-//                        Conecion_postgres1.rs.getInt(2), Conecion_postgres1.rs.getInt(3));
-//                R_profesor R = new R_profesor();
-//                R = TraerInfo(Conecion_postgres1.rs.getString(4));
-//                p.setCedula(R.getCedula());
-//                p.setNombre(R.getNombre());
-//                p.setApellido(R.getApellido());
-//                lista_Profe.add(p);
-//            }
-//            Conecion_postgres1.cerrarConexion();
-//
-//        } catch (Exception ex) {
-//            System.out.println("Error " + ex.toString());
-//        }
-//
-//    }
-    public void mns() {
-        System.out.println("entro");
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Excel Descarga ", ""));
+
+        }
+
     }
 
     public JasperPrint getV_jasperPrint() {
@@ -563,6 +538,14 @@ public class Reporte_Proyectos {
 
     public void setDownload(DefaultStreamedContent download) {
         this.download = download;
+    }
+
+    public String getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(String carrera) {
+        this.carrera = carrera;
     }
 
 }

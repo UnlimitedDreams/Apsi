@@ -8,6 +8,7 @@ package Beans;
 import Entity.Persona;
 import Modelo.MDias;
 import Modelo.Profesor;
+import apsi.Security.ingresar;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public final class ajusteProfesorBean implements Serializable {
     private HttpServletRequest httpServletRequest;
     private FacesContext faceContext;
     private String NombreUsuario;
+    Persona p = new Persona();
 
     public ajusteProfesorBean() {
 
@@ -100,7 +102,7 @@ public final class ajusteProfesorBean implements Serializable {
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
         if (httpServletRequest.getSession().getAttribute("user") != null) {
             System.out.println("Existe");
-            Persona p = (Persona) httpServletRequest.getSession().getAttribute("persona");
+            p = (Persona) httpServletRequest.getSession().getAttribute("persona");
             NombreUsuario = p.getNombres() + " " + p.getApellidos();
             Profesor temp = null;
             temp = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
@@ -216,12 +218,18 @@ public final class ajusteProfesorBean implements Serializable {
         System.out.println("fecha hoy " + fecha_hoy.getTime());
         System.out.println("fecha Inicial " + fecha_I.getTime());
         System.out.println("fecha Final " + fechaF.getTime());
+        System.out.println("" + fecha_I.get(Calendar.MONTH) + "---" + fecha_hoy.get(Calendar.MONTH));
+        if (fecha_I.get(Calendar.MONTH) >= fecha_hoy.get(Calendar.MONTH)) {
+            if (fecha_I.get(Calendar.MONTH) == fecha_hoy.get(Calendar.MONTH)) {
+                if (fecha_I.get(Calendar.DAY_OF_MONTH) < fecha_hoy.get(Calendar.DAY_OF_MONTH)) {
+                    System.out.println("entro aqui");
+                    r = true;
+                }
+            }
 
-        if (fecha_I.get(Calendar.DAY_OF_MONTH) < fecha_hoy.get(Calendar.DAY_OF_MONTH)) {
+        } else {
+            System.out.println("Entro aqui 2");
             r = true;
-        } else if (fechaF.get(Calendar.DAY_OF_MONTH) < fecha_hoy.get(Calendar.DAY_OF_MONTH)) {
-            r = true;
-
         }
 
         return r;
@@ -236,9 +244,15 @@ public final class ajusteProfesorBean implements Serializable {
         System.out.println("fecha Inicial " + fecha_I.getTime());
         System.out.println("fecha Final " + fechaF.getTime());
 
-        if (fechaF.get(Calendar.DAY_OF_MONTH) < fecha_I.get(Calendar.DAY_OF_MONTH)) {
+        if (fechaF.get(Calendar.MONTH) == fecha_I.get(Calendar.MONTH)) {
+            if (fecha_I.get(Calendar.DAY_OF_MONTH) > fechaF.get(Calendar.DAY_OF_MONTH)) {
+                r = true;
+            }
+        } else if (fechaF.get(Calendar.MONTH) < fecha_I.get(Calendar.MONTH)) {
+
             r = true;
         }
+
         return r;
     }
 
@@ -381,18 +395,31 @@ public final class ajusteProfesorBean implements Serializable {
         return Estado;
     }
 
+    public void traerPeriodo() {
+        Date fechahoy = new Date();
+        if (fecha_inicial.getYear() == fechahoy.getYear() && fecha_final.getYear() == fechahoy.getYear()) {
+            if (fecha_inicial.getMonth() >= 1 && fecha_final.getMonth() <= 6) {
+                periodo = 1;
+            } else {
+                periodo = 2;
+            }
+        } else {
+            System.out.println("Fecha pasada");
+        }
+    }
+
     public void cargarTodo() throws IOException {
-   
+        ArrayList<MDias> d = new ArrayList();
+        MDias temp = null;
+        for (int i = 0; i < Dias.size(); i++) {
+            temp = (MDias) Dias.get(i);
+            if (temp.isEstado() == true) {
+                d.add(temp);
+            }
+        }
         if (validarFechas() == false) {
             if (validarFechasMayores() == false) {
-                ArrayList<MDias> d = new ArrayList();
-                MDias temp = null;
-                for (int i = 0; i < Dias.size(); i++) {
-                    temp = (MDias) Dias.get(i);
-                    if (temp.isEstado() == true) {
-                        d.add(temp);
-                    }
-                }
+
                 System.out.println("tamaño de d " + d.size());
                 if (d.size() > 0) {
                     if (validarJornada(d) == true) {
@@ -419,11 +446,13 @@ public final class ajusteProfesorBean implements Serializable {
                     System.out.println("No ha seleccionado ningun dia");
                 }
             } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("List_dias", d);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "La fecha final es menor que la fecha inicial", ""));
 
             }
 
         } else {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("List_dias", d);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Una de las fechas es menor que la fecha de hoy", ""));
 
         }
@@ -450,18 +479,14 @@ public final class ajusteProfesorBean implements Serializable {
             }
         }
     }
+    
+      public void cerrarSesion() throws IOException {
+        ingresar i = new ingresar();
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        httpServletRequest.getSession().invalidate();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("../logIn/index.jsp");
 
-    public void traerPeriodo() {
-        Date fechahoy = new Date();
-        if (fecha_inicial.getYear() == fechahoy.getYear() && fecha_final.getYear() == fechahoy.getYear()) {
-            if (fecha_inicial.getMonth() >= 1 && fecha_final.getMonth() <= 6) {
-                periodo = 1;
-            } else {
-                periodo=2;
-            }
-        } else {
-            System.out.println("Fecha pasada");
-        }
     }
 
     public String getNombreProfesor() {
@@ -575,5 +600,15 @@ public final class ajusteProfesorBean implements Serializable {
     public void setNombreUsuario(String NombreUsuario) {
         this.NombreUsuario = NombreUsuario;
     }
+
+    public Persona getP() {
+        return p;
+    }
+
+    public void setP(Persona p) {
+        this.p = p;
+    }
+    
+    
 
 }

@@ -57,10 +57,11 @@ public class CargarArchivos implements Serializable {
     public void cargar_tipo() {
         System.out.println("Entr");
         tipo.clear();
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             tipo = (ArrayList) session.createQuery("from TipoProyecto").list();
+            t.commit();
         } catch (Exception ex) {
             System.out.println("Error " + ex.toString());
         }
@@ -77,7 +78,19 @@ public class CargarArchivos implements Serializable {
         return null;
     }
 
+    public boolean verificarArchivo() {
+        boolean r = false;
+        System.err.println("entro a validar " + getFilename(file1));
+        String vp = getFilename(file1).substring(getFilename(file1).length() - 4, getFilename(file1).length());
+        if (vp.equalsIgnoreCase("docx")) {
+            r = true;
+        } 
+        return r;
+
+    }
+
     public void mandarAVista() {
+        if (verificarArchivo()) {
         String ruta = "";
         String r = creardirectorios();
         String v1 = getFilename(file1).substring(0, getFilename(file1).length() - 5);
@@ -92,6 +105,11 @@ public class CargarArchivos implements Serializable {
         } catch (Exception ex) {
 
         }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El archivo debe ser tipo Word", ""));
+
+        }
+
     }
 
     public String creardirectorios() {

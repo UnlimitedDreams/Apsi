@@ -78,12 +78,13 @@ public class ListaProfesoresBeansUpdate {
 //    }
 
     public void traer_dias(Disponibilidad d) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             Dias = (ArrayList) session.createQuery("select dia from Disponibilidad D "
                     + " INNER JOIN D.dias dia "
                     + " WHERE dia.disponibilidad=" + d.getCodDis()).list();
+            t.commit();
         } catch (Exception ex) {
             System.out.println("Error Dias " + ex.toString());
         }
@@ -124,7 +125,7 @@ public class ListaProfesoresBeansUpdate {
     }
 
     public boolean update_disponibilidad(Disponibilidad d) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
         System.out.println("----- update " + d.getCodDis() + "----" + d.getNumHoras());
@@ -142,7 +143,7 @@ public class ListaProfesoresBeansUpdate {
     }
 
     public boolean update_dias(Disponibilidad d) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         boolean r = false;
         Dia dias = new Dia();
@@ -163,24 +164,24 @@ public class ListaProfesoresBeansUpdate {
         return r;
     }
 
-//    public void pasar_horas(String dia, String hora, int decision) {
-//        System.out.println("-**-*-/-*-*/-*/* condi " + decision);
-//        Dia temp = null;
-//        boolean esta = false;
-//        for (int i = 0; i < Dias.size(); i++) {
-//            temp = (Dia) Dias.get(i);
-//            if (temp.getDia().equalsIgnoreCase(dia)) {
-//                if (decision == 1) {
-//                    temp.setHoraInicial(hora);
-//                } else {
-//                    temp.setHoraFinal(hora);
-//                }
-//            }
-//        }
-//        for (int i = 0; i < Dias.size(); i++) {
-//            System.out.println("- " + Dias.get(i).getHoraInicial() + "-" + Dias.get(i).getHoraFinal());
-//        }
-//    }
+    public void pasar_horas(String dia, String hora, int decision) {
+        System.out.println("-**-*-/-*-*/-*/* condi " + decision);
+        Dia temp = null;
+        boolean esta = false;
+        for (int i = 0; i < Dias.size(); i++) {
+            temp = (Dia) Dias.get(i);
+            if (temp.getDia().equalsIgnoreCase(dia)) {
+                if (decision == 1) {
+                    temp.setHoraInicial(hora);
+                } else {
+                    temp.setHoraFinal(hora);
+                }
+            }
+        }
+        for (int i = 0; i < Dias.size(); i++) {
+            System.out.println("- " + Dias.get(i).getHoraInicial() + "-" + Dias.get(i).getHoraFinal());
+        }
+    }
 
     public String getNombreProfesor() {
         return nombreProfesor;

@@ -33,6 +33,7 @@ import util.HibernateUtil;
 public class AsiganarDirector {
 
     ArrayList<ProyectosModelo> pro2 = new ArrayList();
+    private String nombreUsuario;
 
     public AsiganarDirector() {
     }
@@ -40,7 +41,7 @@ public class AsiganarDirector {
     public void cargar_Proyectos() {
         ArrayList<Proyectos> pro = new ArrayList();
         pro2.clear();
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         try {
             pro = (ArrayList) session.createQuery("select distinct P FROM Proyectos P"
@@ -51,56 +52,33 @@ public class AsiganarDirector {
             Proyectos temp2 = null;
             for (int i = 0; i < pro.size(); i++) {
                 temp2 = (Proyectos) pro.get(i);
-                System.out.println("codigoooooo " + temp2.getCodigoProyecto());
                 pro2.add(new ProyectosModelo(temp2.getCodigoProyecto().intValue(), temp2.getNombre(), false));
             }
-            System.out.println("---- " + pro2.size());
+            t.commit();
         } catch (Exception ex) {
+            if (t != null) {
+                t.rollback();
+            }
             System.out.println("Error " + ex.toString());
         }
     }
-    
-
 
     public void pasar_Proyectos(int x) {
         ProyectosModelo temp = null;
-        System.out.println("codigooo " + x);
         for (int i = 0; i < pro2.size(); i++) {
             temp = (ProyectosModelo) pro2.get(i);
-            System.out.println("cod " + temp.getCod_pro());
             if (temp.getCod() == x) {
-                System.out.println("entro");
                 if (temp.isEstado() == false) {
-                    System.out.println("quedo true");
                     temp.setEstado(true);
                 } else {
                     temp.setEstado(false);
-                    System.out.println("quedo false");
                 }
             }
-        }
-        for (int i = 0; i < pro2.size(); i++) {
-
-            System.out.println("- " + pro2.get(i) + "\n");
-        }
-    }
-
-    public void TraerCodUsuPro() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-        ArrayList<String> cod = new ArrayList();
-        ArrayList<UsuarioProyecto> pro = new ArrayList();
-        try {
-            pro = (ArrayList) session.createQuery("from UsuarioProyecto U  where"
-                    + " U.proyectos.codigoProyecto=" + 23).list();
-            System.out.println("-- " + pro.size());
-        } catch (Exception ex) {
-
         }
     }
 
     public void guardar() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         ArrayList<UsuarioProyecto> pro = new ArrayList();
         try {
@@ -112,11 +90,21 @@ public class AsiganarDirector {
             for (int i = 0; i < pro2.size(); i++) {
                 temp2 = (ProyectosModelo) pro2.get(i);
                 if (temp2.isEstado() == true) {
-                    Conecion_postgres1.conectar();
-                    r = Conecion_postgres1.ejecuteUpdate("update usuario_proyecto set "
-                            + "director=" + p.getPege_id() + " where codigo_proyecto=" + temp2.getCod_pro());
-                    Conecion_postgres1.cerrarConexion();
-                    buscarProyecto(temp2.getCod_pro());
+                    ArrayList<UsuarioProyecto> list_U = new ArrayList();
+                    UsuarioProyecto usu = new UsuarioProyecto();
+                    list_U = (ArrayList) session.createQuery("select us from UsuarioProyecto us inner join "
+                            + " us.proyectos p where p.codigoProyecto=" + temp2.getCod_pro()).list();
+                    usu = list_U.get(0);
+                    Usuario u = (Usuario) session.load(Usuario.class, new BigDecimal(Integer.parseInt(p.getPege_id())));
+                    usu.setUsuarioByDirector(u);
+                    session.update(usu);
+                    Estados e = (Estados) session.load(Estados.class, new BigDecimal(1));
+                    EstadoProyecto ep = new EstadoProyecto();
+                    ep = (EstadoProyecto) session.createQuery("select e from Proyectos p "
+                            + " INNER JOIN p.estadoProyectos e where p.codigoProyecto=" + temp2.getCod_pro()).uniqueResult();
+                    ep.setEstados(e);
+                    session.update(ep);
+                    r = true;
                 }
 
             }
@@ -130,49 +118,12 @@ public class AsiganarDirector {
             }
 
         } catch (Exception ex) {
-
+            if (t != null) {
+                t.rollback();
+            }
         }
     }
 
-    public void buscarProyecto(int cod) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-        EstadoProyecto ep = new EstadoProyecto();
-        Estados e = new Estados();
-        e.setCodigoEstados(new BigDecimal(1));
-        e.setDescripcion("Activo");
-        System.out.println("codigo Proyecto " + cod);
-        try {
-            ep = (EstadoProyecto) session.createQuery("select e from Proyectos p INNER JOIN p.estadoProyectos e where p.codigoProyecto=" + cod).uniqueResult();
-            ep.setEstados(e);
-            session.update("EstadoProyecto", ep);
-            t.commit();
-        } catch (Exception ex) {
-            System.out.println("Error Actualizando estado " + ex.toString());
-        }
-    }
-
-//    public void establecerEstado(int codi) throws ClassNotFoundException {
-//        Session session = HibernateUtil.getSessionFactory().openSession();
-//        Transaction t = session.beginTransaction();
-//        Proyectos p = new Proyectos();
-//        p = buscarProyecto(codi);
-//        Estados e = new Estados();
-//        e.setCodigoEstados(new BigDecimal(1));
-//        e.setDescripcion("Activo");
-//        EstadoProyecto ep = new EstadoProyecto();
-//        int cod = Secuencia.seque("select max(cod_estadoproyec) from estado_proyecto");
-//        ep.setCodEstadoproyec(new BigDecimal(cod));
-//        ep.setEstados(e);
-//        ep.setProyectos(p);
-//        session.save(ep);
-//        t.commit();
-//        try {
-//
-//        } catch (Exception ex) {
-//            System.out.println("Error estado " + ex.toString());
-//        }
-//    }
     public void adicionarDiretor() {
         Profesor p = new Profesor();
         p = (Profesor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("profesor");
@@ -182,29 +133,9 @@ public class AsiganarDirector {
             temp = (ProyectosModelo) pro2.get(i);
             temp.setProfesor(cod);
         }
-        for (int i = 0; i < pro2.size(); i++) {
-            System.out.println("-- " + pro2.get(i) + "\n");
-        }
-
-    }
-
-    public void traer_codigoProyec() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-        ProyectosModelo temp = null;
-        UsuarioProyecto temp2 = null;
-        for (int i = 0; i < pro2.size(); i++) {
-            temp = (ProyectosModelo) pro2.get(i);
-            temp2 = (UsuarioProyecto) session.createQuery("select U from UsuarioProyecto U INNER JOIN U.proyectos P where"
-                    + " P.codigoProyecto=" + temp.getCod()).uniqueResult();
-            temp.setCodigo(temp2.getCodUsuproyecto().intValue());
-            System.out.println("-*- " + temp2.getUsuarioByEstudiante().getPegeId());
-            temp.setEstudiante(temp2.getUsuarioByEstudiante().getPegeId().intValue());
-//            temp.setEstudiante(temp2.);
-        }
-
-    }
     
+
+    }
 
     public ArrayList<ProyectosModelo> getPro2() {
         return pro2;
@@ -216,6 +147,14 @@ public class AsiganarDirector {
 
     public void mns() {
         System.out.println("entro");
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
 }

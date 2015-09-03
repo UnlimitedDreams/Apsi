@@ -39,7 +39,7 @@ public class ProyectoVersones {
     }
 
     public void listarVersiones() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
         Proyectos p = new Proyectos();
         p = (Proyectos) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Poryecto_Revi");
@@ -64,7 +64,7 @@ public class ProyectoVersones {
 
     public void atrasVista1() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Poryecto_Revi");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("PROrRevisiones-1.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("DireccionProyecto.xhtml");
 
     }
 

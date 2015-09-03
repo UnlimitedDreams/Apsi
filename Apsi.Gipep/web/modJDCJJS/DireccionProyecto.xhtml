@@ -5,8 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>ApSi.GiPep - Menú Principal</title>
-        <link rel="icon" type="image/png" href="../img/apsi.ico"/>
+        <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -15,59 +14,90 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-
-    <h:body>
-
+  <h:body onload="#{revision.cargar_años()}">
 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
-                <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="  "></h:outputLabel></h3> 
+                    </div>
+                    <div class="col-sm-1"> <center><h3><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h3></center></div>
                 </div>
             </div>
         </section>
 
         <section class="container-fluid" id="section2">
             <div class="row">
-               
-                <div class="col-sm-12">
+                <div class="col-sm-1">
+                    
+                </div>
+                <div class="col-sm-10">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>Nueva revicion</h4></div>
+                            <h4>Revisiones De Proyecto</h4></div>
 
-
+                        <br></br>
                         <h:form id="vista_validar">
 
-                            <br/>
+
                             <p:growl id="messages" showDetail="true" />
+
                             <div class="form-group">
-                                <label>Nota para Recomendar</label>
-                                <h:inputTextarea id="comentario" class="form-control" value="#{nuevaRevision.nueva}">
-                                </h:inputTextarea>
+                                <h:outputLabel  value="Año :" />
+                                <h:selectOneMenu class="form-control" value="#{revision.año}" >
+                                    <f:selectItems value="#{revision.b_año}"/>   
+                                </h:selectOneMenu>
                             </div>
+
                             <br></br>
-                            <label></label>
                             <center>
-                                
-                                <h:commandButton value="Atras" class="btn btn-succes btn-lg" action="PROVistaRevision-1.2.xhtml"></h:commandButton>
-                                <label></label>
-                                <h:commandButton value="Nueva Revision" class="btn btn-primary btn-lg" actionListener="#{nuevaRevision.revi()}"></h:commandButton>
-                                <br></br>
-                            </center>
-                            <br></br>
-                            <label></label>
+                            <h:commandButton value="Cargar" class="btn btn-primary btn-lg " actionListener="#{revision.listaProfeProyect()}"></h:commandButton>
+                           </center>
+                           <br></br>
+                           <label></label>
+                            <h:dataTable id="tabla" var="Proyecto" value="#{revision.p}" class="table">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{Proyecto.nombre}" />
+                                </h:column>
+                                <h:column>
+                                    <center>
+                                        <f:facet name="header">
+                                            <h:outputText value="Porcentaje"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{Proyecto.porcentaje} %" />
+                                    </center>
+                                </h:column>
+                                <h:column>
+                                    <center>
+                                        <f:facet name="header">
+                                            <h:outputText value="Opciones"></h:outputText>
+                                        </f:facet>
+                                        <center>
+                                            <h:commandButton value="R" class="btn btn-primary btn-lg" actionListener="#{validarProfesor.validarProyecto(Proyecto,1)}"></h:commandButton>
+                                            <label></label>
+                                            <h:commandButton value="V" class="btn btn-succes btn-lg" actionListener="#{validarProfesor.validarProyecto(Proyecto,2)}"></h:commandButton>
+                                        </center>
+                                    </center>
+                                </h:column>
+                               
+                            </h:dataTable>
+                             <br></br>
+                           <label></label>
                         </h:form>
 
-
-
                     </div>
+                </div>
+                <div class="col-sm-1">
+                    
                 </div>
             </div>
 
         </section>
-
-
         <footer id="footer">
             <div class="container">
                 <div class="row">

@@ -9,10 +9,24 @@ import Entity.Asesoria;
 import Entity.Asistente;
 import Modelo.Conecion_postgres1;
 import Modelo.ModeloAsesoria;
+import Modelo.ProyectosModelo;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -22,7 +36,7 @@ import util.HibernateUtil;
  * @author Britt
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class Reporte_Asesoria {
 
     /**
@@ -37,6 +51,7 @@ public class Reporte_Asesoria {
     }
 
     public void buscar() throws ClassNotFoundException {
+        System.out.println("Buscar");
         asesorias();
     }
 
@@ -53,53 +68,87 @@ public class Reporte_Asesoria {
 //            System.out.println("Error " + ex.toString());
 //        }
         Conecion_postgres1.conectar();
-        Conecion_postgres1.ejecuteQuery("select asesoria.cod_asesoria,codigo_proyecto,fecha_asesoria ,count(asesoria.cod_asesoria)from asesoria,asistente\n"
+        Conecion_postgres1.ejecuteQuery("select asesoria.cod_asesoria,codigo_proyecto,fecha_asesoria from asesoria,asistente\n"
                 + "where\n"
                 + "asesoria.cod_asesoria=asistente.cod_asesoria\n"
                 + "and asesoria.fecha_asesoria='" + fecha + "'\n"
                 + "and asistente.asistencia='" + estado_ase + "'\n"
-                + "group by\n"
-                + "asesoria.cod_asesoria,codigo_proyecto,fecha_asesoria ");
-        System.out.println("select asesoria.cod_asesoria,codigo_proyecto,fecha_asesoria ,count(asesoria.cod_asesoria)from asesoria,asistente\n"
-                + "where\n"
-                + "asesoria.cod_asesoria=asistente.cod_asesoria\n"
-                + "and asesoria.fecha_asesoria='" + fecha + "'\n"
-                + "and asistente.asistencia='" + estado_ase + "'\n"
-                + "group by\n"
-                + "asesoria.cod_asesoria,codigo_proyecto,fecha_asesoria ");
+                );
+
         try {
             while (Conecion_postgres1.rs.next()) {
+                System.out.println("----- estado " + estado_ase);
                 ModeloAsesoria m = new ModeloAsesoria(Conecion_postgres1.rs.getInt(1),
-                        Conecion_postgres1.rs.getString(3), Conecion_postgres1.rs.getDate(2));
-//                m.setCantidad(Conecion_postgres1.rs.getInt(4));
+                        Conecion_postgres1.rs.getInt(2), Conecion_postgres1.rs.getDate(3),
+                        estado_ase);
+
+                m.setCantidad(0);
                 list_aseso.add(m);
             }
-            Conecion_postgres1.cerrarConexion();
+            System.out.println("lista asesos : " + list_aseso.size());
             traerProyecetos();
         } catch (Exception ex) {
             System.out.println("Error " + ex.toString());
+        } finally {
+            Conecion_postgres1.cerrarConexion();
+        }
+
+    }
+   
+
+    public void reporteHorasProfePDf() throws JRException {
+        ModeloAsesoria temp = null;
+        System.out.println("proyectos size " + list_aseso.size());
+        Report_Asesoria datasource = new Report_Asesoria();
+
+        try {
+            for (int i = 0; i < list_aseso.size(); i++) {
+                temp = (ModeloAsesoria) list_aseso.get(i);
+                System.out.println("-");
+                datasource.addObjecto(temp);
+            }
+            System.out.println("+++++ ::::");
+            Date fec = new Date();
+            DateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd ");
+            String convertido = fechaHora.format(fec);
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("Fecha", convertido);
+            JasperPrint jasperPrint = JasperFillManager.fillReport("d:\\Users\\USR_Toshiba\\Desktop\\Apsi\\Apsi\\Apsi.Gipep\\web\\Reportes\\Asesorias.jasper", parametros, datasource);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            String user = System.getProperty("user.name");
+            File f = new File("C:\\Users\\" + user + "\\Downloads\\reporteAsesorias.pdf");
+            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, f);
+            exporter.exportReport();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descarga Pdf Exitosa", ""));
+
+        } catch (Exception ex) {
+            System.out.println("Error : " + ex.toString());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error Pdf Descarga ", ""));
+
         }
 
     }
 
     public void traerProyecetos() throws ClassNotFoundException {
         Conecion_postgres1.conectar();
-        System.out.println("buscar proyecto");
+        System.out.println("buscar proyecto size " + list_aseso.size());
         ModeloAsesoria temp = null;
         try {
             for (int i = 0; i < list_aseso.size(); i++) {
                 temp = (ModeloAsesoria) list_aseso.get(i);
                 System.out.println("codigo " + temp.getCod_proyecto());
-                Conecion_postgres1.ejecuteQuery("select nombre,porcentaje from proyectos  where codigo_proyecto=" + temp.getNombre_proyecto());
+                Conecion_postgres1.ejecuteQuery("select nombre,porcentaje from proyectos  where codigo_proyecto=" + temp.getCod_proyecto());
                 while (Conecion_postgres1.rs.next()) {
-                    System.out.println("cambio nombre por " + Conecion_postgres1.rs.getString(1));
                     temp.setNombre_proyecto(Conecion_postgres1.rs.getString(1));
                     temp.setPorcentaje(Conecion_postgres1.rs.getString(2));
                 }
             }
-            Conecion_postgres1.cerrarConexion();
         } catch (Exception ex) {
             System.out.println("error traernombre " + ex.toString());
+        } finally {
+            Conecion_postgres1.cerrarConexion();
+
         }
 
     }

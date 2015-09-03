@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.stat.Statistics;
 import util.HibernateUtil;
 
 /**
@@ -54,6 +55,29 @@ public class proyectoHelper implements helper {
         }
     }
 
+    public static void reportConeciones() {
+        Statistics stats = HibernateUtil.getSessionFactory().getStatistics();
+        stats.setStatisticsEnabled(true);
+
+        System.out.println("recuento de conexión: " + stats.getConnectCount());
+
+//Numero de transacciones completadas (falladas y satisfactorias)
+        System.out.println("recuento Trx: " + stats.getTransactionCount());
+
+//Numero de transacciones completadas (solo satisfactorias)
+        System.out.println("Succ trx count: " + stats.getSuccessfulTransactionCount());
+
+// Numero de sesiones que el codigo ha abierto
+        System.out.println("sesiones abiertas: " + stats.getSessionOpenCount());
+
+// Numero de sesiones que el codigo ha cerrado
+        System.out.println("sesiones  cerradas: " + stats.getSessionCloseCount());
+
+// Numero total de queries ejecutados
+        System.out.println("No. queries: " + stats.getQueryExecutionCount());
+//            esta();
+    }
+
     @Override
     public List listarTodo() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -62,13 +86,13 @@ public class proyectoHelper implements helper {
         try {
             lista = session.createQuery("from Proyectos").list();
             t.commit();
+            reportConeciones();
         } catch (Exception e) {
             if (t != null) {
                 t.rollback();
             }
             throw e;
         } finally {
-            session.close();
         }
         return lista;
     }
@@ -91,7 +115,6 @@ public class proyectoHelper implements helper {
             }
             throw e;
         } finally {
-            session.close();
         }
         return x;
     }
@@ -120,7 +143,6 @@ public class proyectoHelper implements helper {
             }
             throw e;
         } finally {
-            session.close();
         }
         return lista;
     }

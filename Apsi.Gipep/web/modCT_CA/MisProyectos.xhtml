@@ -1,16 +1,223 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ApSi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <!-- Link para panel menu-->
+        <link href="../css/style.css" rel="stylesheet"/>
+    </h:head>
+    <h:body onload="#{miProyecto.cargarMiProyecto()}"> 
+        <b:modal id="amodal" title="Subir Nueva Version Proyecto" styleClass="modalPseudoClass">
+            <h:form id="form-vdrsion" enctype="multipart/form-data" >
+                <div class="form-group">
+                    <h:outputLabel for="at44" value="Nombre de la nueva version :" style="font-weight:bold" />
+                    <h:inputText id="at44" class="form-control" value="#{miProyecto.nombre}" required="true"  requiredMessage="Añadir Titulo" />
+                </div> 
+                <div class="form-group">
+                    <h:outputLabel for="at33" value="Ruta del proyecto :" style="font-weight:bold" />
+                    <h:inputFile id="at33" class="form-control" value="#{miProyecto.file1}" required="true" requiredMessage="Añadir Archivo"></h:inputFile>     
+                </div> 
+                <div class="form-group">
+                    <b:commandButton value="Subir" look="primary" actionListener="#{miProyecto.subirVersion()}" />
+
+                    <b:button value="Cerrar" look="success" dismiss="modal" onclick="return false;"/>
+                </div> 
+
+            </h:form>
+        </b:modal>
+        <section class="container-fluid" id="section6">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="  "></h:outputLabel></h3> 
+                    </div>
+                    <div class="col-sm-1"> <center><h3><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h3></center></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container-fluid" id="section2">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+
+                    <div class="panel panel-default slideInUp animate">
+                        <div class="panel-heading">
+                            <h4>Mi Proyecto</h4></div>
+
+
+                        <h:form id="uploadDoc" >
+
+                            <p:growl id="grwol" showDetail="true"></p:growl>
+
+                            <div class="col-sm-6">
+                                <br></br>
+                                <div class="form-group">
+                                    <h:outputLabel for="at1" value="Nombre del Proyecto : #{miProyecto.proyecto.nombre}" style="font-weight:bold" />
+                                </div> 
+                                <div class="form-group">
+                                    <h:outputLabel for="at2" value="Fecha Inicial : #{miProyecto.proyecto.fechaInicio}" style="font-weight:bold" />
+                                </div> 
+                                <div class="form-group">
+                                    <h:outputLabel for="at3" value="Fecha Final : #{miProyecto.proyecto.fechaFinal}" style="font-weight:bold" />
+                                </div> 
+                                <div class="form-group">
+                                    <h:outputLabel for="at4" value="Porcentaje : #{miProyecto.proyecto.porcentaje}" style="font-weight:bold" />
+                                </div> 
+                                <div class="form-group">
+                                    <h:outputLabel for="at5" value="Calificacion : #{miProyecto.proyecto.calificacion}" style="font-weight:bold" />
+                                </div>
+                                <div class="form-group">
+                                    <br></br>
+                                    <h5>Lista Objetivos</h5>
+                                    <h:dataTable id="tabla" var="Objetivo" value="#{miProyecto.list_obj}"
+                                                 class="table">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Objetivos"></h:outputText>
+                                            </f:facet>
+
+                                            <h:outputText value="#{Objetivo}" />
+                                        </h:column>
+
+                                    </h:dataTable>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <br></br>
+                                    <h5>Lista Versiones</h5> 
+                                </div>
+                                <h:dataTable id="tabla2" var="Versio" value="#{miProyecto.list_versiones}"
+                                             class="table">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre"></h:outputText>
+                                        </f:facet>
+
+                                        <h:outputText value="#{Versio.nombre}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Fecha"></h:outputText>
+                                        </f:facet>
+
+                                        <h:outputText value="#{Versio.fecha_I}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Descarga"></h:outputText>
+                                        </f:facet>
+                                        <h:commandButton value="descargar" actionListener="#{miProyecto.prepDownload(Versio.ruta)}" 
+                                                         class="btn btn-danger " >
+                                            <p:fileDownload value="#{miProyecto.download}" />
+                                        </h:commandButton> 
+                                    </h:column>
+                                </h:dataTable>
+                                <div class="form-group">
+                                    <br></br>
+                                    <h5>Lista de Revisiones</h5>
+                                    <h:dataTable id="tabla23" var="Revisiones" value="#{miProyecto.list_revi}"
+                                                 class="table">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="fecha"></h:outputText>
+                                            </f:facet>
+
+                                            <h:outputText value="#{Revisiones.fecha}" />
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Revision"></h:outputText>
+                                            </f:facet>
+
+                                            <h:outputText value="#{Revisiones.descripcion}" />
+                                        </h:column>
+                                    </h:dataTable>
+                                </div>
+                            </div>
+                            <br/>
+                            <label></label>
+                            <br/><br/>
+                            <center>
+                                <b:button value="Subir Version" look="success" onclick="$('.modalPseudoClass').modal();
+                                        return false;" size="lg"/>
+                            </center>
+                        </h:form>
+                    </div>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+
+        </section>
+
+        <footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>ApSi&REG;</strong>
+                        </h4>
+                        <p>Instituci&oacute;n Universitaria Antonio Jos&eacute; Camacho<br></br>Santiago de Cali, Colombia</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (318) 265-7417</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:unlimitedDreamsTi@gmail.com">unlimitedDreamsTi@gmail.com</a>
+                            </li>
+                        </ul>
+                        <br></br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small"></hr>
+                        <p class="text-muted">Powered By Unlimited Dreams <br></br>Copyright &copy; Unlimited Dreams, Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div class="scroll-up">
+            <a href="#"><i class="fa fa-angle-up"></i></a>
+        </div>
+
+
+        <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="../js/scripts.js"></script>
+        <!--scripts para panel menu-->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/scripts1.js"></script>
+
+
+        <!--scripts loaded here-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+        <!--scripts para panel menu-->
+        <script src="../js/Jquery/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../js/custom/scripts1.js"></script>
+
+
+
+    </h:body>
 </html>
+

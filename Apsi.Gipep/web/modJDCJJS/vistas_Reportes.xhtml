@@ -14,7 +14,6 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <!-- <h:body onload="#/{validarProfesor.cargar_facultad()}"> -->
     <h:body>
 
 
@@ -42,12 +41,19 @@
             <div class="row">
                 <div class="col-sm-12">
                     <center>
-                        <h:commandButton value="Next" class="btn btn-primary btn-lg "  ></h:commandButton> 
-                        <label></label>
-                        <label></label>
-                        <label></label>
-                        <label></label>
-                        <h:commandButton value="back" class="btn btn-succes btn-lg "  ></h:commandButton> 
+                        <h:form>
+                            <h:commandButton value="profesor" class="btn btn-primary btn-lg " action="R_ProfesorHoras.xhtml" ></h:commandButton> 
+                            <label></label>
+                            <label></label>
+                            <label></label>
+                            <label></label>
+                            <h:commandButton value="Proyectos" class="btn btn-succes btn-lg " action="R_ListaProyectos.xhtml" ></h:commandButton> 
+                            <label></label>
+                            <label></label>
+                            <label></label>
+                            <label></label>
+                            <h:commandButton value="Asesorias" class="btn btn-succes btn-lg " action="R_Asesorias.xhtml" ></h:commandButton> 
+                        </h:form>
                     </center> 
                 </div>
             </div>
@@ -56,7 +62,7 @@
                     <br></br>
                     <br></br>
                     <center>
-                        <h:commandButton  style="width:90px" class="btn btn-lg" value="HOME" actionListener="#{objetivosDocumento.añadirObt()}">                           
+                        <h:commandButton  style="width:90px" class="btn btn-lg" value="HOME" >                           
                         </h:commandButton>
                     </center>
                 </div>

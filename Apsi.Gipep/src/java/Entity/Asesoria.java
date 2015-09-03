@@ -1,5 +1,5 @@
 package Entity;
-// Generated 18-ago-2015 14:13:44 by Hibernate Tools 4.3.1
+// Generated 15/10/2015 01:16:32 AM by Hibernate Tools 4.3.1
 
 
 import java.math.BigDecimal;
@@ -20,8 +20,8 @@ public class Asesoria  implements java.io.Serializable {
      private BigDecimal codigoProyecto;
      private String description;
      private String tipoAsesoria;
-     private Date horaIni;
-     private Date horaFin;
+     private String horaFin;
+     private String horaIni;
      private Set estadosAsesorias = new HashSet(0);
      private Set detalleAsesorias = new HashSet(0);
      private Set asistentes = new HashSet(0);
@@ -40,7 +40,7 @@ public class Asesoria  implements java.io.Serializable {
         this.description = description;
         this.tipoAsesoria = tipoAsesoria;
     }
-    public Asesoria(BigDecimal codAsesoria, Disponibilidad disponibilidad, Ubicacion ubicacion, Date fechaAsesoria, BigDecimal codigoProyecto, String description, String tipoAsesoria, Date horaIni, Date horaFin, Set estadosAsesorias, Set detalleAsesorias, Set asistentes, Set tareases) {
+    public Asesoria(BigDecimal codAsesoria, Disponibilidad disponibilidad, Ubicacion ubicacion, Date fechaAsesoria, BigDecimal codigoProyecto, String description, String tipoAsesoria, String horaFin, String horaIni, Set estadosAsesorias, Set detalleAsesorias, Set asistentes, Set tareases) {
        this.codAsesoria = codAsesoria;
        this.disponibilidad = disponibilidad;
        this.ubicacion = ubicacion;
@@ -48,8 +48,8 @@ public class Asesoria  implements java.io.Serializable {
        this.codigoProyecto = codigoProyecto;
        this.description = description;
        this.tipoAsesoria = tipoAsesoria;
-       this.horaIni = horaIni;
        this.horaFin = horaFin;
+       this.horaIni = horaIni;
        this.estadosAsesorias = estadosAsesorias;
        this.detalleAsesorias = detalleAsesorias;
        this.asistentes = asistentes;
@@ -105,19 +105,19 @@ public class Asesoria  implements java.io.Serializable {
     public void setTipoAsesoria(String tipoAsesoria) {
         this.tipoAsesoria = tipoAsesoria;
     }
-    public Date getHoraIni() {
-        return this.horaIni;
-    }
-    
-    public void setHoraIni(Date horaIni) {
-        this.horaIni = horaIni;
-    }
-    public Date getHoraFin() {
+    public String getHoraFin() {
         return this.horaFin;
     }
     
-    public void setHoraFin(Date horaFin) {
+    public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+    public String getHoraIni() {
+        return this.horaIni;
+    }
+    
+    public void setHoraIni(String horaIni) {
+        this.horaIni = horaIni;
     }
     public Set getEstadosAsesorias() {
         return this.estadosAsesorias;

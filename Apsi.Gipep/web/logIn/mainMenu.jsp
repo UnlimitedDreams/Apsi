@@ -117,7 +117,7 @@
 
             </ul>
         </nav> 
-        <header class="container-fluid" id="top">
+        <header class="container-fluid" id="section6">
             <div class="container-fluid">
                 <div class="row">                   
                     <h3><i class="fa fa-tag"></i> <%
@@ -130,11 +130,12 @@
                             Rol value = (Rol) roles.get(key);
                             rol = value.getNombre();
                             idRol = value.getCodRol().toString();
-                            out.println(value.getNombre());
+                            out.print(value.getNombre());
                         }
                         %>
+
                     </h3> 
-                    <hr>
+                   
                 </div>
             </div>
         </header>

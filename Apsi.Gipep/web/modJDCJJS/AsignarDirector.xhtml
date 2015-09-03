@@ -14,117 +14,42 @@
         <!-- Link para panel menu-->
         <link href="../css/style.css" rel="stylesheet"/>
     </h:head>
-    <h:body onload="#{validarProfesor.cargarProfeII()}"> 
-        <nav class="navbar navbar-trans " role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle top" data-toggle="collapse" data-target="#navbar-collapsible">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand text-primary" href="menuAdm.xhtml">ApSi</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar-collapsible">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="#"><i class="fa fa-folder-o"> Archivo</i></a></li>
-                        <li><a href="#"><i class="fa fa-cog"> Opciones</i></a></li>
-                        <li><a href="index.xhtml"><i class="fa fa-sign-out "> Salir</i></a></li>                       
-                        <li>&nbsp;</li>
-                    </ul>                   
-                </div>
-            </div>
-        </nav>
-
+    <h:body onload="#{validarProfesor.cargar_facultad()}"> 
         <section class="container-fluid" id="section6">
             <div class="container-fluid">
-                <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="#{asiganarDirector.nombreUsuario}"></h:outputLabel></h3> 
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="#{ajusteProfesorBean.nombreUsuario}"></h:outputLabel></h3> 
+                    </div>
+                    <div class="col-sm-1"> <center><h2><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h2></center></div>
                 </div>
             </div>
         </section>
 
         <section class="container-fluid" id="section2">
             <div class="row">
-                <div class="col-sm-3">
-                    <aside>
-                        <div id="sidebar"  class="nav-collapse  ">
-                            <!-- sidebar menu start-->
-                            <ul class="sidebar-menu">                
-                                <li class="active">
-                                    <a class="" href="#">
-                                        <i class="icon_house_alt"></i>
-                                        <span>USER OPTIONS</span>
-                                    </a>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-male"></i>
-                                        <span>Profesores</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="Lista_Profesor.xhtml"><i class="fa fa-plus"></i>Profesores Activos</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Disponibilidad Profesor</a></li>
-                                        <li><a href="ValidarProfesor.xhtml"><i class="fa fa-plus"></i>Calendario Profesor</a></li>
+                <div class="col-sm-1">
 
-                                    </ul>
-                                </li>       
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Mi Calendario</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a ><i class="fa fa-plus"> </i>Calendario</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Reportes</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Profesor Horas</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Profesor Asesorias</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Estudiante Proyecto</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu">
-                                    <a href="javascript:;" class="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Proyectos</span>
-                                        <span class="menu-arrow arrow_carrot-right"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a href="GRUagregar.xhtml" ><i class="fa fa-plus"> </i>Item 1</a></li>
-                                        <li><a href="GRUeliminar.xhtml" ><i class="fa fa-cogs"> </i>Item 1</a></li>
-
-                                    </ul>
-                                </li>
-
-
-
-
-
-
-                            </ul>
-                        </div>
-                    </aside>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
 
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
-                            <h4>Asignacion de Director</h4></div>
+                            <h4>Lista de Profesores Disponibles</h4></div>
+                        <br></br>
+                        <label></label>
                         <h:form id="vista_validar">
                             <br/>
                             <p:growl id="messages" showDetail="true" />
+                            <div class="form-group">
+                                <h:selectOneMenu id="car" class="form-control input-lg" value="#{validarProfesor.facultad}" >
+                                    <f:selectItem itemLabel="*--Seleccione Facultad--*" itemValue="" />
+                                    <f:selectItems value="#{validarProfesor.facul}" />
+                                    <p:ajax  event="change" listener="#{validarProfesor.cargarProfesores()}" update=":vista_validar:tabla,messages"></p:ajax>
+                                </h:selectOneMenu>
+                            </div>
+                            <br></br>
+                            <label></label>
                             <h:dataTable id="tabla" var="Profesor" value="#{validarProfesor.profe}"
                                          class="table">
                                 <h:column>
@@ -132,14 +57,20 @@
                                         <h:outputText value="Selecionar"></h:outputText>
                                     </f:facet>
                                     <p:selectBooleanCheckbox >
-                                        <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,2)}" />
+                                        <p:ajax  listener="#{validarProfesor.ajusteProfe(Profesor.cedula,2,Profesor.num_proyectos)}" />
                                     </p:selectBooleanCheckbox>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Cedula"></h:outputText>
+                                        <h:outputText value="Proyectos Asignados"></h:outputText>
                                     </f:facet>
-                                    <h:outputText value="#{Profesor.cedula}" />
+                                    <h:outputText value="#{Profesor.num_proyectos}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Disponibilidad Asignada"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{Profesor.dispo}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
@@ -149,18 +80,19 @@
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Herramienta"></h:outputText>
+                                        <h:outputText value="Apellido"></h:outputText>
                                     </f:facet>
                                     <h:outputText value="#{Profesor.apellido}" />
 
                                 </h:column>
                             </h:dataTable>
+                            <br></br>
                         </h:form>
-
                     </div>
                 </div>
+                <div class="col-sm-1">
+                </div>
             </div>
-
         </section>
 
 

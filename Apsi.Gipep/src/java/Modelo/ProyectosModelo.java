@@ -42,6 +42,12 @@ public class ProyectosModelo {
         this.procentaje = procentaje;
     }
 
+    public ProyectosModelo(String nombre, String fecha_I, String ruta) {
+        this.nombre = nombre;
+        this.fecha_I = fecha_I;
+        this.ruta = ruta;
+    }
+
     public ProyectosModelo() {
     }
 

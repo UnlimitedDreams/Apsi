@@ -16,6 +16,7 @@ public class Estudiante {
     private String nombre;
     private String apellido;
     private String pege_id;
+    private String Estado;
 
     public Estudiante(boolean activo, String cedula, String nombre, String apellido, String pege_id) {
         this.activo = activo;
@@ -73,6 +74,15 @@ public class Estudiante {
     public String toString() {
         return "Estudiante{" + "nombre=" + nombre + '}';
     }
+
+    public String getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(String Estado) {
+        this.Estado = Estado;
+    }
+    
     
     
 }

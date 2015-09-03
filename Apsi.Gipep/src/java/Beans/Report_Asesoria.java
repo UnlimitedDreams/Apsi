@@ -27,12 +27,14 @@ public class Report_Asesoria implements JRDataSource {
         Object valor = null;
 
         try {
-            if ("codigo".equalsIgnoreCase(dato.getName())) {
+            if ("Codigo".equalsIgnoreCase(dato.getName())) {
                 valor = listaParticipantes.get(indiceParticipanteActual).getCodigo_ase();
-            } else if ("proyecto".equalsIgnoreCase(dato.getName())) {
+            } else if ("Proyecto".equalsIgnoreCase(dato.getName())) {
                 valor = listaParticipantes.get(indiceParticipanteActual).getNombre_proyecto();
-            } else if ("fecha".equalsIgnoreCase(dato.getName())) {
+            } else if ("Fecha Inicial".equalsIgnoreCase(dato.getName())) {
                 valor = listaParticipantes.get(indiceParticipanteActual).getFecha();
+            }else if ("Estado".equalsIgnoreCase(dato.getName())) {
+                valor = listaParticipantes.get(indiceParticipanteActual).getEstado();
             }
         } catch (Exception ex) {
             System.out.println("Error getFielValue " + ex.toString());

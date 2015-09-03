@@ -16,26 +16,36 @@
     </h:head>
     <h:body onload="#{reporte_Proyectos.cargar_años(1)}"> 
 
-
         <section class="container-fluid" id="section6">
+
             <div class="container-fluid">
-                <div class="row">                   
-                    <h3><i class="fa fa-user"> </i> Name User : <h:outputLabel value="  "></h:outputLabel></h3> 
+
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h3><i class="fa fa-user"> </i> Nombre de Usuario : <h:outputLabel value="  "></h:outputLabel></h3> 
+                        <h:form></h:form>
+
+                    </div>
+                    <h:form>
+                        <div class="col-sm-1"> <center><h2><a href="../logIn/mainMenu.jsp"><i class="fa fa-home"></i></a></h2></center></div>
+                    </h:form>
                 </div>
             </div>
+
         </section>
 
         <section class="container-fluid" id="section2">
             <div class="row">
-
-                <div class="col-sm-12">
-
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
                     <div class="panel panel-default slideInUp animate">
                         <div class="panel-heading">
                             <h4>Proyectos </h4></div>
                         <br></br>
                         <h:form>
                             <div class="col-sm-6">
+                                <p:growl id="messages" showDetail="true" />
+
                                 <div class="form-group">
                                     <h:outputLabel  value="Año :" />
                                     <h:selectOneMenu id="car" class="form-control input-lg" value="#{reporte_Proyectos.año}" >
@@ -45,10 +55,10 @@
 
                                 <div class="form-group">
                                     <h:outputLabel  value="Carrera :" />
-                                    <h:selectOneMenu id="car3" class="form-control input-lg" value="#{reporte_Proyectos.cod_carrera}" >
+                                    <h:selectOneMenu id="car3" class="form-control input-lg" value="#{reporte_Proyectos.carrera}" >
                                         <f:selectItems value="#{reporte_Proyectos.lista_Carrera}"
                                                        var="carrera"
-                                                       itemLabel="#{carrera.carrera}" itemValue="#{carrera.cod}"/>   
+                                                       itemLabel="#{carrera.carrera}" itemValue="#{carrera.carrera}"/>   
                                     </h:selectOneMenu>
                                 </div>
                             </div>
@@ -120,6 +130,15 @@
                                     </f:facet>
                                     <h:outputText value="#{Proyecto.integrantes}" />
 
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Descargar"></h:outputText>
+                                    </f:facet>
+                                    <h:commandButton value="descargar" actionListener="#{reporte_Proyectos.prepDownload(Proyecto.ruta)}" 
+                                                     class="btn btn-danger " >
+                                        <p:fileDownload value="#{reporte_Proyectos.download}" />
+                                    </h:commandButton>  
                                 </h:column>
                             </h:dataTable>
                             <br></br>
